@@ -58,6 +58,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: 'SignInPage',
   data() {
@@ -66,24 +67,13 @@ export default {
       userEmail: '',
       userPassword: '',
       isPwd: false,
-      passwordVisible: false,
+      passwordVisible: false
     }
   },
-  created() {
-    this.findUser();
-
-    // AmplifyEventBus.$on('authState', info =>  {
-    //   if(info === "signedIn") {
-    //     this.findUser();
-    //   } else {
-    //     this.$store.state.signedIn = false;
-    //     this.$store.state.user = null;
-    //   }
-    // })
-  },
+  created() {},
   computed: {
     signedIn() {
-      return this.$store.state.signedIn;
+      return this.$store.state.signedIn
     },
     emailRules() {
       return [
@@ -100,32 +90,18 @@ export default {
     }
   },
   methods: {
-      async findUser() {
-        try {
-          const user = await Auth.currentAuthenticatedUser();
-          this.$store.state.signedIn = true;
-          this.$store.state.user = user;
-          console.log(user);
-        } catch(err) {
-          this.$store.state.signedIn = false;
-          this.$store.state.user = null;
-        }
-      },
-      signIn() {
-        axios.post(this.userEmail, this.userPassword)
-          .then(user => {
-            
-          })
-          .catch(err => console.log(err));
-          console.log('error no login')
-      },
-      signOut() {
-        Auth.signOut()
-        .then(data =>{
-          this.$store.state.signedIn = !!data;
+    signIn() {
+      this.$store.
+       dispatch('retrieveToken', {
+        username: this.userEmail,
+        password: this.userPassword,
+      })
+        .then(response => {
+          this.$router.push({ name: 'about' })
         })
-        . catch(err => console.log(err));
-      }
+      console.log('try Login')
+      
+    },
   }
 }
 </script>
@@ -137,7 +113,6 @@ export default {
   box-sizing: border-box;
   font-family: 'Courier New', Courier, monospace;
 }
-
 
 .btn-back:hover::before {
   content: 'Voltar';
@@ -206,21 +181,21 @@ export default {
   // color: grey;
   font-weight: 700;
   transform: scaleY(1.1);
-  transition: all .2s linear;
+  transition: all 0.2s linear;
 }
 
 .btn-login {
-  align-self: center; 
-  width: 150px; 
-  height: 50px; 
-  margin-top: 16px; 
-  border-radius: 25px; 
-  box-shadow: none
+  align-self: center;
+  width: 150px;
+  height: 50px;
+  margin-top: 16px;
+  border-radius: 25px;
+  box-shadow: none;
 }
 
 .btn-login:hover {
   transform: scale(1.05);
-  transition: all .2s linear;
+  transition: all 0.2s linear;
 }
 
 .span {

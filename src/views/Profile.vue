@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>this is a profile</h1>
     <h2 v-if="signedIn">veio com o login</h2>
   </div>
 </template>
@@ -9,7 +9,6 @@ export default {
   name: "about",
   data() {
     return {
-      logou: false
     }
   },
   computed: {
@@ -17,6 +16,14 @@ export default {
       return this.$store.state.signedIn
     },
   },
+  methods: {
+      logout() {
+        this.$store.dispatch('destroyToken')
+        .then(response => {
+            this.$router.push({ name: 'home' })
+        })
+      }
+  }
 }
 </script>
 
