@@ -11,20 +11,22 @@
     </q-btn> -->
     <div class="container-center">
       <div class="card column">
-        <h2 class="ttl">Seja Bem Vindo!</h2>
+        <h2 class="ttl">
+          Seja Bem Vindo!
+        </h2>
         <q-input
+          v-model="userEmail"
           class="input"
           outlined
-          v-model="userEmail"
           :rules="emailRules"
           label="login"
           color="black"
           required
         />
         <q-input
+          v-model="userPassword"
           class="input"
           outlined
-          v-model="userPassword"
           label="senha"
           :type="isPwd ? 'password' : 'text'"
           hint="Mínimo de 8 caracteres"
@@ -48,7 +50,11 @@
             <span class="link">Cadastre-se</span>
           </router-link>
 
-          <q-btn class="btn-login" color="black" @click="signIn()">
+          <q-btn
+            class="btn-login"
+            color="black"
+            @click="signIn()"
+          >
             <span class="span">LOGAR</span>
           </q-btn>
         </div>
@@ -93,11 +99,11 @@ export default {
     signIn() {
       this.$store.
        dispatch('retrieveToken', {
-        username: this.userEmail,
+        email: this.userEmail,
         password: this.userPassword,
       })
         .then(response => {
-          this.$router.push({ name: 'about' })
+          this.$router.push({ name: 'Profile' })
         })
       console.log('try Login')
       

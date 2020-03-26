@@ -1,0 +1,1 @@
+LEVEL computer fonts v1.0©2003 Harold LohnerHLohner@aol.comwww.haroldsfonts.comThe regular font includes a black stripe with the letters. To create a continuous stripe, use a _ (underscore) instead of a space. For angled ends on the stripes, type < or { before a word, > or } after it. To create a break with angled ends, use ~.

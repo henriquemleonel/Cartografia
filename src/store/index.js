@@ -3,15 +3,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import api from '../config/index.js'
 
 Vue.use(Vuex)
-// axios.defaults.baseURL = 'http://localhost:4000'
 
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('access_token') || null,
     signedIn: false,
-    pins: []
+    currentUser: {},
+    allPins: [],
+    AllEvents: []
   },
 
   getters: {
@@ -25,31 +27,23 @@ export default new Vuex.Store({
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
-        // axios.post('/signin', {
-        //     username: credentials.username,
-        //     password: credentials.password,
-        //   })
-        axios({
-          method: 'post',
-          url: 'http://localhost:4000/signin',
-          data: {
-            username: credentials.username,
-            password: credentials.password,
-          }
-        })
-          .then(response => {
-            console.log(response)
-            const token = response.token
-            console.log(token)
-            localStorage.setItem('access_token', validateToken)
-            context.commit('retrieveToken', token)
-            resolve(response)
-          })
-          .catch(error => {
-            console.log(error)
-            reject(error)
-          })
-        })
+          api.post('/signin', {
+                  email: credentials.email,
+                  password: credentials.password,
+              })
+              .then(response => {
+                  console.log(response)
+                  const token = response.data.token
+                  console.log(token)
+                      // localStorage.setItem('access_token', validateToken)
+                      // context.commit('retrieveToken', token)
+                  resolve(response)
+              })
+              .catch(error => {
+                  console.log(error)
+                  reject(error)
+              })
+      })
     },
     destroyToken(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -58,14 +52,14 @@ export default new Vuex.Store({
         return new Promise((resolve, reject) => {
           axios.post('/logout')
             .then(response => {
-              localStorage.removeItem('access_token')
+              //localStorage.removeItem('access_token')
               context.commit('destroyToken')
               resolve(response)
               // console.log(response);
               // context.commit('addTodo', response.data)
             })
             .catch(error => {
-              localStorage.removeItem('access_token')
+              //localStorage.removeItem('access_token')
               context.commit('destroyToken')
               reject(error)
             })

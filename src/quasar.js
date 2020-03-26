@@ -1,9 +1,9 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
-import './styles/quasar.scss'
-import '@quasar/extras/roboto-font/roboto-font.css'
-import '@quasar/extras/fontawesome-v5/fontawesome-v5.css'
-import '@quasar/extras/material-icons/material-icons.css'
+import './styles/quasar.scss';
+import '@quasar/extras/roboto-font/roboto-font.css';
+import '@quasar/extras/fontawesome-v5/fontawesome-v5.css';
+import '@quasar/extras/material-icons/material-icons.css';
 import {
   ClosePopup,
   QAvatar,
@@ -59,7 +59,7 @@ import {
   QTooltip,
   Quasar,
   QUploader,
-} from 'quasar'
+} from 'quasar';
 
 Vue.use(Quasar, {
   config: {
@@ -76,7 +76,7 @@ Vue.use(Quasar, {
       // negative: '',
       // info: '',
       // warning: '',
-    }
+    },
   },
   components: {
     ClosePopup,
@@ -105,7 +105,7 @@ Vue.use(Quasar, {
     QItemLabel,
     QItemSection,
     QLayout,
-  QList,
+    QList,
     QOptionGroup,
     QPage,
     QPageContainer,
@@ -135,7 +135,7 @@ Vue.use(Quasar, {
     QUploader,
   },
   directives: {
-    ClosePopup
+    ClosePopup,
   },
-  plugins: {}
-})
+  plugins: {},
+});

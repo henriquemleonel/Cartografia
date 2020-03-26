@@ -2,8 +2,8 @@ module.exports = {
   pluginOptions: {
     quasar: {
       importStrategy: 'manual',
-      rtlSupport: false
+      rtlSupport: false,
     }
   },
-  transpileDependencies: ['quasar']
-}
+  transpileDependencies: ['quasar'],
+};

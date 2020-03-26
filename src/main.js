@@ -1,47 +1,90 @@
-import Vue from 'vue'
-import App from './App.vue'
-import './registerServiceWorker'
-import router from './router'
-import store from './store'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+import {
+  LMap, LTileLayer, LMarker, LControlZoom, LControlAttribution, LPopup,
+} from 'vue2-leaflet';
+// import { Icon } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+import App from './App.vue';
+import './registerServiceWorker';
+import router from './router';
+import store from './store';
 
 // import axios from 'axios'
-import './quasar'
-import VueRouter from 'vue-router'
+import './quasar';
 
-window.eventBus = new Vue()
+import HeaderCard from './components/HeaderProfile.vue';
+import LogoCard from './components/LogoCard.vue';
+import PinProfile from './components/PinProfile.vue';
+import Menu from './components/Menu.vue';
+import MulticolorLine from './components/Multicolor-Line.vue';
 
-Vue.config.productionTip = false
-Vue.use(VueRouter)
+Vue.component('logo-card', LogoCard);
+Vue.component('header-card', HeaderCard);
+Vue.component('my-pin', PinProfile);
+Vue.component('my-menu', Menu);
+Vue.component('multicolor-line', MulticolorLine);
+
+// leaflet map components
+Vue.component('l-map', LMap);
+Vue.component('l-tile-layer', LTileLayer);
+Vue.component('l-marker', LMarker);
+Vue.component('l-control-zoom', LControlZoom);
+Vue.component('l-control-attribution', LControlAttribution);
+Vue.component('l-popup', LPopup);
+
+// delete Icon.Default.prototype.getIconUrl;
+
+// Icon.Default.mergeOptions({
+//   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+//   iconUrl: require('leaflet/dist/images/marker-icon.png'),
+//   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+// });
+
+// font awesome setups
+library.add(faUserSecret);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+
+window.eventBus = new Vue();
+// export const EventBus = new Vue();
+
+Vue.config.productionTip = false;
+Vue.use(VueRouter);
 
 const routes = new VueRouter({
   router,
-  mode: 'history'
-})
+  mode: 'history',
+});
 
 routes.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.getters.loggedIn) {
       next({
-        name: 'login',
-      })
+        name: 'SignIn',
+      });
     } else {
-      next()
+      next();
     }
-  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+  } else if (to.matched.some((record) => record.meta.requiresVisitor)) {
     if (store.getters.loggedIn) {
       next({
-        name: 'todo',
-      })
+        name: 'Home',
+      });
     } else {
-      next()
+      next();
     }
   } else {
-    next()
+    next();
   }
-})
+});
 
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount('#app');
