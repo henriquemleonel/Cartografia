@@ -1,5 +1,5 @@
 <template>
-  <div class="cantainer">
+  <div class="container">
 
     <div class="overlay" ref="overlay">
       <!-- <img class="imgPresentation" src="../assets/esboco.png" alt=""> -->

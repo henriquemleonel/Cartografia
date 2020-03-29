@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="moveUp">
+    <transition name="">
       <router-view :key="$route.path" />
     </transition>
   </div>
@@ -21,22 +21,20 @@
   font-family: Helvetica, 'Roboto Mono';
   box-sizing: border-box;
   padding: 0;
-  margin: 0;
 }
 
-.content {
-  border-radius: 0px;
-  background-color: white;
+.content-center {
+  // background-color: white;
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 100%;
 }
 
-.container {
-  @include for-desktop-up {
-    max-width: 1000px;
-  }
+.fixed-logo {
+  position: absolute;
+  top: 32px;
+  left: 32px;
 }
 
 // ------------------- animations ---------------------------
@@ -68,16 +66,28 @@
 }
 
 .moveUp-leave-active {
-  animation: moveUp 0.3s ease-in;
+  animation: moveUp 0.5s linear;
 }
 
 @keyframes moveUp {
   0% {
     transform: translateY(0);
   }
-  100% {
-    transform: translateY(-400px);
+  50% {
+    transform: translateY(-200px);
   }
+  100% {
+    transform: translateY(-500px);
+  }
+}
+
+// ---------------- buttons -------------------------
+.btn-primary {
+  box-shadow: none;
+  // width: 150px;
+  height: 50px;
+  border-radius: 0px;
+  background-color: black;
 }
 
 // ---------------- patterns components -------------------
@@ -97,15 +107,55 @@ display: flex;
 flex-direction: row;
 }
 
+.space-around {
+  justify-content: space-around;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
 // ------------------- margins ---------------------------
 .margin-top8 {
   margin-top: 8px;
 }
 
+.margin-top16 {
+  margin-top: 16px;
+}
+
+.margin-top32 {
+  margin-top: 32px;
+}
+
+.margin-left8 {
+  margin-left: 8px;
+}
+
+.margin-left16 {
+  margin-left: 16px;
+}
+
+.margin-rigth16 {
+  margin-right: 16px;
+}
+
 // ------------- spaced -> mix margins -------------------
 .spaced-8 {
-  margin: 4px;
+  margin-top: 4px;
   margin-bottom: 4px;
+  margin-left: 0;
+}
+
+.spaced-16 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-left: 0;
+}
+
+.spaced-32 {
+  margin-top: 16px;
+  margin-bottom: 16px;
   margin-left: 0;
 }
 
@@ -117,6 +167,12 @@ flex-direction: row;
 
 .padding-8 {
   padding: 8px;
+}
+
+// ---------------- borders -----------------------------
+
+.border-white {
+  border: 2px solid white;
 }
 
 </style>

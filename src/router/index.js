@@ -28,6 +28,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "signIn" */ '../views/SignUp.vue'),
   },
   {
+    path: '/recover',
+    name: 'Recover',
+    component: () => import(/* webpackChunkName: "signIn" */ '../views/Recover.vue'),
+  },
+  {
     path: '/profile',
     name: 'Profile',
     component: () => import(/* webpackChunkName: "signIn" */ '../views/Profile.vue'),

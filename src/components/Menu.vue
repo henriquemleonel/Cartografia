@@ -93,7 +93,7 @@
 
       <q-separator class="separator" />
 
-      <q-expansion-item class="item" group="somegroup" to="/sigIn" expand-icon-class="text-black">
+      <q-expansion-item class="item" group="somegroup" to="/signIn" expand-icon-class="text-black">
 
         <template v-slot:header>
           <q-item-section>
@@ -161,7 +161,8 @@ export default {
   background-color: black;
 
   &:hover {
-    background-color:#fa7f72;
+    background-color: #1d1e22;
+    // background-color:#fa7f72;
     transition: 0.3s linear;
     .menu-text {
       color: black;

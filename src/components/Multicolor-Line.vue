@@ -45,7 +45,8 @@ $colors: ( #683931,
 }
 
 .line {
-  height: 5px;
+  height: 3px;
+  width: 100%;
   @include stripes(to right, $colors);
 }
 

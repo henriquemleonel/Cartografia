@@ -109,81 +109,86 @@ $breakpoints: (
 
 
 // ----------------- typograph styleguide ---------------------------------
-
+  
 .big-title {
-    font-size: 6em;  // 96 px
-    letter-spacing: -1.5px;
-  }
-  
-  .title-1 {
-    font-size: 5em;  // 80 px
-    letter-spacing: -0.5px;
-  }
-  
-  .title-2 {
-    font-size: 4em;  // 64 px
-  }
-  
-  .title-3 {
-    font-size: 3em;  // 48px
-  }
+  font-size: 3rem;  // 48 px
+  letter-spacing: -0.5px;
+}
 
-  .title-4 {
-    font-size: 1.5em;
-  }
-  
-  .subheading {
-    font-size: 2em;  // 32 px
-    letter-spacing: 0.25px;
-  }
-  
-  .subheading-2 {
-    font-size: 1.5em;  // 24 px
-  }
-  
-  .body-1 {
-    font-size: 1.25em;  // 20 px
-    letter-spacing: 0.15px;
-  }
-  
-  .body-2 {
-    font-size: 1em;  // 16 px
-    letter-spacing: 0.15px;
-  }
-  
-  .body-large {
-    font-size: 1.25em;  // 20 px
-    letter-spacing: 0.15px;
-    font-weight: bold;
-  }
-  
-  .caption {
-    font-size: 0.75em;  // 12 px
-    letter-spacing: 0.4px;
-  }
-  
-  .overline {
-    font-size: 0.625em; // 10 px
-    letter-spacing: 1.5px;
-  }
-  
-  .btn-text {
-    font-size: 0.875em;  // 14 px
-    letter-spacing: 1.25px;
-  }
-  
-  .bold {
-    font-weight: bold;
-  }
-  
-  .bolder {
-    font-weight: bolder;
-  }
-  
-  .text-white {
-    color: white;
-  }
-  
-  .text-black {
-    color: black;
-  }
+.title-1 {
+  font-size: 2.125rem;  // 34 px
+}
+
+.title-2 {
+  font-size: 1.75rem;  // 28 px
+}
+
+.title-3 {
+  font-size: 1.125rem; // 18 px
+}
+
+.headline {
+  font-size: 1.375rem;  // 22 px
+  letter-spacing: 0.25px;
+}
+
+.headline-2 {
+  font-size: 1.125rem;  // 18 px
+}
+
+.headline-3 {
+  font-size: 1rem;  // 16 px
+}
+
+.body-1 {
+  font-size: 1.125rem;  // 18 px
+  letter-spacing: 0.15px;
+}
+
+.body-2 {
+  font-size: 1rem;  // 16 px
+  letter-spacing: 0.15px;
+}
+
+.body-large {
+  font-size: 1.125rem;  // 18 px
+  letter-spacing: 0.15px;
+  font-weight: bold;
+}
+
+.body-large2 {
+  font-size: 1rem;  // 16 px
+  letter-spacing: 0.15px;
+  font-weight: bold;
+}
+
+.caption {
+  font-size: 0.75rem;  // 12 px
+  letter-spacing: 0.4px;
+}
+
+.overline {
+  font-size: 0.625rem; // 10 px
+  letter-spacing: 1.5px;
+}
+
+.btn-text {
+  font-size: 0.875em;  // 14 px
+  letter-spacing: 1.25px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.bolder {
+  font-weight: bolder;
+}
+
+.text-white {
+  color: white;
+}
+
+.text-black {
+  color: black;
+}
