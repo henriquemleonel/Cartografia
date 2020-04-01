@@ -11,16 +11,20 @@
 @import './styles/mixins.scss';
 
 #app {
-  font-family: Helvetica, Arial, sans-serif;
+  // font-family: Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 // ----------------- typograph styleguide -------------------
 * {
-  font-family: Helvetica, 'Roboto Mono';
+  // font-family: Helvetica, 'Roboto Mono';
   box-sizing: border-box;
   padding: 0;
+}
+
+.font2 {
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .content-center {
@@ -107,12 +111,16 @@ display: flex;
 flex-direction: row;
 }
 
-.space-around {
+.justify-around {
   justify-content: space-around;
 }
 
-.space-between {
+.justify-between {
   justify-content: space-between;
+}
+
+.no-wrap {
+  flex-wrap: nowrap;
 }
 
 // ------------------- margins ---------------------------
