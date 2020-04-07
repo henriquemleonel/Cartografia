@@ -10,6 +10,8 @@ import {
 // import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+import VueMasonry from 'vue-masonry-css';
+
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
@@ -23,12 +25,14 @@ import LogoCard from './components/LogoCard.vue';
 import PinProfile from './components/PinProfile.vue';
 import Menu from './components/Menu.vue';
 import MulticolorLine from './components/Multicolor-Line.vue';
+import Event from './components/Event.vue';
 
 Vue.component('logo-card', LogoCard);
 Vue.component('header-card', HeaderCard);
 Vue.component('my-pin', PinProfile);
 Vue.component('my-menu', Menu);
 Vue.component('multicolor-line', MulticolorLine);
+Vue.component('my-event', Event);
 
 // leaflet map components
 Vue.component('l-map', LMap);
@@ -52,6 +56,9 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 window.eventBus = new Vue();
 // export const EventBus = new Vue();
+
+// masonry grid setup
+Vue.use(VueMasonry);
 
 Vue.config.productionTip = false;
 Vue.use(VueRouter);

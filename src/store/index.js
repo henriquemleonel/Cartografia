@@ -12,17 +12,137 @@ export default new Vuex.Store({
     token: localStorage.getItem('access_token') || null,
     signedIn: false,
     currentUser: {},
-    allPins: [],
-    AllEvents: []
+    pins: [
+      {}
+    ],
+    events: [
+      {
+        id: '1',
+        name:'Dance_Fest',
+        date: { month: 'Abril', day: '15', year: '2020', hour: '13:00' },
+        address: { street: 'Rua do Dinar', neighborhood: 'Vila Carlota', city: 'campo grande' },
+        ticket: '0',
+        link: 'https://www.facebook.com/henriquemleonel',
+        description: 'Festival de dança da comunidade para a comunidade, venha se divertir',
+        category: { value: 'Dança', color: '#683931' },
+        imgUrl: 'https://placeimg.com/500/300/nature',
+      },
+      {
+        id: '2',
+        name:'Festival Forró',
+        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
+        ticket: '0',
+        link: 'https://www.facebook.com/henriquemleonel',
+        description: 'pula fogueira',
+        category: { value: 'Música', color: '#D3869B' },
+        imgUrl: 'https://placeimg.com/500/300/nature',
+      },
+      {
+        id: '3',
+        name:'"Como não viver em isolamento"',
+        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
+        ticket: '0',
+        link: 'https://www.facebook.com/henriquemleonel',
+        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica ede impressos,',
+        category: { value: 'Teatro', color: '#683931' },
+        imgUrl: 'https://placeimg.com/500/300/nature',
+      },
+      {
+        id: '4',
+        name:'Fashion Trends CG',
+        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
+        ticket: '0',
+        link: '',
+        description: 'pula fogueira ',
+        category: { value: 'Moda', color: '#BD6A5C' },
+        imgUrl: 'https://placeimg.com/500/300/nature',
+      },
+      {
+        id: '5',
+        name:'Mis Hitchcok',
+        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
+        ticket: '0',
+        link: '',
+        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
+        category: { value: 'Cinema', color: '#4692C1' },
+        imgUrl: 'https://placeimg.com/500/300/nature',
+      },
+      {
+        id: '6',
+        name:'Festa Junina',
+        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
+        ticket: '0',
+        link: '',
+        description: 'pula fogueira ',
+        category: { value: 'Cultura Popular', color: '#E6B545' },
+        imgUrl: 'https://placeimg.com/500/300/nature',
+      },
+      {
+        id: '7',
+        name:'Photo Export',
+        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
+        ticket: '0',
+        link: '',
+        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
+        category: { value: 'Fotografia', color: '#254C26' },
+        imgUrl: 'https://placeimg.com/500/300/nature',
+      },
+      {
+        id: '8',
+        name:'Print',
+        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
+        ticket: '0',
+        link: '',
+        description: 'pula fogueira ',
+        category: { value: 'Arte Digital', color: '#DBB753' },
+        imgUrl: 'https://placeimg.com/500/300/nature',
+      },
+    ]
   },
 
   getters: {
     loggedIn(state) {
       return state.token !== null
     },
+    pinsFiltered(state) {
+      if(state.filter === 'all') {
+        return state.pins;
+      }
+      return state.pins;
+    },
+    eventsFiltered(state) {
+      if(state.filter === 'all') {
+        return state.events;
+      }
+      return state.events;
+    },
   },
 
-  mutations: {},
+  mutations: {
+    addEvent(state, events) {
+      state.events.push({
+        id: events.id,
+        title: events.title,
+        completed: false,
+        editing: false,
+      })
+    },
+    addEvent(state, pins) {
+      state.pins.push({
+        id: pins.id,
+        title: pins.title,
+        completed: false,
+        editing: false,
+      })
+    },
+  },
   actions: {
     retrieveToken(context, credentials) {
 

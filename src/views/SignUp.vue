@@ -4,7 +4,7 @@
 
       <logo-card class="header" :blackMode="true"/>
 
-      <multicolor-line class="line margin-top8"/>
+      <multicolor-line class="line mg-top8"/>
 
       <div class="info">
 
@@ -18,7 +18,7 @@
           </span>
         </div>
 
-        <div class="margin-top8">
+        <div class="mg-top8">
           <span class="headline bold">O cadastro permitirá:</span>
         </div>
 
@@ -103,7 +103,7 @@
 
           <q-checkbox v-model="terms" color="green-10"  true-value="item.category"/>
           <span class="body-2">Eu li e concordo com os
-            <a class="link" href="#"><strong>Termos de Uso</strong></a>
+            <a class="link" href=""><strong>Termos de Uso</strong></a>
             e <a class="link" href="#"><strong>Privacidade.</strong></a>
           </span>
 

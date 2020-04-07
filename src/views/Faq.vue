@@ -1,34 +1,46 @@
 <template>
+  <div class="container">
 
-  <div class="content">
-    <logo-card :bordered="true"/>
-    <h1 style="color: black">faq page h1</h1>
-    <div class="column">
-      <span class="big-title"> bigtitle</span>
-      <span class="title-1"> title1</span>
-      <span class="title-2"> title2</span>
-      <span class="title-3"> title3</span>
-      <span class="subheading"> subheading</span>
-      <span class="subheading-2"> subheading2</span>
-      <span class="body-text"> body-text</span>
-      <span class="body-large"> body-large</span>
-      <span class="caption"> caption</span>
-      <span class="overline"> overline</span>
-      <span class="button-text"> button</span>
+    <!-- <logo-card class="fixed-logo" :blackMode="true"/> -->
+    <div class="content-center column">
+
+      <header class="spaced-32">
+        <logo-card :blackMode="true"/>
+
+        <multicolor-line class="line mg-top32"/>
+      </header>
+
+      <section class="column spaced-32">
+
+        <span class="title-1 bolder"> Perguntas Frequentes </span>
+
+        <span class="body-2 bold mg-top32"></span>
+        <p class="body-2 font2 mg-top8">
+          1. A navegação pelas informações disponíveis na Plataforma Cartografia da Cultura é anônima.
+        </p>
+
+      </section>
+
+      <div class="white-space"></div>
+
     </div>
-    <div id="teste"></div>
-    <div id="frm"/>
-  </div>
 
+  </div>
 </template>
 
 <script>
+
 export default {
-  name: 'Faq',
+  name: 'termsPage',
   data() {
     return {
-
     };
+  },
+  watch: {
+  },
+  methods: {
+  },
+  computed: {
   },
 };
 </script>
@@ -38,19 +50,98 @@ export default {
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
-
-#seila {
-  height: 600px;
-  background-color: yellow;
+.container {
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
-#teste {
-  height: 800px;
+.content-center {
+  // background-color: black;
+  // position: absolute;
+  // left: 50%;
+  // transform: translateX(-50%);
+  width: 800px;
+  padding: 16px;
+  z-index: 0;
+  align-items: flex-start;
+  //border: 2px solid white;
 }
 
-#frm {
-  height: 400px;
-  background-color: red;
+span, p, a {
+  color: black;
 }
 
+a {
+  text-decoration: none;
+}
+
+.link {
+  align-items: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.white-space {
+  height: 60px;
+  //border: 2px solid green;
+}
+
+header, .plat, .team, .contato, .colabor {
+  width: 100%;
+}
+
+.line {
+  height: 3px;
+  background-color: white;
+}
+
+// ----------------- transitions ------------------
+.slide-enter-active,
+.slide-leave-active {
+  transition: opacity 1s, transform 1s;
+}
+
+.slide-enter,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30%);
+}
+
+.moveUp-enter-active {
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  0%{
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.moveUp-leave-active {
+  animation: moveUp 0.5s linear;
+}
+
+@keyframes moveUp {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-200px);
+  }
+  100% {
+    transform: translateY(-500px);
+  }
+}
 </style>

@@ -8,7 +8,7 @@
       <header class="spaced-32">
         <logo-card :blackMode="false"/>
 
-        <multicolor-line class="line margin-top32"/>
+        <multicolor-line class="line mg-top32"/>
       </header>
 
       <section class="plat spaced-32">
@@ -85,18 +85,18 @@
 
         <div class="links row align-center">
 
-          <a class="caption font2 bold">cartografiadacultura.plataforma@forum.com</a>
-          <span class="margin-left16">|</span>
+          <a class="caption font2 bold">cartografiadacultura.plataforma@forum.com </a>
+          <span class="mg-left16">|</span>
 
-          <div class="row align-center margin-left8">
+          <div class="row align-center mg-left8">
             <!-- <q-btn flat round type="a" target="_blank" size="md" href="https://www.facebook.com/AlgoRitmo.ufms/">
               <q-icon size="xs" name="fab fa-facebook-square" color="white"></q-icon>
             </q-btn> -->
             <a class="caption font2 bold" target="_blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
           </div>
-          <span class="margin-left16">|</span>
+          <span class="mg-left16">|</span>
 
-          <div class="row align-center margin-left8">
+          <div class="row align-center mg-left8">
             <!-- <q-btn flat round  type="a" target="_blank" size="md" href="https://www.instagram.com/algo.ritmo_/">
               <q-icon size="xs" name="fab fa-instagram" color="white"></q-icon>
             </q-btn> -->
@@ -113,7 +113,7 @@
 
         <!-- <span class="title-2 bolder">Colaboradores</span> -->
 
-        <div class="row margin-top8">
+        <div class="row mg-top8">
 
           <div class="colab-item column spaced-16">
 
@@ -127,8 +127,8 @@
             <div class="links row align-center">
 
               <span class="caption font2 bold">email@email.com</span>
-              <a class="caption font2 bold margin-left16" target="blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
-              <a class="caption font2 bold margin-left16" target="blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
+              <a class="caption font2 bold mg-left16" target="blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
+              <a class="caption font2 bold mg-left16" target="blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
 
               <!-- <q-btn flat round type="a" target="_blank" size="md" href="https://www.facebook.com/AlgoRitmo.ufms/">
                 <q-icon size="sm" name="fab fa-facebook-square" color="white"></q-icon>
@@ -155,8 +155,8 @@
             <div class="links row align-center">
 
               <span class="caption font2 bold">email@email.com</span>
-              <a class="caption font2 bold margin-left16" target="blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
-              <a class="caption font2 bold margin-left16" target="blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
+              <a class="caption font2 bold mg-left16" target="blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
+              <a class="caption font2 bold mg-left16" target="blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
 
             </div>
 

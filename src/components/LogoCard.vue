@@ -86,10 +86,6 @@ export default {
   font-weight: 750;
   font-size: 2em; // 32px
   line-height: 1.875rem;
-
-  @include for-phone-only {
-    font-size: 2.5em;
-  }
 }
 
 .subtitle {

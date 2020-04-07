@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="">
+    <transition>
       <router-view :key="$route.path" />
     </transition>
   </div>
@@ -18,13 +18,13 @@
 
 // ----------------- typograph styleguide -------------------
 * {
-  // font-family: Helvetica, 'Roboto Mono';
+  font-family: Helvetica, 'Roboto Mono';
   box-sizing: border-box;
   padding: 0;
 }
 
 .font2 {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Courier New' !important;
 }
 
 .content-center {
@@ -41,7 +41,7 @@
   left: 32px;
 }
 
-// ------------------- animations ---------------------------
+// ------------------- transitions ---------------------------
 .slide-enter-active,
 .slide-leave-active {
   transition: opacity 1s, transform 1s;
@@ -124,27 +124,43 @@ flex-direction: row;
 }
 
 // ------------------- margins ---------------------------
-.margin-top8 {
+.mg-top8 {
   margin-top: 8px;
 }
 
-.margin-top16 {
+.mg-top-n8 {
+  margin-top: -8px;
+}
+
+.mg-top-n10 {
+  margin-top: -10px;
+}
+
+.mg-top16 {
   margin-top: 16px;
 }
 
-.margin-top32 {
+.mg-top-n16 {
+  margin-top: -16px;
+}
+
+.mg-top32 {
   margin-top: 32px;
 }
 
-.margin-left8 {
+.mg-left8 {
   margin-left: 8px;
 }
 
-.margin-left16 {
+.mg-left16 {
   margin-left: 16px;
 }
 
-.margin-rigth16 {
+.mg-left32 {
+  margin-left: 32px;
+}
+
+.mg-rigth16 {
   margin-right: 16px;
 }
 
