@@ -74,24 +74,18 @@ export default {
 @import '../styles/mixins.scss';
 
 * {
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   box-sizing: border-box;
-  color: black;
 }
 
 .box {
   overflow: hidden;
-  // border: 2px solid black;
-  // position: relative;
-  margin-top: 2px;
-  margin-bottom: 4px;
-  margin-left: 2px;
-  margin-right: 2px;
+  max-width: 350px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
   transition: transform .2s;
-
-  &:hover {
-    // transform: translateY(0.5em);
-  }
 
   @include for-phone-only {
     max-width: 450px;

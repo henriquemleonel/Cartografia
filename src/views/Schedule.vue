@@ -6,9 +6,9 @@
     <div class="aside column">
 
       <header class="spaced-32">
-        <logo-card :blackMode="false"/>
 
-        <multicolor-line class="line margin-top32"/>
+        <logo-card :blackMode="true"/>
+
       </header>
 
       <section class="recentes spaced-32">
@@ -27,7 +27,7 @@
         :bar-style="barStyle"
       >
 
-        <masonry class="items" :cols="{ default: 3, 900: 2, 600:1 }" :gutter="4">
+        <masonry class="items" :cols="{ default: 3, 900: 2, 600:1 }" :gutter="0">
           <div  v-for="item in allEvents" :key="item.id">
             <my-event class="item" :item="item" :bgColor="item.category.color"/>
           </div>
@@ -84,7 +84,6 @@ export default {
 @import '../styles/mixins.scss';
 
 .container {
-  background-color: black;
   width: 100%;
   height: 100vh;
   padding: 0px;
@@ -95,7 +94,7 @@ export default {
 .aside {
   background-color: white;
   height: 100vh;
-  flex-basis: 20%;
+  flex-basis: 22%;
   min-width: 250px;
   padding: 16px;
   align-items: center;
@@ -105,7 +104,7 @@ export default {
   // background-color: white;
   background-color: #f5f5f5; //gelo
   height: 100%;
-  flex-basis: 80%;
+  flex-basis: 75%;
   overflow-X: hidden;
 }
 

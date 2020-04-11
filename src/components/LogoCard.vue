@@ -2,15 +2,15 @@
   <div class="box" :class="{ 'black-mode' : blackMode, 'bordered' : bordered }" @click="goToHome()">
 
     <div class="top">
-      <span class="title"> {{ title }} </span>
+      <span class="title-2 bold line-height"> {{ title }} </span>
       <!-- <div class="whitespace"></div> -->
     </div>
 
     <div class="bottom column">
-      <span class="subtitle"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
+      <span class="caption bold"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
       <span class="nd-sub"> {{ subtitle }} </span>
       <div class="line"></div>
-      <span class="text"> {{ text }} </span>
+      <span class="overline bold"> {{ text }} </span>
     </div>
 
   </div>
@@ -41,9 +41,10 @@ export default {
 
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
+@import '../styles/typo.scss';
 
 * {
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   box-sizing: border-box;
   color: black;
 }
@@ -82,19 +83,8 @@ export default {
   }
 }
 
-.title {
-  font-weight: 750;
-  font-size: 2em; // 32px
+.line-height {
   line-height: 1.875rem;
-}
-
-.subtitle {
-  font-size: 0.75rem;
-  font-weight: 700;
-
-  @include for-phone-only {
-    display: none;
-  }
 }
 
 .nd-sub {
@@ -114,11 +104,6 @@ export default {
   background-color: black;
 }
 
-.text {
-  font-size: 0.625rem;
-  font-weight: 700;
-}
-
 .black-mode {
   background-color: black;
 
@@ -126,7 +111,7 @@ export default {
     background-color: white;
   }
 
-  .title, .subtitle, .text, .nd-sub {
+  .title-2, .caption, .overline, .nd-sub {
     color: white;
   }
 }

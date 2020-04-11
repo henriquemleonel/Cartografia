@@ -1,35 +1,46 @@
 <template>
-  <div class="content">
-    <!-- <q-btn class="outline pulse" filled to="/" text-color="white" style="background-color: transparent; width: 60px; min-height: 150px;
-     position: absolute; top: 64px; left: 62px; border: 2px solid white; border-radius: 20px; padding: 10px; z-index: 1;">
-      <div class="column space-around" style="height: 100%;">
-        <q-icon name="keyboard_arrow_left"></q-icon>
-        <span style="writing-mode: vertical-rl; text-orientation: upright; font-size: 18px; font-weight: 800">Mapa</span>
+  <div class="container">
+
+    <div class="content grid">
+
+      <!-- identidada da plataforma -->
+      <div class="logo">
+        <logo-card :blackMode="false"/>
       </div>
-    </q-btn> -->
 
-    <div class="container">
+      <!-- imagem/foto do usuário -->
+      <div class="user-img">
+        <img src="../assets/statics/avatar01.jpg" style="width: 200px; height: 200px;"/>
+      </div>
 
-      <header class="column" >
+      <!-- informaçoes do usuário (editáveis) -->
+      <div class="user-info" >
 
         <header-card
           class="profile-card"
-          v-bind:name="this.userName"
-          v-bind:email="this.userEmail"
-          v-bind:password="this.userPassword"
-          v-bind:category="this.userCategory"
+          :info="getUser"
           v-on:callEditInfo="showEditInfo()"
         />
 
-      </header>
+      </div>
 
-      <div class="context">
+      <!-- pin -->
+      <div class="pin">
 
-        <my-pin />
+        <span>pin</span>
+        <!-- <my-pin /> -->
 
       </div>
 
-      <footer style="heigth: 250px;"/>
+      <!-- evento (inserção/edição) -->
+      <div class="event">
+        <span>adicionar evento</span>
+      </div>
+
+      <!--  tabela de eventos -->
+      <div class="events">
+        <span>meus eventos</span>
+      </div>
 
     </div>
 
@@ -41,15 +52,6 @@ export default {
   name: 'Profile',
   data() {
     return {
-      userName: 'Juliana Trujillo',
-      userCategory: 'Cinema e AudioVisual',
-      userEmail: 'JulianaTrujillo@email.com',
-      userPassword: '**********',
-      opemEditInfo: false,
-      opemBoxPin: false,
-      opemBoxEvent: false,
-      addPin: false,
-      addEvent: false,
       nomeEvento: '',
       localEvento: '',
       dataEvento: '',
@@ -71,7 +73,7 @@ export default {
       return this.$store.state.signedIn;
     },
     getUser() {
-      return this.$store.state.user;
+      return this.$store.state.currentUser;
     },
   },
   methods: {
@@ -100,27 +102,95 @@ export default {
 @import '../styles/mixins.scss';
 
 * {
-  font-family: helvetica;
+  font-family: 'Helvetica-Bold';
   box-sizing: border-box;
 }
 
-.content {
-  border-radius: 0px;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
 .container {
-  width: 90%;
+  display: flex;
+  // justify-content: center;
+  align-items: flex-start;
+  border-radius: 0px;
+  // background-color: #f5f5f5;
+  background-color: white;
+  padding: 32px;
+  width: 100%;
+  height: 100vh;
 
-  @include for-desktop-up {
-    max-width: 1000px;
+  @media screen and (max-width: 1200px) {
+    align-items: flex-start;
   }
 }
 
+// .content {
+
+//   // @include for-desktop-up {
+//   //   max-width: 1400px;
+//   // }
+// }
+
+span {
+  font-family: 'Helvetica-Normal';
+  font-weight: bolder;
+  font-size: 2em;
+  color: white;
+  margin: 16px;
+}
+
+// ------------------------- my grid -----------------------------------------------------
+.grid {
+  display: grid;
+  grid-template-columns: 12.5rem 12.5rem 21.875rem 21.875rem 12.5rem;  // 200 200 350 350 200 (px)
+  grid-auto-rows: 200px;
+  gap: 4px;
+}
+
+.logo {
+  background-color: #C95B40;
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+
+.user-img {
+  background-color: #529E63;
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+.user-info {
+  // background-color: #AD3B3B;
+  grid-column: 1/3;
+  grid-row: 2/3;
+}
+
+.pin {
+  background-color: #254C26;
+  grid-column: 3/4;
+  grid-row: 1/3;
+}
+
+.event {
+  background-color: #BD6A5C;
+  grid-column: 4/5;
+  grid-row: 1/2;
+}
+
+.events {
+  background-color: #DBB753;
+  grid-column: 5/6;
+  grid-row: 1/3;
+
+  @media screen and (max-width: 1350px) {
+    grid-column: 4/5;
+    grid-row: 2/3;
+  }
+}
+
+// .pin, .event, .events {
+//   display: none;
+// }
+
+// ---------------------------------- others ---------------------------------------------
 .edit-info {
   height: 0px;
   width: 100%;

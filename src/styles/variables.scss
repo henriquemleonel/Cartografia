@@ -32,7 +32,7 @@ $breakpoints: (
 
 
 .bg-default {
-    background-color: yellow;
+    background-color: f5f5f5;
 }
 
 .bg-dance {
@@ -113,6 +113,7 @@ $breakpoints: (
 .big-title {
   font-size: 3rem;  // 48 px
   letter-spacing: -0.5px;
+  line-height: 2.5rem;
 }
 
 .title-1 {
@@ -138,6 +139,7 @@ $breakpoints: (
 
 .headline-3 {
   font-size: 1rem;  // 16 px
+  letter-spacing: 0.15px;
 }
 
 .body-1 {
@@ -176,6 +178,10 @@ $breakpoints: (
 .btn-text {
   font-size: 0.875em;  // 14 px
   letter-spacing: 1.25px;
+}
+
+.ligth {
+  font-weight: lighter;
 }
 
 .bold {

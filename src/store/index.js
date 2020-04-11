@@ -11,7 +11,12 @@ export default new Vuex.Store({
   state: {
     token: localStorage.getItem('access_token') || null,
     signedIn: false,
-    currentUser: {},
+    currentUser: {
+      name: 'Juliana Trujillo',
+      category: { value: 'Cinema e AudioVisual', color: '#4692C1'},
+      email: 'JulianaTrujillo@email.com',
+      password: '123umdoistres',
+    },
     pins: [
       {}
     ],

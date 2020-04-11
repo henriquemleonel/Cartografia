@@ -1,30 +1,29 @@
 <template>
   <div class="card row">
 
-    <logo-card class="logo-card" :blackMode="false" :bordered="true"/>
-
-    <div class="picture-box">
-      <img class="picture" src="../assets/statics/avatar01.jpg">
-    </div>
-
-    <div class="info column bg-default" :class="{ 'active-bg' : isActive }">
+    <div class="info column" :style="{ 'background-color' : bg }">
 
       <div class="user-info column">
-        <span class="title-3"> {{ name }} </span>
-        <span class="subheading-2"> {{ category }} </span>
+        <span class="title-1 bolder"> {{ name }} </span>
+        <span class="subheading-2 bold mg-top-n8"> {{ category }} </span>
+
+        <q-btn flat round class="btn" size="1em" v-on:click="active" color="white">
+          <!-- <span class="span-btn-form">Editar perfil</span> -->
+          <q-icon name="fas fa-ellipsis-h" size="1.2em" color="white"/>
+        </q-btn>
+
       </div>
 
-      <div class="user-edit row">
+      <div class="user-edit row" v-if="editActive">
 
         <div class="column">
-          <span class="body-2 bold"> {{ email }} </span>
-          <span class="caption"> {{ password }} </span>
-        </div>
+          <!-- <span class="caption bold"> {{ email.toLowerCase() }} </span> -->
 
-        <q-btn flat class="btn" v-on:click="opemEditInfo()" color="black">
-          <!-- <span class="span-btn-form">Editar perfil</span> -->
-          <q-icon name="settings" color="white"/>
-        </q-btn>
+          <q-input class="input" v-model="email" color="white" label="email:" label-color="white" />
+
+          <q-input class="input" v-model="email" color="white" label="senha:" label-color="white" />
+
+        </div>
 
       </div>
 
@@ -44,14 +43,35 @@ export default {
   data() {
     return {
       isActive: true,
-      theme: 'bg-photography',
+      bg: this.info.category.color,
+      name: this.info.name,
+      category: this.info.category.value,
+      email: this.info.email,
+      password: this.info.password,
+      editActive: false,
     };
   },
-  props: ['name', 'email', 'password', 'category'],
-  methods: {
-    opemEditInfo() {
-      this.$emit('callEditInfo');
+  props: {
+    info: {
+      type: Object,
     },
+    bgColor: {
+      type: String,
+    },
+  },
+  methods: {
+    active() {
+      this.editActive = !this.editActive;
+    },
+  },
+  computed: {
+    // cutTitle() {
+    //   const aux = this.name;
+    //   if (this.aux.length > 24) {
+    //     return this.aux.splice(22, 24, '..');
+    //   }
+    //   return this.aux;
+    // },
   },
 };
 </script>
@@ -60,23 +80,18 @@ export default {
 
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
-$header-height: 190px;
-
-.active-bg {
-  background-color: $f;
-}
 
 * {
+  font-family: 'Helvetica';
   box-sizing: border-box;
 }
 
 .card {
-  height: $header-height;
   width: 100%;
-  height: 100%;
+  // height: 100%;
   display: flex;
   justify-content: flex-start;
-  overflow: hidden;
+  // overflow: hidden;
   flex-wrap: nowrap;
 
   @include for-phone-only {
@@ -84,66 +99,38 @@ $header-height: 190px;
   }
 }
 
-.logo-card {
-  height: $header-height;
-  margin-right: 8px;
-  align-self: flex-end;
-
-  @include for-phone-only {
-    width: 50%;
-  }
-}
-
-.picture-box {
-  height: $header-height;
-
-  @include for-phone-only {
-    max-width: 50%;
-  }
-}
-
-.picture {
-  height: inherit;
-  overflow: hidden;
-  border: 1px solid $f;
-
-  @include for-phone-only {
-    height: 100%;
-  }
-}
-
 .info {
-  height: $header-height;
+  // height: $header-height;
   padding: 16px;
   position: relative;
   box-sizing: border-box;
-  width: 400px;
+  width: inherit;
+  // height: inherit;
+}
 
-  @include for-phone-only {
-    width: 100%;
-  }
+.user-info {
+  align-self: flex-start;
+}
 
-  @include for-tablet-portrait-up {
-    min-width: 450px;
-  }
+.user-edit {
+  width: 100%;
+  margin-top: 16px;
+  align-items: center;
+  transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.input {
+  width: 300px;
 }
 
 span {
   color: white;
-  font-family: Helvetica;
 }
 
-.user-info {
+.btn {
   position: absolute;
   top: 16px;
-  align-self: flex-start;
-  z-index: 1;
-}
-
-.user-edit {
-  position: absolute;
-  bottom: 16px;
-  align-items: center;
+  right: 16px;
 }
 
 </style>

@@ -5,6 +5,7 @@
 
     <div class="content-center column">
 
+      <!-- start header section -->
       <header class="spaced-32">
         <logo-card :blackMode="false"/>
 
@@ -13,8 +14,8 @@
 
       <section class="plat spaced-32">
 
-        <span class="title-2 bolder"> Sobre </span>
-        <p class="body-2 font2 margin-top16">
+        <span class="title-2 bold"> Sobre </span>
+        <p class="body-2 margin-top16">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores corporis dicta unde ratione
           eligendi numquam repudiandae maxime tenetur, error temporibus exercitationem quae? Minus ipsa
           ducimus eaque quae dolor, eius saepe! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
@@ -43,15 +44,16 @@
 
       <div class="white-space"></div>
 
+      <!-- start section team -->
       <section class="team spaced-32">
 
-        <span class="title-2 bolder">Nosso Time</span>
+        <span class="title-2 bold">Nosso Time</span>
 
         <div class="row">
 
           <q-item class="item spaced-32" dense v-for="item in team" :key="item.name">
             <q-item-section side>
-              <q-avatar round size="xl">
+              <q-avatar square size="xl">
                 <img :src="item.path" />
               </q-avatar>
             </q-item-section>
@@ -60,7 +62,7 @@
                 <span class="body-3 bold"> {{ item.name }} </span>
               </q-item-label>
               <q-item-label caption>
-                <span class="caption font2 bold"> {{ item.category }} </span>
+                <span class="caption bold"> {{ item.category }} </span>
               </q-item-label>
               <!-- <q-item-label>
                 <q-btn flat round type="a" target="_blank" size="0.7em" href="https://www.facebook.com/AlgoRitmo.ufms/">
@@ -79,29 +81,20 @@
 
       <div class="white-space"></div>
 
+      <!-- start section contato -->
       <section class="contato spaced-32">
 
         <span class="title-2 bolder">Contato</span>
 
         <div class="links row align-center">
 
-          <a class="caption font2 bold">cartografiadacultura.plataforma@forum.com </a>
+          <a class="body-3 font2 bold">cartografiadacultura.plataforma@forum.com </a>
           <span class="mg-left16">|</span>
 
-          <div class="row align-center mg-left8">
-            <!-- <q-btn flat round type="a" target="_blank" size="md" href="https://www.facebook.com/AlgoRitmo.ufms/">
-              <q-icon size="xs" name="fab fa-facebook-square" color="white"></q-icon>
-            </q-btn> -->
-            <a class="caption font2 bold" target="_blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
-          </div>
+          <a class="body-3 font2 bold mg-left8" target="_blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
           <span class="mg-left16">|</span>
 
-          <div class="row align-center mg-left8">
-            <!-- <q-btn flat round  type="a" target="_blank" size="md" href="https://www.instagram.com/algo.ritmo_/">
-              <q-icon size="xs" name="fab fa-instagram" color="white"></q-icon>
-            </q-btn> -->
-            <a class="caption font2 bold" target="_blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
-          </div>
+          <a class="body-3 font2 bold mg-left8" target="_blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
 
         </div>
 
@@ -109,6 +102,7 @@
 
       <div class="white-space"></div>
 
+      <!-- start section colaboradores -->
       <section class="colabor spaced-32">
 
         <!-- <span class="title-2 bolder">Colaboradores</span> -->
@@ -203,6 +197,10 @@ export default {
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
+* {
+  font-family: 'Helvetica';
+}
+
 .container {
   background-color: black;
   width: 100%;
@@ -249,13 +247,13 @@ header, .plat, .team, .contato, .colabor {
   width: 100%;
 }
 
-.plat {
-  // border: 2px solid white;
-}
+// .plat {
+//   // border: 2px solid white;
+// }
 
-.contato, .team {
-  // border: 2px solid yellow;
-}
+// .contato, .team {
+//   // border: 2px solid yellow;
+// }
 
 .colab-box {
   height: 60px;

@@ -1,0 +1,25 @@
+$font-path: '/assets/fonts/';
+
+@font-face {
+    font-family: 'Helvetica';
+    src:  local('Helvetica Bold'), local('Helvetica-Bold'),
+      url($font_path + 'Helvetica-Bold.ttf') format('ttf');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src:  local('Helvetica Normal'), local('Helvetica-Normal'),
+    url($font_path + 'Helvetica-Normal.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src:  local('Helvetica Ligth'), local('Helvetica-Ligth'),
+    url($font_path + 'Helvetica-Ligth.ttf') format('ttf');
+  font-weight: lighter;
+  font-style: normal;
+}

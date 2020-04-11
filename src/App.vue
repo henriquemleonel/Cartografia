@@ -9,6 +9,7 @@
 <style lang="scss">
 @import './styles/variables.scss';
 @import './styles/mixins.scss';
+@import './styles/typo.scss';
 
 #app {
   // font-family: Helvetica, Arial, sans-serif;
@@ -18,7 +19,6 @@
 
 // ----------------- typograph styleguide -------------------
 * {
-  font-family: Helvetica, 'Roboto Mono';
   box-sizing: border-box;
   padding: 0;
 }
@@ -30,8 +30,6 @@
 .content-center {
   // background-color: white;
   display: flex;
-  // flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
@@ -88,7 +86,7 @@
 // ---------------- buttons -------------------------
 .btn-primary {
   box-shadow: none;
-  // width: 150px;
+  max-width: 150px;
   height: 50px;
   border-radius: 0px;
   background-color: black;

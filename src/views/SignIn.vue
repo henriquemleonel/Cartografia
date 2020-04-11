@@ -1,13 +1,13 @@
 <template>
   <div class="container">
 
-    <logo-card class="fixed-logo" :blackMode="true"/>
-
     <div class="content-center column">
+
+      <logo-card class="logo" :blackMode="true"/>
 
       <div class="card column">
 
-        <span class="title-2 bolder"> Olá novamente </span>
+        <!-- <span class="title-2 bolder"> Bem vindo </span> -->
 
         <div class="input-field">
 
@@ -50,15 +50,16 @@
           <router-link to="/recover">
             <span class="link bold">Esqueceu a senha?</span>
           </router-link>
+
           <router-link to="/signUp">
-            <span class="link bold">Cadastre-se</span>
+            <span class="link bold">Não tem uma conta? Cadastre-se</span>
           </router-link>
 
         </div>
 
         <q-btn
           flat
-          class="btn-login"
+          class="btn"
           color="white"
           @click="signIn()"
         >
@@ -136,24 +137,25 @@ export default {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
+  width: 600px;
   padding: 32px;
   height: 100vh;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.fixed-logo {
-  position: absolute;
-  top: 32px;
-  left: 32px;
+.logo {
+  margin-top: 0px;
+  align-self: flex-start;
 }
 
 .card {
-  width: 450px;
-  padding: 32px;
+  width: 400px;
+  padding: 0px;
   background-color: white;
   justify-content: center;
   align-items: flex-start;
+  margin-top: 32px;
+  // border: 2px solid green;
 }
 
 .input-field {
@@ -184,22 +186,22 @@ export default {
   }
 }
 
-.btn-login {
+.btn {
   box-shadow: none;
   align-self: center;
-  width: 150px;
-  height: 50px;
+  width: 120px;
+  height: 40px;
   border-radius: 0px;
   background-color: black;
   margin-top: 16px;
 }
 
-.btn-login:hover {
+.btn:hover {
   transform: scale(1.05);
   transition: all 0.2s linear;
 }
 
-.btn-login span {
+.btn span {
   text-transform: lowercase;
 }
 

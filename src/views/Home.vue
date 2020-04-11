@@ -12,21 +12,25 @@
 
       <my-menu/>
 
-      <!-- <div class="row space-around social-media">
-        <q-btn flat round type="a" target="_blank" size="1.1em" href="https://www.facebook.com/AlgoRitmo.ufms/">
-          <q-icon size="1.3em" name="fab fa-facebook-square" color="white"></q-icon>
-        </q-btn>
-        <q-btn flat round  type="a" target="_blank" size="1.1em" href="https://www.instagram.com/algo.ritmo_/">
-          <q-icon size="1.3em" name="fab fa-instagram" color="white"></q-icon>
-        </q-btn>
-      </div> -->
-
     </div>
 
-    <div class="wrapper">
-    </div>
+    <!-- start button area -->
+    <div class="button-area">
 
+      <router-link to="/signIn">
+        <template>
+          <q-btn flat class="btn btn-primary">
+            <span class="subheading-2 bold normal" to="/singIn">Entrar</span>
+          </q-btn>
+        </template>
+      </router-link>
+
+    </div>
+    <!-- end button area -->
+
+    <!-- start map -->
     <div class="map-container">
+
       <l-map
         style="width: 100%, height: 100%"
         :zoom="zoom"
@@ -38,11 +42,14 @@
         @update:center="centerUpdated"
         @update:bounds="boundsUpdated"
       >
+
         <l-tile-layer
           :url="url"
           :attribution="attribution"
         ></l-tile-layer>
-        <l-control-zoom position="topright" ></l-control-zoom>
+
+        <l-control-zoom position="bottomright" ></l-control-zoom>
+
         <l-marker class="" :lat-lng="markerLatLng">
           <l-popup class="align-center hover-scale05" style="max-width: 230px; padding: 0px">
             <div class="column" style="width: 100%">
@@ -65,7 +72,10 @@
         </l-marker>
         <!-- <l-control-attribution position="topleft" prefix="Algo+Ritmo - Research Group" /> -->
       </l-map>
+
     </div>
+    <!-- end map -->
+
   </div>
 </template>
 
@@ -135,12 +145,6 @@ export default {
     },
     onChange(message) {
       console.log(message);
-    },
-    showNav() {
-      this.showSideBar = !this.showSideBar;
-    },
-    showFilterBar() {
-      this.showFilter = !this.showFilter;
     },
   },
 };
@@ -215,6 +219,30 @@ export default {
   z-index: 2;
   overflow: hidden;
   flex-wrap: nowrap;
+}
+
+.button-area {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.btn {
+  box-shadow: none;
+  max-width: 150px;
+  max-height: 50px;
+  border-radius: 0px;
+  background-color: black;
+
+  span {
+    color: white;
+  }
+}
+
+.normal {
+  text-transform: none;
 }
 
 .nav {

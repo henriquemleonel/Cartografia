@@ -8,7 +8,7 @@
 
       <div class="info">
 
-        <div class="column">
+        <div class="column mg-top16">
           <span class="headline bolder">Cartografia da Cultura - Campo Grande</span>
           <span class="body-2">
             Para o Fórum Municipal de Cultura é muito importante que você, sendo classe artística, produtor cultural,
@@ -18,7 +18,7 @@
           </span>
         </div>
 
-        <div class="mg-top8">
+        <div class="mg-top32">
           <span class="headline bold">O cadastro permitirá:</span>
         </div>
 
@@ -114,7 +114,7 @@
             <span class="span-btn-cancel">Num quero</span>
           </q-btn> -->
           <q-btn flat class="btn-primary btn" color="black">
-            <span class="span-btn">Concluir Cadastro</span>
+            <span class="span-btn">Cadastre-se</span>
           </q-btn>
         </div>
 
@@ -173,7 +173,7 @@ export default {
 @import '../styles/mixins.scss';
 
 * {
-  font-family: Helvetica, 'Roboto Mono';
+  font-family: 'Helvetica-Normal';
   box-sizing: border-box;
 }
 
@@ -219,7 +219,6 @@ export default {
   margin-bottom: 8px;
   font-size: 12px;
   min-width: 49%;
-  font-family: 'Courier New', Courier, monospace;
 }
 
 .context {
@@ -233,7 +232,6 @@ export default {
 
 .body-2 {
   text-align: justify;
-  font-family: 'Courier New', Courier, monospace;
 }
 
 .link {
@@ -247,8 +245,8 @@ export default {
   box-shadow: none;
   background-color: black;
   border-radius: 0px;
-  height: 50px;
-  margin-top: 32px;
+  height: 40px;
+  margin-top: 24px;
 
   &:hover {
     transform: scale(50%);
@@ -261,10 +259,8 @@ export default {
 }
 
 .span-btn {
-  font-family: Helvetica, 'Courier New', Courier, monospace;
   font-weight: bold;
-  font-size: 16px;
-  letter-spacing: 3px;
+  font-size: 1em;
   color: white;
 }
 

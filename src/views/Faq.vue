@@ -15,7 +15,7 @@
         <span class="title-1 bolder"> Perguntas Frequentes </span>
 
         <span class="body-2 bold mg-top32"></span>
-        <p class="body-2 font2 mg-top8">
+        <p class="body-2 mg-top8">
           1. A navegação pelas informações disponíveis na Plataforma Cartografia da Cultura é anônima.
         </p>
 

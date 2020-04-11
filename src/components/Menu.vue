@@ -1,13 +1,14 @@
 <template>
 
-  <div class="nav">
+  <div class="box">
     <q-list>
 
+      <!-- item Sobre -->
       <q-expansion-item class="item" group="somegroup" expand-icon-class="text-black">
 
         <template v-slot:header>
           <q-item-section>
-            <span class="menu-text subheading-2">Sobre</span>
+            <span class="menu-text body-large2">Sobre</span>
           </q-item-section>
         </template>
 
@@ -19,7 +20,7 @@
 
               <li class="navigation-item">
                 <router-link class="a" type="link" :to="{ name: 'About' }" exact>
-                  <span class="body-2 effect-underline">Plataforma</span>
+                  <span class="headline-3 bold effect-underline">Plataforma</span>
                 </router-link>
               </li>
               <div class="line"/>
@@ -55,6 +56,7 @@
 
       <q-separator class="separator" />
 
+      <!-- item Agenda -->
       <q-expansion-item class="item" group="somegroup" expand-icon-class="text-black">
 
         <template v-slot:header>
@@ -65,15 +67,22 @@
 
         <q-card>
           <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-              commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
+
+            <router-link to="/schedule">
+              <template>
+                <q-btn flat class="btn btn-primary">
+                  <span class="subheading-2 bold normal">Ver agenda</span>
+                </q-btn>
+              </template>
+            </router-link>
+
           </q-card-section>
         </q-card>
       </q-expansion-item>
 
       <q-separator class="separator" />
 
+      <!-- item Diálogo -->
       <q-expansion-item class="item" group="somegroup" expand-icon-class="text-black">
 
         <template v-slot:header>
@@ -84,26 +93,22 @@
 
         <q-card>
           <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-              commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
+
+            <router-link to="/debates">
+              <template>
+                <q-btn flat class="btn btn-primary">
+                  <span class="subheading-2 bold normal">Ver diálogos</span>
+                </q-btn>
+              </template>
+            </router-link>
+
           </q-card-section>
         </q-card>
       </q-expansion-item>
 
       <q-separator class="separator" />
 
-      <q-expansion-item class="item" group="somegroup" to="/signIn" expand-icon-class="text-black">
-
-        <template v-slot:header>
-          <q-item-section>
-            <span class="menu-text subheading-2">Login</span>
-          </q-item-section>
-        </template>
-      </q-expansion-item>
-
-      <q-separator class="separator" />
-
+      <!-- item filtro -->
       <q-expansion-item class="item" group="somegroup" expand-icon-class="text-black">
 
         <template v-slot:header>
@@ -147,11 +152,11 @@ export default {
 
 
 * {
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   letter-spacing: 1px;
 }
 
-.nav {
+.box {
   width: 100%;
   margin-top: 8px;
   margin-bottom: 8px;
@@ -165,7 +170,7 @@ export default {
     // background-color:#fa7f72;
     transition: 0.3s linear;
     .menu-text {
-      color: black;
+      color: white;
     }
   }
 }
