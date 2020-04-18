@@ -134,7 +134,7 @@
 <script>
 
 export default {
-  name: 'Menu-Component',
+  name: 'nav-component',
   data() {
     return {
 

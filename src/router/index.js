@@ -25,17 +25,17 @@ const routes = [
   {
     path: '/signUp',
     name: 'SignUp',
-    component: () => import(/* webpackChunkName: "signIn" */ '../views/SignUp.vue'),
+    component: () => import(/* webpackChunkName: "signUp" */ '../views/SignUp.vue'),
   },
   {
     path: '/recover',
     name: 'Recover',
-    component: () => import(/* webpackChunkName: "signIn" */ '../views/Recover.vue'),
+    component: () => import(/* webpackChunkName: "recover" */ '../views/Recover.vue'),
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: () => import(/* webpackChunkName: "signIn" */ '../views/Profile.vue'),
+    component: () => import(/* webpackChunkName: "profile" */ '../views/Profile.vue'),
     // meta: {
     //   requiresAuth: true,
     // },
@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/schedule',
     name: 'Schedule',
-    component: () => import(/* webpackChunkName: "signIn" */ '../views/Schedule.vue'),
+    component: () => import(/* webpackChunkName: "schedule" */ '../views/Schedule.vue'),
     // meta: {
     //   requiresAuth: true,
     // },
@@ -51,7 +51,7 @@ const routes = [
   {
     path: '/debates',
     name: 'Debates',
-    component: () => import(/* webpackChunkName: "signIn" */ '../views/Debates.vue'),
+    component: () => import(/* webpackChunkName: "debates" */ '../views/Debates.vue'),
     // meta: {
     //   requiresAuth: true,
     // },
@@ -59,12 +59,17 @@ const routes = [
   {
     path: '/terms',
     name: 'Terms',
-    component: () => import(/* webpackChunkName: "signIn" */ '../views/Terms.vue'),
+    component: () => import(/* webpackChunkName: "terms" */ '../views/Terms.vue'),
   },
   {
     path: '/faq',
     name: 'Faq',
-    component: () => import(/* webpackChunkName: "signIn" */ '../views/Faq.vue'),
+    component: () => import(/* webpackChunkName: "faq" */ '../views/Faq.vue'),
+  },
+  {
+    path: '/teste',
+    name: 'Teste',
+    component: () => import(/* webpackChunkName: "teste" */ '../views/CompTeste.vue'),
   },
 ];
 

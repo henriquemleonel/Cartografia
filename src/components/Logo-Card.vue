@@ -38,17 +38,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 @import '../styles/typo.scss';
-
 * {
   font-family: 'Helvetica';
   box-sizing: border-box;
   color: black;
 }
-
 .box {
   //background-color: white;
   overflow: hidden;
@@ -58,66 +55,52 @@ export default {
   // border: 2px solid black;
   background-color: white;
   position: relative;
-
   @include for-phone-only {
     align-items: left;
   }
-
   &:hover {
     cursor: pointer;
   }
 }
-
 .top, .bottom {
   text-align: left;
 }
-
 .bottom {
   flex-wrap: nowrap;
   line-height: 16px;
   position: absolute;
   bottom: 16px;
-
   @include for-phone-only {
     justify-content: flex-end;
   }
 }
-
 .line-height {
   line-height: 1.875rem;
 }
-
 .nd-sub {
   font-size: 0.75rem;
   font-weight: 700;
   display: none;
-
   @include for-phone-only {
     display: block;
   }
 }
-
 .line {
   height: 2px;
   // background-color: black;
   width: 100%;
   background-color: black;
 }
-
 .black-mode {
   background-color: black;
-
   .line {
     background-color: white;
   }
-
   .title-2, .caption, .overline, .nd-sub {
     color: white;
   }
 }
-
 .bordered {
   border: 2px solid black;
 }
-
 </style>

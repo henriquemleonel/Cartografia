@@ -5,7 +5,7 @@
 
       <!-- identidada da plataforma -->
       <div class="logo">
-        <logo-card :blackMode="false"/>
+        <logo-card :blackMode="true"/>
       </div>
 
       <!-- imagem/foto do usuário -->
@@ -16,7 +16,7 @@
       <!-- informaçoes do usuário (editáveis) -->
       <div class="user-info" >
 
-        <header-card
+        <user-card
           class="profile-card"
           :info="getUser"
           v-on:callEditInfo="showEditInfo()"
@@ -27,14 +27,13 @@
       <!-- pin -->
       <div class="pin">
 
-        <span>pin</span>
-        <!-- <my-pin /> -->
+        <pin-profile :info="getPinUser"/>
 
       </div>
 
       <!-- evento (inserção/edição) -->
       <div class="event">
-        <span>adicionar evento</span>
+        <event-profile />
       </div>
 
       <!--  tabela de eventos -->
@@ -74,6 +73,9 @@ export default {
     },
     getUser() {
       return this.$store.state.currentUser;
+    },
+    getPinUser() {
+      return this.$store.state.currentUser.infoPin;
     },
   },
   methods: {
@@ -167,6 +169,7 @@ span {
   background-color: #254C26;
   grid-column: 3/4;
   grid-row: 1/3;
+  overflow: hidden;
 }
 
 .event {

@@ -28,8 +28,10 @@
       >
 
         <masonry class="items" :cols="{ default: 3, 900: 2, 600:1 }" :gutter="0">
-          <div  v-for="item in allEvents" :key="item.id">
-            <my-event class="item" :item="item" :bgColor="item.category.color"/>
+          <div  v-for="item in allEvents" :key="item.id" v-intersection="onIntersection">
+            <transition name="q-transition--scale">
+              <event-map class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
+            </transition>
           </div>
         </masonry>
 
@@ -50,7 +52,7 @@ export default {
     return {
       newEvent: '',
       thumbStyle: {
-        right: '2px',
+        right: '0px',
         borderRadius: '0px',
         backgroundColor: '#111111',
         width: '9px',
@@ -58,7 +60,7 @@ export default {
         opacity: 0.75,
       },
       barStyle: {
-        right: '2px',
+        right: '0px',
         borderRadius: '0px',
         backgroundColor: '#eeeeee',
         width: '9px',
@@ -68,10 +70,17 @@ export default {
   },
   computed: {
     allEvents() {
-      return this.$store.getters.eventsFiltered;
+      const eventsToShow = this.$store.getters.eventsFiltered;
+      return eventsToShow;
     },
   },
   methods: {
+    onIntersection(entry) {
+      const index = parseInt(entry.target.dataset.id, 10);
+      setTimeout(() => {
+        this.allEvents.splice(index, 3, entry.isIntersecting);
+      }, 50);
+    },
   },
   watch: {
   },
@@ -106,11 +115,13 @@ export default {
   height: 100%;
   flex-basis: 75%;
   overflow-X: hidden;
+  z-index: 1;
 }
 
 .scrollArea {
   height: 100vh;
   width: 100%;
+  padding-right: 8px;
 }
 
 span {

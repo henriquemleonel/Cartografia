@@ -7,7 +7,7 @@
 
       <!-- start header section -->
       <header class="spaced-32">
-        <logo-card :blackMode="false"/>
+        <logo-card :blackMode="true"/>
 
         <multicolor-line class="line mg-top32"/>
       </header>
@@ -15,7 +15,7 @@
       <section class="plat spaced-32">
 
         <span class="title-2 bold"> Sobre </span>
-        <p class="body-2 margin-top16">
+        <p class="body-2 margin-top16 text">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores corporis dicta unde ratione
           eligendi numquam repudiandae maxime tenetur, error temporibus exercitationem quae? Minus ipsa
           ducimus eaque quae dolor, eius saepe! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
@@ -112,7 +112,7 @@
           <div class="colab-item column spaced-16">
 
             <!-- <div class="line spaced-8"></div> -->
-            <multicolor-line/>
+            <div class="line"/>
 
             <div class="colab-box spaced-16">
               <span class="title-3 bold">Fórum Municipal de <br> Cultura de Campo Grande</span>
@@ -139,7 +139,7 @@
           <div class="colab-item column spaced-16">
 
             <!-- <div class="line spaced-8"></div> -->
-            <multicolor-line/>
+            <div class="line"/>
 
             <div class="colab-box spaced-16">
               <span class="title-2 bold">Colabor</span>
@@ -202,7 +202,7 @@ export default {
 }
 
 .container {
-  background-color: black;
+  background-color: white;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -223,7 +223,11 @@ export default {
 }
 
 span, p, a {
-  color: white;
+  color: black;
+}
+
+.text {
+  text-align: justify;
 }
 
 a {
@@ -276,7 +280,7 @@ header, .plat, .team, .contato, .colabor {
 
 .line {
   height: 2px;
-  background-color: white;
+  background-color: black;
 }
 
 </style>

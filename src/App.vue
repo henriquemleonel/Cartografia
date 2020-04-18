@@ -87,13 +87,12 @@
 .btn-primary {
   box-shadow: none;
   max-width: 150px;
-  height: 50px;
   border-radius: 0px;
   background-color: black;
 }
 
 // ---------------- patterns components -------------------
-.button {
+.reset-btn {
     border-radius: 0px !important;
     box-shadow: none;
 }

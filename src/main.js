@@ -20,19 +20,21 @@ import store from './store';
 // import axios from 'axios'
 import './quasar';
 
-import HeaderCard from './components/HeaderProfile.vue';
-import LogoCard from './components/LogoCard.vue';
-import PinProfile from './components/PinProfile.vue';
-import Menu from './components/Menu.vue';
+import LogoCard from './components/Logo-Card.vue';
+import NavMenu from './components/Nav-Menu.vue';
 import MulticolorLine from './components/Multicolor-Line.vue';
-import Event from './components/Event.vue';
+import UserCard from './components/User-Card.vue';
+import PinProfile from './components/Pin-Profile.vue';
+import EventMap from './components/Event-Map.vue';
+import EventProfile from './components/Event-Profile.vue';
 
 Vue.component('logo-card', LogoCard);
-Vue.component('header-card', HeaderCard);
-Vue.component('my-pin', PinProfile);
-Vue.component('my-menu', Menu);
+Vue.component('user-card', UserCard);
+Vue.component('pin-profile', PinProfile);
+Vue.component('my-menu', NavMenu);
 Vue.component('multicolor-line', MulticolorLine);
-Vue.component('my-event', Event);
+Vue.component('event-map', EventMap);
+Vue.component('event-profile', EventProfile);
 
 // leaflet map components
 Vue.component('l-map', LMap);

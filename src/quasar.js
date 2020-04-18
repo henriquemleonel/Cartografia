@@ -4,6 +4,7 @@ import './styles/quasar.scss';
 import '@quasar/extras/roboto-font/roboto-font.css';
 import '@quasar/extras/fontawesome-v5/fontawesome-v5.css';
 import '@quasar/extras/material-icons/material-icons.css';
+// import iconSet from 'quasar/icon-set/material-icons';
 import {
   ClosePopup,
   QAvatar,
@@ -59,11 +60,15 @@ import {
   QTooltip,
   Quasar,
   QUploader,
+  QFile,
+  Intersection,
 } from 'quasar';
 
 Vue.use(Quasar, {
+  // iconSet: { iconSet },
   config: {
     extras: [
+      'material-icons',
       'fontawesome-v5',
     ],
     brand: {
@@ -76,6 +81,9 @@ Vue.use(Quasar, {
       // negative: '',
       // info: '',
       // warning: '',
+    },
+    directives: {
+      Intersection,
     },
   },
   components: {
@@ -133,9 +141,7 @@ Vue.use(Quasar, {
     QTooltip,
     Quasar,
     QUploader,
-  },
-  directives: {
-    ClosePopup,
+    QFile,
   },
   plugins: {},
 });
