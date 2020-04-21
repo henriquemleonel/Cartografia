@@ -157,7 +157,11 @@ flex-direction: row;
   margin-left: 32px;
 }
 
-.mg-rigth16 {
+.mg-right8 {
+  margin-right: 8px;
+}
+
+.mg-right16 {
   margin-right: 16px;
 }
 

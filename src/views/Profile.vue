@@ -1,26 +1,31 @@
 <template>
   <div class="container">
 
-    <div class="content grid">
+    <div class="content row no-wrap">
 
-      <!-- identidada da plataforma -->
-      <div class="logo">
-        <logo-card :blackMode="true"/>
-      </div>
+      <div class="column">
 
-      <!-- imagem/foto do usuário -->
-      <div class="user-img">
-        <img src="../assets/statics/avatar01.jpg" style="width: 200px; height: 200px;"/>
-      </div>
+        <!-- identidada da plataforma e img -->
+        <div class="row brand-box">
 
-      <!-- informaçoes do usuário (editáveis) -->
-      <div class="user-info" >
+          <logo-card class="logo" :blackMode="false"/>
 
-        <user-card
-          class="profile-card"
-          :info="getUser"
-          v-on:callEditInfo="showEditInfo()"
-        />
+          <div class="user-img">
+            <img src="../assets/statics/avatar01.jpg" style="width: 200px; height: 200px;"/>
+          </div>
+
+        </div>
+
+        <!-- informaçoes do usuário (editáveis) -->
+        <div class="user-info" >
+
+          <user-card
+            class="profile-card"
+            :info="getUser"
+            v-on:callEditInfo="showEditInfo()"
+          />
+
+        </div>
 
       </div>
 
@@ -115,21 +120,19 @@ export default {
   border-radius: 0px;
   // background-color: #f5f5f5;
   background-color: white;
-  padding: 32px;
+  padding: 24px;
   width: 100%;
-  height: 100vh;
+  // height: 100vh;
 
   @media screen and (max-width: 1200px) {
     align-items: flex-start;
   }
 }
 
-// .content {
-
-//   // @include for-desktop-up {
-//   //   max-width: 1400px;
-//   // }
-// }
+.content {
+  width: 100%;
+  height: 100%;
+}
 
 span {
   font-family: 'Helvetica-Normal';
@@ -139,53 +142,49 @@ span {
   margin: 16px;
 }
 
-// ------------------------- my grid -----------------------------------------------------
-.grid {
-  display: grid;
-  grid-template-columns: 12.5rem 12.5rem 21.875rem 21.875rem 12.5rem;  // 200 200 350 350 200 (px)
-  grid-auto-rows: 200px;
-  gap: 4px;
-}
+// ------------------------- components -----------------------------------------------------
 
-.logo {
-  background-color: #C95B40;
-  grid-column: 1/2;
-  grid-row: 1/2;
-}
+.brand-box {
+  height: 200px;
+  width: 400px;
+  margin: 2px;
+  overflow: hidden;
 
-.user-img {
-  background-color: #529E63;
-  grid-column: 2/3;
-  grid-row: 1/2;
+// .logo {
+//   // background-color: #C95B40;
+// }
+
+// .user-img {
+//   background-color: #529E63;
+// }
+
 }
 
 .user-info {
   // background-color: #AD3B3B;
-  grid-column: 1/3;
-  grid-row: 2/3;
+  margin: 2px;
 }
 
 .pin {
-  background-color: #254C26;
-  grid-column: 3/4;
-  grid-row: 1/3;
+  // background-color: #254C26;
+  margin: 2px;
   overflow: hidden;
 }
 
 .event {
+  height: 100%;
+  width: 200px;
   background-color: #BD6A5C;
-  grid-column: 4/5;
-  grid-row: 1/2;
+  margin: 2px;
 }
 
 .events {
+  height: 200px;
+  width: 400px;
   background-color: #DBB753;
-  grid-column: 5/6;
-  grid-row: 1/3;
+  margin: 2px;
 
   @media screen and (max-width: 1350px) {
-    grid-column: 4/5;
-    grid-row: 2/3;
   }
 }
 

@@ -3,12 +3,12 @@
 
     <div class="context column">
       <span class="title-1 bolder line-h16"> {{ name }} </span>
-      <span class="body-2 bold mg-top-8"> {{ category.value.toLowerCase() }} </span>
+      <span class="body-2 bold mg-top-8"> {{ category.value }} </span>
 
       <div class="row spaced-32">
-        <span class="body-2 bold"> {{ date.day }} de {{ date.month.toLowerCase() }} </span>
+        <span class="body-2 bold"> {{ date.day }} de {{ date.month }} </span>
         <!-- <span class="body-2 bold"> {{ date.year }} </span> -->
-        <span class="body-2 bold mg-left16"> {{ date.hour.substr(0, 2) + 'h' }} </span>
+        <span class="body-2 bold mg-left16"> {{ date.hour }} </span>
       </div>
 
       <span class="body-2 bold spaced-32"> {{ description }} </span>
@@ -38,16 +38,17 @@ export default {
   name: 'event-component',
   data() {
     return {
-      // id: this.item.id,
-      // name: this.item.name,
-      // date: this.item.date,
-      // address: this.item.address,
-      // ticket: this.item.ticket,
-      // link: this.item.link,
-      // description: this.item.description,
-      // category: this.item.category,
+      id: '1',
+      name: '',
+      date: { day: '1', mouth: '2', hour: '2' },
+      address: 'dinar',
+      ticket: 1,
+      link: 'link',
+      description: 'description',
+      category: 'c',
       // img: this.item.imgUrl,
-      // background: this.bgColor,
+      background: '#C95B40',
+      img: '',
     };
   },
   props: {

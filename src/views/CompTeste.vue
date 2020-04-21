@@ -14,7 +14,7 @@
 
 .container {
   width: 100%;
-  height: 100vh;
+  // height: 100%;
   padding: 32px;
   background-color: #f5f5f5;
 }
@@ -26,8 +26,7 @@
   transform: translateX(-50%);
   border: 2px solid green;
   width: 80%;
-  height: 100%;
-  overflow: hidden;
+  // height: 100%;
 }
 
 </style>

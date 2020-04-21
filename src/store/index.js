@@ -17,12 +17,12 @@ export default new Vuex.Store({
       email: 'JulianaTrujillo@email.com',
       password: '123umdoistres',
       infoPin: {
-        name: '',
-        email: '',
-        phone: '',
-        address: { street: '', neighborhood: '', city: '', cep: '' },
-        description: '',
-        links: { linkF: '', linkIG: '', otherLink: '' },
+        name: 'brava',
+        email: 'email',
+        phone: '67993036371',
+        address: { street: 'rua 0', neighborhood: 'centro', number: '322', city: 'cg', cep: '1111' },
+        description: 'lugar legal',
+        links: { linkF: 'face', linkIG: 'ig', otherLink: 'link' },
         imgUrl: 'https://placeimg.com/500/300/nature',
       }
     },

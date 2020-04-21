@@ -75,11 +75,11 @@ Vue.use(Quasar, {
       // definir aqui suas cores padroes
       primary: '#050302',
       secondary: '#00ff00',
-      // accent: '',
+      accent: '#E6B545',
       // dark: '',
-      // positive: '',
-      // negative: '',
-      // info: '',
+      positive: '#E6B545',
+      // negative: '#E6B545',
+      // info: '#E6B545',
       // warning: '',
     },
     directives: {
