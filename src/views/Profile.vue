@@ -32,7 +32,7 @@
       <!-- pin -->
       <div class="pin">
 
-        <pin-profile :info="getPinUser"/>
+        <pin-profile/>
 
       </div>
 
@@ -48,6 +48,20 @@
 
     </div>
 
+    <div class="show column">
+      <q-btn outlined @click="login()" label="login" style="heigth: 30px; width: 60px; background-color: white;"/>
+      <q-btn outlined @click="logout()" label="logout" style="heigth: 30px; width: 60px; background-color: white;"/>
+      <!-- show pin status and data -->
+      <!-- <span class="status"> pin:store:status = {{ userPinStatus }} </span>
+      <span class="pin-status"> {{ getPinUser }} </span> -->
+
+      <!-- show my events lenght and data -->
+      <span class="status"> store -> token = {{ getStateToken }} <br> </span>
+      <span class="status"> store -> key = {{ getKeyToken }} <br> </span>
+      <span class="status"> pin:store:status = {{ myEventsSize }} <br> </span>
+      <span class="pin-status"> {{ getMyEvents }} </span>
+    </div>
+
   </div>
 </template>
 
@@ -56,20 +70,6 @@ export default {
   name: 'Profile',
   data() {
     return {
-      nomeEvento: '',
-      localEvento: '',
-      dataEvento: '',
-      filter: '',
-      myPinName: '',
-      myPinEmail: '',
-      myPinPhone: '',
-      myPinStreet: '',
-      myPinStreetNumber: '',
-      myPinCep: '',
-      myPinDescription: '',
-      linkFacebook: '',
-      linkInstagram: '',
-      linkPagina: '',
     };
   },
   computed: {
@@ -79,8 +79,25 @@ export default {
     getUser() {
       return this.$store.state.currentUser;
     },
+    getStateToken() {
+      const tokenStatus = this.$store.state.token;
+      return tokenStatus;
+    },
+    getKeyToken() {
+      const keyToken = this.$store.state.newKey;
+      if (keyToken === null) {
+        return false;
+      }
+      return keyToken;
+    },
     getPinUser() {
-      return this.$store.state.currentUser.infoPin;
+      return this.$store.state.myPin[0];
+    },
+    myEventsSize() {
+      return this.$store.state.myEvents.length;
+    },
+    getMyEvents() {
+      return this.$store.state.myEvents;
     },
   },
   methods: {
@@ -97,6 +114,14 @@ export default {
     //   else
     //     this.className = 'is-blue';
     // }
+    login() {
+      this.$store.dispatch('setKey');
+      console.log('logando');
+    },
+    logout() {
+      this.$store.dispatch('logout');
+      console.log('logout');
+    },
     showEditInfo() {
       this.opemEditInfo = !this.opemEditInfo;
     },
@@ -113,6 +138,25 @@ export default {
   box-sizing: border-box;
 }
 
+.show {
+  position: absolute;
+  top: 320px;
+  left: 24px;
+  // height: 200px;
+  width: 400px;
+  background-color: #000;
+
+  .status {
+    color: red;
+    font-size: 0.9rem;
+  }
+
+  .pin-status {
+    color: white;
+    font-size: 0.9rem;
+  }
+}
+
 .container {
   display: flex;
   // justify-content: center;
@@ -124,8 +168,9 @@ export default {
   width: 100%;
   // height: 100vh;
 
-  @media screen and (max-width: 1200px) {
-    align-items: flex-start;
+  @media screen and (min-width: 1200px) {
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -173,14 +218,14 @@ span {
 
 .event {
   height: 100%;
-  width: 200px;
-  background-color: #BD6A5C;
+  min-width: 200px;
+  // background-color: #BD6A5C;
   margin: 2px;
 }
 
 .events {
   height: 200px;
-  width: 400px;
+  max-width: 400px;
   background-color: #DBB753;
   margin: 2px;
 

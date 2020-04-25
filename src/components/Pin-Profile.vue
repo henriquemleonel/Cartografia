@@ -2,6 +2,9 @@
 
   <div class="box" :style="{ 'background-color' : background }">
 
+    <!-- <div class="show-steps"> {{ this.step }} - {{ this.lastStep }} </div> -->
+
+    <!-- first -->
     <div class="first" v-if="step==0" :class="{ 'active' : active }">
 
         <div class="header column">
@@ -10,12 +13,13 @@
 
         </div>
 
-        <q-btn flat class="reset-btn btn" ref="btnFirst" @click="firstEdit()">
+        <q-btn flat class="reset-btn btn" ref="btnFirst" @click="showFirstEdit()">
           <span class="body2 bolder">+</span>
         </q-btn>
 
     </div>
 
+    <!-- edit mode -->
     <div class="edit" v-if="step==1">
 
       <div class="input-content">
@@ -49,7 +53,17 @@
         <!-- phone -->
         <div class="column mg-top8">
           <span class="subheading-2">telefone</span>
-          <q-input class="input" dense v-model="phone" type="tel" mask="(##) ##### - ####" input-class="text-white" color="white"/>
+
+          <q-input
+            class="input"
+            dense
+            v-model="phone"
+            type="tel"
+            mask="(##) ##### - ####"
+            unmasked-value
+            input-class="text-white"
+            color="white"
+          />
         </div>
 
         <!-- address -->
@@ -67,13 +81,35 @@
         <div class="row justify-between mg-top8">
 
           <div class="column">
+
             <span class="subheading-2">número</span>
-            <q-input class="input2" dense v-model="number" input-class="text-white" color="white"/>
+
+            <q-input
+              class="input2"
+              dense
+              v-model="number"
+              :rules="[ val => val.length <= 5 || 'Máximo de 5 caracteres']"
+              mask="#####"
+              input-class="text-white"
+              color="white"
+            />
+
           </div>
 
           <div class="column">
             <span class="subheading-2">cep</span>
-            <q-input class="input2" dense v-model="cep" input-class="text-white" color="white"/>
+
+            <q-input
+              class="input2"
+              dense
+              v-model="cep"
+              :rules="[ val => val.length <= 8 || 'Máximo de 5 caracteres']"
+              mask="##-######"
+              unmasked-value
+              input-class="text-white"
+              color="white"
+            />
+
           </div>
 
         </div>
@@ -97,17 +133,17 @@
         <!-- links -->
         <div class="column mg-top8">
           <span class="subheading-2">link</span>
-          <q-input class="input" dense v-model="linkPagina" input-class="text-white" color="white"/>
+          <q-input class="input f-size" dense v-model="link" input-class="text-white" color="white"/>
         </div>
 
         <div class="column mg-top8">
           <span class="subheading-2">facebook</span>
-          <q-input class="input" dense v-model="linkFacebook" input-class="text-white" color="white"/>
+          <q-input class="input f-size" dense v-model="face" input-class="text-white" color="white"/>
         </div>
 
         <div class="column mg-top8">
           <span class="subheading-2">instagram</span>
-          <q-input class="input" dense v-model="linkInstagram" input-class="text-white" color="white"/>
+          <q-input class="input f-size" dense v-model="insta" input-class="text-white" color="white"/>
         </div>
 
         <!-- file picker -->
@@ -133,7 +169,7 @@
           <span class="caption">Cancelar</span>
         </q-btn>
 
-        <q-btn outline color="white" @click="confirmEdit()">
+        <q-btn outline color="white" @click="createPin()">
           <span class="caption">Finalizar</span>
         </q-btn>
 
@@ -141,6 +177,7 @@
 
     </div>
 
+    <!-- ready -->
     <div class="ready" v-if="step==2">
 
       <div class="context column">
@@ -156,15 +193,15 @@
         <span class="body-2 bold spaced-16"> {{ phoneMask }} </span>
 
         <div class="links row mg-top16">
-          <a class="link caption bold" target="blank" :href="this.linkFacebook">.facebook</a>
-          <a class="link caption bold mg-left16" target="blank" :href="this.linkInstagram">.instagram</a>
-          <a class="link caption bold mg-left16" target="blank" :href="this.linkPagina">.link</a>
+          <a class="link caption bold" target="blank" :href="this.face">.facebook</a>
+          <a class="link caption bold mg-left16" target="blank" :href="this.insta">.instagram</a>
+          <a class="link caption bold mg-left16" target="blank" :href="this.link">.link</a>
         </div>
 
-        <!-- <div class="img-box">
-          <q-img :src="imgUrl" :ratio="16/9" placeholder-src="statics/avatar01.jpg"/>
-        </div> -->
+      </div>
 
+      <div class="img-box">
+        <q-img :src="this.imgUrl" :ratio="16/9" />
       </div>
 
       <div class="action">
@@ -201,64 +238,129 @@ export default {
       phone: '',
       street: '',
       neighborhood: '',
-      streetNumber: '',
+      number: '',
       city: '',
       cep: '',
+      lat: '',
+      long: '',
       description: '',
-      links: '',
-      linkPagina: '',
-      linkInstagram: '',
-      linkFacebook: '',
+      link: '',
+      insta: '',
+      face: '',
+      imgUrl: 'https://placeimg.com/500/300/nature',
       file: null,
-      imgUrl: '',
     };
   },
   props: {
-    info: {
-      type: Object,
-      default: null,
-    },
+    // info: {
+    //   type: Object,
+    //   default: null,
+    // },
     bgColor: {
       type: String,
       default: '#254C26',
     },
   },
   created() {
-    this.fetchData();
+    this.fetchStorage();
+  },
+  updated() {
+    // this.fetcLocalStorage();
   },
   computed: {
     phoneMask() {
-      let str = '';
-      const p = this.phone;
-      const ddd = p.slice(0, 2);
-      const prefix = p.slice(2, 7);
-      const sufix = p.slice(7, 11);
-      str = str.concat(ddd).concat(' ').concat(prefix).concat(' ')
-        .concat(sufix);
-      console.log(str);
-      return str;
+      if (this.phone !== null) {
+        let str = '';
+        const p = this.phone;
+        const ddd = p.slice(0, 2);
+        const prefix = p.slice(2, 7);
+        const sufix = p.slice(7, 11);
+        str = str.concat(ddd).concat('').concat(prefix).concat(' ')
+          .concat(sufix);
+        console.log(str);
+        return str;
+      }
+      return this.phone;
+    },
+    getKeyUser() {
+      return this.$store.state.currentUser.email;
+    },
+    getPinStatus() {
+      const status = this.$store.state.currentUser.pinCompleted; // verifica se o usuário possui um pin
+      return status;
+    },
+    getStateToken() {
+      const tokenStatus = this.$store.state.token;
+      if (tokenStatus === null) {
+        return false;
+      }
+      return true;
     },
   },
   methods: {
-    fetchData() {
-      if (this.info !== null) {
-        this.name = this.info.name;
-        this.email = this.info.email;
-        this.phone = this.info.phone;
-        this.street = this.info.address.street;
-        this.number = this.info.address.number;
-        this.neighborhood = this.info.address.neighborhood;
-        this.city = this.info.address.city;
-        this.cep = this.info.address.cep;
-        this.description = this.info.description;
-        this.linkPagina = this.info.links.otherLink;
-        this.linkFacebook = this.info.links.linkF;
-        this.linkInstagram = this.info.links.linkIG;
+    fetchStorage() {
+      console.log('pin-profile : fetchStorage');
+      if (this.getPinStatus === false) { //  se não existe pin
+        console.log('null_Fetch');
+        this.name = '';
+        this.email = '';
+        this.phone = '';
+        this.street = '';
+        this.number = '';
+        this.neighborhood = '';
+        this.city = '';
+        this.cep = '';
+        this.description = '';
+        this.link = '';
+        this.insta = '';
+        this.face = '';
+        this.imgUrl = '';
+        this.step = 0;
+        this.lastStep = 0;
+      } else if (this.getPinStatus === true) { // há pin, get myPin na store.
+        console.log('state_fetch');
+        const info = this.$store.state.myPin[0];
+        console.log('info', this.$store.state.myPin[0].name);
+        this.name = info.name;
+        this.email = info.email;
+        this.phone = info.phone;
+        console.log('number', info.name);
+        this.number = info.address.number;
+        this.street = info.address.street;
+        this.neighborhood = info.address.neighborhood;
+        this.city = info.address.city;
+        this.cep = info.address.cep;
+        this.description = info.description;
+        this.link = info.links.otherLink;
+        this.linkF = info.links.linkF;
+        this.linkIG = info.links.linkIG;
+        this.imgUrl = info.imgUrl;
         this.step = 2;
         this.lastStep = 2;
       }
     },
-    firstEdit() {
+    fetcLocalStorage() {
+      if (this.getPinStatus === true) {
+        console.log('localStorage_fetch'); // há pin, get myPin na localStorage
+        const info = localStorage.getItem('myPin');
+        this.name = info.name;
+        this.email = info.email;
+        this.phone = info.phone;
+        this.street = info.address.street;
+        this.number = info.address.number;
+        this.neighborhood = info.address.neighborhood;
+        this.city = info.address.city;
+        this.cep = info.address.cep;
+        this.description = info.description;
+        this.link = info.links.otherLink;
+        this.linkF = info.links.linkF;
+        this.linkIG = info.links.linkIG;
+        this.imgUrl = info.imgUrl;
+        this.step = 2;
+        this.lastStep = 2;
+      }
+    },
+    showFirstEdit() {
       if (this.step === 0) {
         this.lastStep = 0;
         // this.active = true;
@@ -288,24 +390,39 @@ export default {
         this.lastStep = 2;
       }
     },
-    confirmEdit() {
-      // this.editFinished = true;
-      // this.name = this.info.name;
-      // this.email = this.info.email;
-      // this.phone = this.info.phone;
-      // this.street = this.info.address.street;
-      // this.neighborhood = this.info.address.neighborhood;
-      // this.streetNumber = this.info.address.number;
-      // this.cep = this.info.address.cep;
-      // this.description = this.info.description;
-      // this.links = this.info.links;
-      // this.linkPagina = this.info.links.otherLink;
-      // this.linkInstagram = this.info.links.linkI;
-      // this.linkFacebook = this.info.links.linkF;
-      // this.img = this.info.imgUrl;
+    createPin() {
+      console.log('pin-profile:create-pin');
+      const payload = {
+        userRef: this.getKeyUser,
+        completed: true,
+        name: this.name,
+        email: this.email,
+        phone: this.phone,
+        address: {
+          street: this.street,
+          neighborhood: this.neighborhood,
+          number: this.number,
+          city: this.city,
+          cep: this.cep,
+        },
+        coordinates: {
+          lat: this.lat,
+          long: this.long,
+        },
+        description: this.description,
+        links: {
+          linkF: this.face,
+          linkIG: this.insta,
+          otherLink: this.link,
+        },
+        imgUrl: this.imgUrl, // fazer post da imagem recuperar url
+      };
       this.lastStep = 1;
-      const a = this;
-      setTimeout(() => { a.step = 2; }, 1000);
+      this.step = 2;
+      // const a = this;
+      // setTimeout(() => { a.step = 2; }, 1000);
+      console.log('funfou');
+      this.$store.dispatch({ type: 'addPin', payload });
     },
     expand() {
       this.state = !this.state;
@@ -320,6 +437,17 @@ export default {
 
 * {
   font-family: 'Helvetica';
+}
+
+.show-steps {
+  position: relative;
+  top: 16px;
+  left: 16px;
+  height: 16px;
+  width: 32px;
+  background-color: white;
+  color: red;
+  font-size: 1rem;
 }
 
 .box {
@@ -399,7 +527,7 @@ export default {
 }
 
 .f-size {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 // .edit {
@@ -407,12 +535,12 @@ export default {
 // }
 
 .ready {
-  padding: 32px;
   height: 100%;
   position: relative;
 
   .context {
     position: relative;
+    padding: 32px;
   }
 
   .action {

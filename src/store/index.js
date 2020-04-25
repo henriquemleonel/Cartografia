@@ -2,39 +2,42 @@
 /* eslint-disable */
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { Store } from  'vuex'
+import createPersistedState from "vuex-persistedstate"
 import axios from 'axios'
 import api from '../config/index.js'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Store({
   state: {
-    token: localStorage.getItem('access_token') || null,
-    signedIn: false,
+    newKey: null,
+    token: null,
+    // token: '',
     currentUser: {
       name: 'Juliana Trujillo',
-      category: { value: 'Cinema e AudioVisual', color: '#254C26'},
       email: 'JulianaTrujillo@email.com',
-      password: '123umdoistres',
-      infoPin: {
-        name: 'brava',
-        email: 'email',
-        phone: '67993036371',
-        address: { street: 'rua 0', neighborhood: 'centro', number: '322', city: 'cg', cep: '1111' },
-        description: 'lugar legal',
-        links: { linkF: 'face', linkIG: 'ig', otherLink: 'link' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
-      }
+      category: { value: 'Cinema e AudioVisual', color: '#254C26'},  // *** transforma category em um id numérico
+      isValid: true, // check do fórum quanto ao usuário, começa com true
+      isAdmin: false,
+      pinCompleted: false,
+      // password: '123umdoistres',
     },
-    pins: [
-      {}
-    ],
+    myPin: [],
+    myEvents: [],
+    pins: [],
     events: [
       {
         id: '1',
+        userRef: '',
         name:'Dance_Fest',
-        date: { month: 'Abril', day: '15', year: '2020', hour: '13:00' },
-        address: { street: 'Rua do Dinar', neighborhood: 'Vila Carlota', city: 'campo grande' },
+        date: { value: '28/04/2020' },
+        hour: '13:00',
+        address: {
+          street: 'Rua do Dinar',
+          neighborhood: 'Vila Carlota',
+          city: 'campo grande'
+        },
         ticket: '0',
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'Festival de dança da comunidade para a comunidade, venha se divertir',
@@ -44,7 +47,8 @@ export default new Vuex.Store({
       {
         id: '2',
         name:'Festival Forró',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '04/05/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: 'https://www.facebook.com/henriquemleonel',
@@ -55,7 +59,8 @@ export default new Vuex.Store({
       {
         id: '3',
         name:'"Como não viver em isolamento"',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '07/05/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: 'https://www.facebook.com/henriquemleonel',
@@ -66,7 +71,8 @@ export default new Vuex.Store({
       {
         id: '4',
         name:'Fashion Trends CG',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '12/05/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: '',
@@ -77,7 +83,8 @@ export default new Vuex.Store({
       {
         id: '5',
         name:'Mis Hitchcok',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '16/05/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: '',
@@ -88,7 +95,8 @@ export default new Vuex.Store({
       {
         id: '6',
         name:'Festa Junina',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '22/05/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: '',
@@ -99,7 +107,8 @@ export default new Vuex.Store({
       {
         id: '7',
         name:'Photo Export',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '23/05/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: '',
@@ -110,7 +119,8 @@ export default new Vuex.Store({
       {
         id: '8',
         name:'Print',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '28/05/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: '',
@@ -121,7 +131,7 @@ export default new Vuex.Store({
       {
         id: '9',
         name:'Dance_Fest',
-        date: { month: 'Abril', day: '15', year: '2020', hour: '13:00' },
+        date: { value: '30/05/2020' },
         address: { street: 'Rua do Dinar', neighborhood: 'Vila Carlota', city: 'campo grande' },
         ticket: '0',
         link: 'https://www.facebook.com/henriquemleonel',
@@ -132,7 +142,8 @@ export default new Vuex.Store({
       {
         id: '10',
         name:'Festival Forró',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '01/06/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: 'https://www.facebook.com/henriquemleonel',
@@ -143,7 +154,8 @@ export default new Vuex.Store({
       {
         id: '11',
         name:'"Como não viver em isolamento"',
-        date: { month: '05', day: '15', year: '2020', hour: '18:00' },
+        date: { value: '03/06/2020' },
+        hour: '18:00',
         address: { street: 'rua festeja', neighborhood: 'centro', city: 'campo grande' },
         ticket: '0',
         link: 'https://www.facebook.com/henriquemleonel',
@@ -154,10 +166,11 @@ export default new Vuex.Store({
     ]
   },
 
+  plugins: [
+    createPersistedState(),
+  ],
+
   getters: {
-    loggedIn(state) {
-      return state.token !== null
-    },
     pinsFiltered(state) {
       if(state.filter === 'all') {
         return state.pins;
@@ -173,44 +186,90 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    addEvent(state, events) {
-      state.events.push({
-        id: events.id,
-        title: events.title,
-        completed: false,
-        editing: false,
-      })
+    setKey (state, payload) {
+      state.newKey = payload;
+      state.token = payload;
+      localStorage.setItem('access_token', payload);
+      console.log('mutations -> state/newKey : _SETKEY');
+      console.log('mutations -> localStorage : _SETKEY');
     },
-    addEvent(state, pins) {
-      state.pins.push({
-        id: pins.id,
-        title: pins.title,
-        completed: false,
-        editing: false,
+    logout (state) {
+      state.newKey = null;
+      state.token = null;
+      localStorage.removeItem('access_token');
+      console.log('resert key e token');
+    },
+    addPin(state, payload) {
+      if (state.currentUser.pinCompleted === false && state.myPin[0] !== null) {
+        state.myPin.push(payload);
+        state.currentUser.pinCompleted = true;
+        console.log('mutation -> state/myPin[] : first-write', state.myPin);
+      } else {
+        state.myPin.splice(0, 1, payload);
+        console.log('mutation -> state/myPin[] : editing', state.myPin);
+      }
+    },
+    addEvent(state, payload) {
+
+      console.log('mutation -> state/myEvents[] : add', payload);
+      state.myEvents.push({
+        id: payload.id, // onde gerar id ? no component : na store
+        name: payload.name,
+        date: { value: payload.data.value },
+        hour: payload.hour,
+        address: {
+          street: payload.address.street,
+          neighborhood: payload.address.neighborhood,
+          city: payload.address.city,
+        },
+        ticket: payload.ticket,
+        link: payload.link,
+        description: payload.description,
+        category: {
+          value: payload.category.value,
+          color: payload.category.color
+        },
+        imgUrl: payload.imgUrl,
       })
+
     },
   },
+
   actions: {
+    setKey (context) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      let autoId = ''
+      for (let i = 0; i < 20; i++) {
+        autoId += chars.charAt(Math.floor(Math.random() * chars.length))
+      }
+      let key = autoId
+      console.log('KEY DO NOVO EVENTO:', key)
+      context.commit('setKey', key);
+    },
+    logout (context) {
+      context.commit('logout');
+    },
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
-          api.post('/signin', {
-                  email: credentials.email,
-                  password: credentials.password,
-              })
-              .then(response => {
-                  console.log(response)
-                  const token = response.data.token
-                  console.log(token)
-                      // localStorage.setItem('access_token', validateToken)
-                      // context.commit('retrieveToken', token)
-                  resolve(response)
-              })
-              .catch(error => {
-                  console.log(error)
-                  reject(error)
-              })
+        api.post('/signin', {
+                email: credentials.email,
+                password: credentials.password,
+            })
+            .then(response => {
+                console.log(response)
+                const token = response.data.token
+                console.log(token)
+                    // localStorage.setItem('access_token', validateToken)
+                    // context.commit('retrieveToken', token)
+                resolve(response)
+            })
+            .catch(error => {
+                console.log(error)
+                reject(error)
+            })
       })
+
     },
     destroyToken(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -233,6 +292,52 @@ export default new Vuex.Store({
         })
       }
     },
+    addPin(context, payload) {
+      console.log('action>mutation:addPin(payload)', payload)
+      context.commit('addPin', payload);
+      localStorage.setItem('myPin', payload);
+    },
+    addPinPost(context, payload) {
+      
+      api.post('/pin', {
+        userRef: payload.userRef,
+        completed: payload.completed,
+        name: payload.name,
+        email: payload.email,
+        phone: pyaload.phone,
+        address: {
+          street: payload.street,
+          neighborhood: payload.neighborhood,
+          number: payload.number,
+          city: payload.city,
+          cep: payload.cep,
+        },
+        coordinates: {
+          lat: payload.lat,
+          long: payload.long,
+        },
+        description: '',
+        links: {
+          linkF: '',
+          linkIG: '',
+          otherLink: ''
+        },
+        imgUrl: payload.imgUrl,
+      })
+        .then(response => {
+          console.log(response)
+          context.commit('addPin', response.data)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+      
+
+    },
   },
   modules: {}
-})
+});
+
+export default store;
+

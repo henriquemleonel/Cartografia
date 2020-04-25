@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+// import { library } from '@fortawesome/fontawesome-svg-core';
+// import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import {
   LMap, LTileLayer, LMarker, LControlZoom, LControlAttribution, LPopup,
@@ -44,17 +44,9 @@ Vue.component('l-control-zoom', LControlZoom);
 Vue.component('l-control-attribution', LControlAttribution);
 Vue.component('l-popup', LPopup);
 
-// delete Icon.Default.prototype.getIconUrl;
-
-// Icon.Default.mergeOptions({
-//   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-//   iconUrl: require('leaflet/dist/images/marker-icon.png'),
-//   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-// });
-
 // font awesome setups
-library.add(faUserSecret);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+// library.add(faUserSecret);
+// Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 window.eventBus = new Vue();
 // export const EventBus = new Vue();

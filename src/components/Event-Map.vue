@@ -6,9 +6,9 @@
       <span class="body-2 bold mg-top-8"> {{ category.value.toLowerCase() }} </span>
 
       <div class="row spaced-32">
-        <span class="body-2 bold"> {{ date.day }} de {{ date.month.toLowerCase() }} </span>
+        <span class="body-2 bold"> {{ date.value }} </span>
         <!-- <span class="body-2 bold"> {{ date.year }} </span> -->
-        <span class="body-2 bold mg-left16"> {{ date.hour.substr(0, 2) + 'h' }} </span>
+        <span class="body-2 bold mg-left16"> {{ hour.substr(0, 2) + 'h' }} </span>
       </div>
 
       <span class="body-2 bold spaced-32"> {{ description }} </span>
@@ -41,6 +41,7 @@ export default {
       id: this.item.id,
       name: this.item.name,
       date: this.item.date,
+      hour: this.item.hour,
       address: this.item.address,
       ticket: this.item.ticket,
       link: this.item.link,
