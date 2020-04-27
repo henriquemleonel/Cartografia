@@ -20,21 +20,28 @@ import store from './store';
 // import axios from 'axios'
 import './quasar';
 
-import LogoCard from './components/Logo-Card.vue';
-import NavMenu from './components/Nav-Menu.vue';
-import MulticolorLine from './components/Multicolor-Line.vue';
-import UserCard from './components/User-Card.vue';
-import PinProfile from './components/Pin-Profile.vue';
-import EventMap from './components/Event-Map.vue';
-import EventProfile from './components/Event-Profile.vue';
+import LogoCard from './components/Logo-Card.vue'; // ----------- logo da plataforma
+import NavMenu from './components/Nav-Menu.vue'; // ------------- menu de navegação do mapa
+import MulticolorLine from './components/Multicolor-Line.vue'; // linha colorida
+import UserCard from './components/User-Card.vue'; // ----------- editor info do usuário
+import PinProfile from './components/Pin-Profile.vue'; // ------- criador/editor pin no perfil
+import Event from './components/Event.vue'; // ------------------ evento da agenda
+import EventProfile from './components/Event-Profile.vue'; // --- criador/editor eventos no perfil
+import ShortEvent from './components/Short-Event.vue'; // --- evento reduzido para tabela de eventos
+import PinTeste from './components/pinTeste.vue'; // ------------- pin teste
 
 Vue.component('logo-card', LogoCard);
 Vue.component('user-card', UserCard);
 Vue.component('pin-profile', PinProfile);
 Vue.component('my-menu', NavMenu);
 Vue.component('multicolor-line', MulticolorLine);
-Vue.component('event-map', EventMap);
+Vue.component('event', Event);
 Vue.component('event-profile', EventProfile);
+Vue.component('short-event', ShortEvent);
+
+
+Vue.component('pin-teste', PinTeste); // pin teste
+
 
 // leaflet map components
 Vue.component('l-map', LMap);

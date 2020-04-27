@@ -171,11 +171,29 @@ const store = new Store({
   ],
 
   getters: {
+    getKey(state) {
+      return state.newKey;
+    },
+    currentUser(state) {
+      return state.currentUser;
+    },
+    signedIn(state) {
+      return state.token !== false;
+    },
+    pinCompleted(state) {
+      return state.currentUser.pinCompleted;
+    },
+    myPin(state) {
+      return state.myPin[0];
+    },
     pinsFiltered(state) {
       if(state.filter === 'all') {
         return state.pins;
       }
       return state.pins;
+    },
+    myEvents(state) {
+      return state.myEvents;
     },
     eventsFiltered(state) {
       if(state.filter === 'all') {
@@ -206,32 +224,14 @@ const store = new Store({
         console.log('mutation -> state/myPin[] : first-write', state.myPin);
       } else {
         state.myPin.splice(0, 1, payload);
+        localStorage.removeItem('myPin');
+        localStorage.setItem(payload);
         console.log('mutation -> state/myPin[] : editing', state.myPin);
       }
     },
     addEvent(state, payload) {
-
       console.log('mutation -> state/myEvents[] : add', payload);
-      state.myEvents.push({
-        id: payload.id, // onde gerar id ? no component : na store
-        name: payload.name,
-        date: { value: payload.data.value },
-        hour: payload.hour,
-        address: {
-          street: payload.address.street,
-          neighborhood: payload.address.neighborhood,
-          city: payload.address.city,
-        },
-        ticket: payload.ticket,
-        link: payload.link,
-        description: payload.description,
-        category: {
-          value: payload.category.value,
-          color: payload.category.color
-        },
-        imgUrl: payload.imgUrl,
-      })
-
+      state.myEvents.push(payload.newEvent);
     },
   },
 
@@ -334,6 +334,47 @@ const store = new Store({
         })
       
 
+    },
+    addEvent(context, payload) {
+      console.log('action -> mutation/myEvents : addEvent', payload)
+      context.commit('addEvent', payload);
+      // localStorage.setItem('', payload);
+    },
+    addEventPost(context, payload) {
+      
+      api.post('/event', {
+        id: payload.id,
+        userRef: payload.userRef,
+        name: payload.name,
+        address: {
+          street: payload.street,
+          neighborhood: payload.neighborhood,
+          number: payload.number,
+          city: payload.city,
+          cep: payload.cep,
+        },
+        address: {
+          street: payload.street,
+          neighborhood: payload.neighborhood,
+          number: payload.number,
+          city: payload.city,
+          cep: payload.cep,
+        },
+        date: payload.date,
+        hour: payload.hour,
+        ticket: payload.ticket,
+        description: payload.description,
+        link: payload.link,
+        imgUrl: payload.imgUrl,
+      })
+        .then(response => {
+          console.log(response)
+          context.commit('addEvent', response.data)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
     },
   },
   modules: {}

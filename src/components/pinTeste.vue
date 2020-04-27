@@ -2,8 +2,10 @@
 
   <div class="box" :style="{ 'background-color' : background }">
 
+    <!-- <div class="show-steps"> {{ this.step }} - {{ this.lastStep }} </div> -->
+
     <!-- first -->
-    <div class="first" v-if="step==0">
+    <div class="first" v-if="step==0" :class="{ 'active' : active }">
 
         <div class="header column">
 
@@ -18,7 +20,7 @@
     </div>
 
     <!-- edit mode -->
-    <div class="edit" v-if="step==1" :class="{ 'active' : active }">
+    <div class="edit" v-if="step==1">
 
       <div class="input-content">
 
@@ -131,17 +133,17 @@
         <!-- links -->
         <div class="column mg-top8">
           <span class="subheading-2">link</span>
-          <q-input class="input f-size" dense v-model="link" input-class="text-white" color="white"/>
+          <q-input class="input f-size" dense v-model="otherLink" input-class="text-white" color="white"/>
         </div>
 
         <div class="column mg-top8">
           <span class="subheading-2">facebook</span>
-          <q-input class="input f-size" dense v-model="face" input-class="text-white" color="white"/>
+          <q-input class="input f-size" dense v-model="linkF" input-class="text-white" color="white"/>
         </div>
 
         <div class="column mg-top8">
           <span class="subheading-2">instagram</span>
-          <q-input class="input f-size" dense v-model="insta" input-class="text-white" color="white"/>
+          <q-input class="input f-size" dense v-model="linkIG" input-class="text-white" color="white"/>
         </div>
 
         <!-- file picker -->
@@ -176,7 +178,7 @@
     </div>
 
     <!-- ready -->
-    <div class="ready" v-if="step==2" :class="{ 'active' : active }">
+    <div class="ready" v-if="step==2">
 
       <div class="context column">
         <span class="title-1 bolder line-h16"> {{ this.name }} </span>
@@ -188,12 +190,12 @@
           <span class="body-2 bold"> {{ this.street }} - {{ this.neighborhood }} - {{ this.number }} </span>
         </div>
 
-        <span class="body-2 bold spaced-16"> {{ phoneMask }} </span>
+        <span class="body-2 bold spaced-16"> {{ this.phone }} </span>
 
         <div class="links row mg-top16">
-          <a class="link caption bold" target="blank" :href="this.links.linkF">.facebook</a>
-          <a class="link caption bold mg-left16" target="blank" :href="this.links.linkIG">.instagram</a>
-          <a class="link caption bold mg-left16" target="blank" :href="this.links.otherLink">.link</a>
+          <a class="link caption bold" target="blank" :href="this.linkF">.facebook</a>
+          <a class="link caption bold mg-left16" target="blank" :href="this.linkIG">.instagram</a>
+          <a class="link caption bold mg-left16" target="blank" :href="this.otherLink">.link</a>
         </div>
 
       </div>
@@ -239,14 +241,12 @@ export default {
       number: '',
       city: '',
       cep: '',
-      address: {},
       lat: '',
       long: '',
       description: '',
-      // link: '',
-      // insta: '',
-      // face: '',
-      links: {},
+      linkF: '',
+      linkIG: '',
+      otherLink: '',
       imgUrl: 'https://placeimg.com/500/300/nature',
       file: null,
     };
@@ -268,29 +268,28 @@ export default {
     // this.fetcLocalStorage();
   },
   computed: {
-    phoneMask() {
-      if (this.phone === null || this.phone === undefined) {
-        console.log('phone undefined');
-        return false;
-      }
-      let str = '';
-      const p = this.phone;
-      console.log('p', this.phone);
-      const ddd = p.slice(0, 2);
-      const prefix = p.slice(2, 7);
-      const sufix = p.slice(7, 11);
-      str = str.concat(ddd).concat('').concat(prefix).concat(' ')
-        .concat(sufix);
-      console.log(str);
-      return str;
-    },
+    // phoneMask() {
+    //   if (this.phone === null || this.phone === undefined) {
+    //     console.log('phone undefined');
+    //     return false;
+    //   }
+    //   let str = '';
+    //   const p = this.phone;
+    //   console.log('p', this.phone);
+    //   const ddd = p.slice(0, 2);
+    //   const prefix = p.slice(2, 7);
+    //   const sufix = p.slice(7, 11);
+    //   str = str.concat(ddd).concat('').concat(prefix).concat(' ')
+    //     .concat(sufix);
+    //   console.log(str);
+    //   return str;
+    // },
     getKeyUser() {
       const aux = this.$store.getters.currentUser;
       return aux.email;
     },
     getPinStatus() {
-      const status = this.$store.state.currentUser.pinCompleted; // verifica se o usuário possui um pin
-      return status;
+      return this.$store.getters.pinCompleted; // verifica se o usuário possui um pin
     },
     getStateToken() {
       const tokenStatus = this.$store.state.token;
@@ -302,7 +301,6 @@ export default {
   },
   methods: {
     fetchStorage() {
-      console.log('pin-profile : fetchStorage');
       if (this.getPinStatus === false) { //  se não existe pin
         console.log('null_Fetch');
         this.name = '';
@@ -314,9 +312,9 @@ export default {
         this.city = '';
         this.cep = '';
         this.description = '';
-        this.link = '';
-        this.insta = '';
-        this.face = '';
+        this.linkF = '';
+        this.linkIG = '';
+        this.otherLink = '';
         this.imgUrl = '';
         this.step = 0;
         this.lastStep = 0;
@@ -328,17 +326,15 @@ export default {
         this.email = info.email;
         this.phone = info.phone;
         console.log('number', info.name);
-        // this.number = info.address.number;
-        // this.street = info.address.street;
-        // this.neighborhood = info.address.neighborhood;
-        // this.city = info.address.city;
-        // this.cep = info.address.cep;
-        this.address = info.address;
+        this.number = info.number;
+        this.street = info.street;
+        this.neighborhood = info.neighborhood;
+        this.city = info.city;
+        this.cep = info.cep;
         this.description = info.description;
-        // this.link = info.links.otherLink;
-        // this.linkF = info.links.linkF;
-        // this.linkIG = info.links.linkIG;
-        this.links = info.links;
+        this.link = info.otherLink;
+        this.linkF = info.linkF;
+        this.linkIG = info.linkIG;
         this.imgUrl = info.imgUrl;
         this.step = 2;
         this.lastStep = 2;
@@ -368,13 +364,14 @@ export default {
     showFirstEdit() {
       if (this.step === 0) {
         this.lastStep = 0;
-        this.active = true;
+        // this.active = true;
         const a = this;
         setTimeout(() => { a.step = 1; }, 1000);
         console.log('iniciando primeira edição', this.lastStep, this.step);
       }
     },
     reEdit() {
+      this.fetchStorage();
       this.lastStep = 2;
       const a = this;
       setTimeout(() => { a.step = 1; }, 1000);
@@ -403,23 +400,17 @@ export default {
         name: this.name,
         email: this.email,
         phone: this.phone,
-        address: {
-          street: this.street,
-          neighborhood: this.neighborhood,
-          number: this.number,
-          city: this.city,
-          cep: this.cep,
-        },
-        coordinates: {
-          lat: this.lat,
-          long: this.long,
-        },
+        street: this.street,
+        neighborhood: this.neighborhood,
+        number: this.number,
+        city: this.city,
+        cep: this.cep,
+        lat: this.lat,
+        long: this.long,
         description: this.description,
-        links: {
-          linkF: this.face,
-          linkIG: this.insta,
-          otherLink: this.link,
-        },
+        linkF: this.face,
+        linkIG: this.insta,
+        otherLink: this.link,
         imgUrl: this.imgUrl, // fazer post da imagem recuperar url
       };
       this.lastStep = 1;
@@ -444,14 +435,24 @@ export default {
   font-family: 'Helvetica';
 }
 
+.show-steps {
+  position: relative;
+  top: 16px;
+  left: 16px;
+  height: 16px;
+  width: 32px;
+  background-color: white;
+  color: red;
+  font-size: 1rem;
+}
+
 .box {
-  // width: 100%;
-  // transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .active {
-  width: 350px;
-  height: 100%;
+  // width: 350px;
+  // height: 100%;
   // transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
   animation: expand 1s linear;
 }

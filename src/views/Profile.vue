@@ -32,7 +32,8 @@
       <!-- pin -->
       <div class="pin">
 
-        <pin-profile/>
+        <!-- <pin-profile/> -->
+        <pin-teste/>
 
       </div>
 
@@ -42,25 +43,28 @@
       </div>
 
       <!--  tabela de eventos -->
-      <div class="events">
-        <span>meus eventos</span>
+      <div class="events row">
+        <div class="event-item" v-for="item in getMyEvents" :key="item.id">
+          <short-event :item="item"/>
+          <!-- <span> {{ item.newEvent }} </span> -->
+        </div>
       </div>
 
     </div>
 
-    <div class="show column">
+    <!-- <div class="show column">
       <q-btn outlined @click="login()" label="login" style="heigth: 30px; width: 60px; background-color: white;"/>
       <q-btn outlined @click="logout()" label="logout" style="heigth: 30px; width: 60px; background-color: white;"/>
-      <!-- show pin status and data -->
-      <!-- <span class="status"> pin:store:status = {{ userPinStatus }} </span>
-      <span class="pin-status"> {{ getPinUser }} </span> -->
+      show pin status and data
+      <span class="status"> pin:store:status = {{ userPinStatus }} </span>
+      <span class="pin-status"> {{ getPinUser }} </span>
 
-      <!-- show my events lenght and data -->
+      show my events lenght and data
       <span class="status"> store -> token = {{ getStateToken }} <br> </span>
       <span class="status"> store -> key = {{ getKeyToken }} <br> </span>
-      <span class="status"> pin:store:status = {{ myEventsSize }} <br> </span>
+      <span class="status"> myEvents size = {{ myEventsSize }} <br> </span>
       <span class="pin-status"> {{ getMyEvents }} </span>
-    </div>
+    </div> -->
 
   </div>
 </template>
@@ -74,10 +78,10 @@ export default {
   },
   computed: {
     signedIn() {
-      return this.$store.state.signedIn;
+      return this.$store.getters.signedIn;
     },
     getUser() {
-      return this.$store.state.currentUser;
+      return this.$store.getters.currentUser;
     },
     getStateToken() {
       const tokenStatus = this.$store.state.token;
@@ -91,13 +95,14 @@ export default {
       return keyToken;
     },
     getPinUser() {
-      return this.$store.state.myPin[0];
+      return this.$store.getters.myPin;
     },
     myEventsSize() {
       return this.$store.state.myEvents.length;
     },
     getMyEvents() {
-      return this.$store.state.myEvents;
+      const showMyEvents = this.$store.getters.myEvents;
+      return showMyEvents;
     },
   },
   methods: {
@@ -212,25 +217,30 @@ span {
 
 .pin {
   // background-color: #254C26;
+  width: 100%;
   margin: 2px;
   overflow: hidden;
 }
 
 .event {
-  height: 100%;
-  min-width: 200px;
+  // height: 100%;
+  // width: 100%;
   // background-color: #BD6A5C;
   margin: 2px;
 }
 
 .events {
-  height: 200px;
-  max-width: 400px;
-  background-color: #DBB753;
+  height: 100%;
+  // max-width: 410px;
   margin: 2px;
 
-  @media screen and (max-width: 1350px) {
+  .event-item {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 4px;
+    margin-left: 4px;
   }
+
 }
 
 // .pin, .event, .events {

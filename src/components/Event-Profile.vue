@@ -1,6 +1,6 @@
 <template>
 
-  <div class="box" :style="{ 'background-color' : category.color }">
+  <div class="box">
 
     <div class="first" v-if="step==0" :class="{ 'active' : active }">
 
@@ -16,7 +16,7 @@
 
     </div>
 
-    <div class="edit" v-if="step==1">
+    <div class="create" v-if="step==1" :style="{ 'background-color' : category.color }">
 
       <div class="input-content">
 
@@ -38,7 +38,7 @@
 
           <div class="column">
             <span class="subheading-2">data</span>
-            <q-input class="input2" dense v-model="date.value" mask="##/##/####" input-class="text-white" color="white"/>
+            <q-input class="input2" dense v-model="date" mask="##/##/####" input-class="text-white" color="white"/>
           </div>
 
           <div class="column">
@@ -80,10 +80,10 @@
           <q-input class="input" dense v-model="ticket" mask="r$ ##" input-class="text-white" color="white"/>
         </div>
 
-        <!-- links -->
+        <!-- link -->
         <div class="column mg-top8">
           <span class="subheading-2">link do evento</span>
-          <q-input class="input" dense v-model="linkPagina" input-class="text-white" color="white"/>
+          <q-input class="input" dense v-model="link" input-class="text-white" color="white"/>
         </div>
 
         <!-- description -->
@@ -150,11 +150,11 @@
       <!-- actions edit -->
       <div class="mg-top32" align="right">
 
-        <q-btn class="mg-right8" flat color="white" @click="cancelEdit()">
+        <q-btn class="mg-right8" flat color="white" @click="cancelCreate()">
           <span class="caption">Cancelar</span>
         </q-btn>
 
-        <q-btn outline color="white" @click="confirmEdit()">
+        <q-btn outline color="white" @click="confirmCreate()">
           <span class="caption">Finalizar</span>
         </q-btn>
 
@@ -162,7 +162,7 @@
 
     </div>
 
-    <div class="ready" v-if="step==2">
+    <div class="ready" v-if="step==2" :style="{ 'background-color' : category.color }">
 
       <div class="context column">
         <span class="title-1 bolder line-h16"> {{ this.name }} </span>
@@ -220,10 +220,9 @@ export default {
       completed: false,
       step: 0,
       lastStep: '',
-      eventId: '',
+      eventId: null,
       name: '',
-      email: '',
-      date: { value: '' },
+      date: null,
       hour: '',
       ticket: '',
       street: '',
@@ -237,7 +236,7 @@ export default {
         value: '',
         color: '#b8cad4',
       },
-      linkPagina: '',
+      link: '',
       file: null,
       imgUrl: '',
       options: [
@@ -340,9 +339,6 @@ export default {
       default: null,
     },
   },
-  created() {
-    this.fetchData();
-  },
   computed: {
     phoneMask() {
       if (this.phone !== null) {
@@ -358,64 +354,28 @@ export default {
       }
       return this.phone;
     },
+    getUserRef() {
+      const aux = this.$store.getters.currentUser;
+      return aux.email;
+    },
   },
   methods: {
-    fetchData() {
-      console.log('fetch EventData');
-      if (this.info !== null) {
-        this.eventId = this.info.eventId;
-        this.name = this.info.name;
-        this.email = this.info.email;
-        this.phone = this.info.phone;
-        this.street = this.info.address.street;
-        this.number = this.info.address.number;
-        this.neighborhood = this.info.address.neighborhood;
-        this.city = this.info.address.city;
-        this.cep = this.info.address.cep;
-        this.description = this.info.description;
-        this.linkPagina = this.info.links.otherLink;
-        this.linkFacebook = this.info.links.linkF;
-        this.linkInstagram = this.info.links.linkIG;
-        this.step = 2;
-        this.lastStep = 2;
-      } else {
-        this.name = '';
-        this.email = '';
-        this.phone = '';
-        this.street = '';
-        this.number = '';
-        this.neighborhood = '';
-        this.city = '';
-        this.cep = '';
-        this.description = '';
-        this.linkPagina = '';
-        this.linkFacebook = '';
-        this.linkInstagram = '';
-        this.step = 0;
-        this.lastStep = 0;
-      }
-    },
-    createEvent() {
-      this.status.push('create');
-      console.log('event:creating', this.status[0]); // emitindo que a box está aberta
+    createEvent() { // abre criação do evento
+      this.status.push('creating');
+      console.log('profile -> addEvent : status', this.status[0]); // emitindo que a box está aberta
       if (this.step === 0) {
         this.lastStep = 0;
         // this.active = true;
         const a = this;
-        setTimeout(() => { a.step = 1; }, 1000);
-        console.log('criando evento', this.lastStep, this.step);
+        setTimeout(() => {
+          a.step = 1;
+          console.log('lastStep - currentStep', this.lastStep, this.step);
+        }, 1000);
       }
     },
-    reEdit() {
-      this.status.push('reedit');
-      this.$emit('event:editing', this.status[0]); // emitindo que a box está aberta
-      this.lastStep = 2;
-      const a = this;
-      setTimeout(() => { a.step = 1; }, 1000);
-      console.log('reeditando', this.lastStep, this.step);
-    },
-    cancelEdit() {
-      console.log('cancelar', this.lastStep, this.step);
+    cancelCreate() { // cancela criação do evento ou edição de shortEvent
+      console.log('cancelar ->', this.lastStep, this.step);
+      this.status.slice(0, 1, 'cancel');
       if (this.lastStep === 0) {
         this.status = []; // reseta status
         console.log('-> criação de evento');
@@ -426,19 +386,23 @@ export default {
       }
       if (this.lastStep === 2) {
         this.status = []; // reseta status
-        console.log('-> reedição de evento');
+        console.log('-> reedição de shortEvent');
         const a = this;
         setTimeout(() => { a.step = 2; }, 1000);
         this.lastStep = 2;
         this.category.color = '#b8cad4'; // resetar bg
       }
     },
-    confirmEdit() {
+    confirmCreate() { // confirma criação de evento ou ediçao de shortEvent
       this.completed = true;
-      const payload = {
+      this.$store.dispatch('setKey');
+      this.eventId = this.$store.getters.getKey;
+      console.log('getKey', this.eventId);
+      console.log('userRef', this.getUserRef);
+      const newEvent = {
+        id: this.eventId,
+        userRef: this.getUserRef,
         name: this.name,
-        email: this.email,
-        phone: this.phone,
         address: {
           street: this.street,
           neighborhood: this.neighborhood,
@@ -446,20 +410,45 @@ export default {
           city: this.city,
           cep: this.cep,
         },
+        date: this.date,
+        hour: this.hour,
+        ticket: this.ticket,
         description: this.description,
-        links: {
-          linkF: this.linkFacebook,
-          linkIG: this.linkInstagram,
-          otherLink: this.linkPagina,
+        link: this.link,
+        category: {
+          label: this.category.label,
+          value: this.category.value,
+          color: this.category.color,
         },
-        imgUrl: '',
+        bg: this.category.color,
+        imgUrl: this.imgUrl,
       };
-      console.log('payload:confirmEdit', payload);
-      this.$emit('event:create-edit:completed', this.status[0]);
-      this.$store.dispatch({ type: 'addEvent', payload });
-      this.lastStep = 1;
-      const a = this;
-      setTimeout(() => { a.step = 0; }, 1000);
+      console.log('payload:confirmEdit', newEvent); // log do objeto
+      // this.$emit('createEvent', this.newEvent.id); // emit id do evento para o componente myEvents se atualizar
+      this.$store.dispatch({ type: 'addEvent', newEvent }); // envia a store a ação add event
+      this.resetFields();
+      this.lastStep = 1; // seta o lastStep
+      const a = this; // armazena escopo
+      setTimeout(() => { a.step = 0; }, 1000); // seta step para modo de adicionar novo evento
+    },
+    resetFields() {
+      this.eventId = null;
+      this.name = '';
+      this.date = '';
+      this.hour = '';
+      this.ticket = '';
+      this.street = '';
+      this.neighborhood = '';
+      this.number = '';
+      this.city = '';
+      this.cep = '';
+      this.description = '';
+      this.category.label = '';
+      this.category.value = '';
+      this.category.color = '#b8cad4';
+      this.link = '';
+      this.file = null;
+      this.imgUrl = '';
     },
     expand() {
       this.state = !this.state;
@@ -505,11 +494,6 @@ export default {
   }
 }
 
-.editMode {
-  height: 100%;
-  width: 350px !important;
-}
-
 .first {
   height: 200px;
   width: 200px;
@@ -517,6 +501,7 @@ export default {
   overflow: hidden;
   position: relative;
   // border: 2px solid white;;
+  background-color: #b8cad4;
 
   .header {
     align-self: center;
@@ -532,12 +517,12 @@ export default {
   }
 }
 
-.edit, .ready {
+.create, .ready {
   width: 350px;
   height: 100%;
 }
 
-.edit {
+.create {
   align-items: center;
   padding: 24px;
   transition: 1s expand linear;
@@ -560,10 +545,6 @@ export default {
 .f-size {
   font-size: 1rem;
 }
-
-// .edit {
-//   background-color: #E6B545;
-// }
 
 .ready {
   padding: 32px;
