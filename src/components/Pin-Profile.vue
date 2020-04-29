@@ -18,7 +18,7 @@
     </div>
 
     <!-- edit mode -->
-    <div class="edit" v-if="step==1" :class="{ 'active' : active }">
+    <div class="edit" v-if="step==1">
 
       <div class="input-content">
 
@@ -176,7 +176,7 @@
     </div>
 
     <!-- ready -->
-    <div class="ready" v-if="step==2" :class="{ 'active' : active }">
+    <div class="ready" v-if="step==2">
 
       <div class="context column">
         <span class="title-1 bolder line-h16"> {{ this.name }} </span>
@@ -445,13 +445,12 @@ export default {
 }
 
 .box {
-  // width: 100%;
   // transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .active {
-  width: 350px;
-  height: 100%;
+  // width: 350px;
+  // height: 100%;
   // transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
   animation: expand 1s linear;
 }
@@ -468,11 +467,6 @@ export default {
     width: 350px;
     height: 100%;
   }
-}
-
-.editMode {
-  height: 100%;
-  width: 350px !important;
 }
 
 .first {

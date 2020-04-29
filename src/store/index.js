@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { Store } from  'vuex'
+import router from '../router/index.js'
 import createPersistedState from "vuex-persistedstate"
 import axios from 'axios'
 import api from '../config/index.js'
@@ -12,17 +13,16 @@ Vue.use(Vuex)
 const store = new Store({
   state: {
     newKey: null,
-    token: null,
-    // token: '',
-    currentUser: {
-      name: 'Juliana Trujillo',
-      email: 'JulianaTrujillo@email.com',
-      category: { value: 'Cinema e AudioVisual', color: '#254C26'},  // *** transforma category em um id numérico
-      isValid: true, // check do fórum quanto ao usuário, começa com true
-      isAdmin: false,
-      pinCompleted: false,
-      // password: '123umdoistres',
-    },
+    token: localStorage.getItem('access_token') || null,
+    currentUser: localStorage.getItem('currentUser') || null,
+    // currentUser: {
+    //   name: 'Juliana Trujillo',
+    //   email: 'JulianaTrujillo@email.com',
+    //   category: { value: 'Cinema e AudioVisual', color: '#254C26'},  // *** transforma category em um id numérico
+    //   isValid: true, // check do fórum quanto ao usuário, começa com true
+    //   isAdmin: false,
+    //   pinCompleted: false,
+    // },
     myPin: [],
     myEvents: [],
     pins: [],
@@ -177,7 +177,7 @@ const store = new Store({
     currentUser(state) {
       return state.currentUser;
     },
-    signedIn(state) {
+    loggedIn(state) {
       return state.token !== false;
     },
     pinCompleted(state) {
@@ -211,21 +211,30 @@ const store = new Store({
       console.log('mutations -> state/newKey : _SETKEY');
       console.log('mutations -> localStorage : _SETKEY');
     },
-    logout (state) {
-      state.newKey = null;
+    setCurrentUser (state, setNewUser) {
+      state.currentUser = setNewUser;
+    },
+    destroyCurrentUser (state) {
+      state.currentUser = null;
+      console.log('mutation : destroy currentUser');
+    },
+    retrieveToken(state, token) {
+      state.token = token;
+      console.log('mutation : retrieveToken');
+    },
+    destroyToken (state) {
       state.token = null;
-      localStorage.removeItem('access_token');
-      console.log('resert key e token');
+      console.log('mutation : destroy token');
     },
     addPin(state, payload) {
       if (state.currentUser.pinCompleted === false && state.myPin[0] !== null) {
-        state.myPin.push(payload);
+        state.push(payload);
         state.currentUser.pinCompleted = true;
         console.log('mutation -> state/myPin[] : first-write', state.myPin);
       } else {
         state.myPin.splice(0, 1, payload);
         localStorage.removeItem('myPin');
-        localStorage.setItem(payload);
+        localStorage.setItem('myPin', payload);
         console.log('mutation -> state/myPin[] : editing', state.myPin);
       }
     },
@@ -246,9 +255,6 @@ const store = new Store({
       console.log('KEY DO NOVO EVENTO:', key)
       context.commit('setKey', key);
     },
-    logout (context) {
-      context.commit('logout');
-    },
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
@@ -257,11 +263,14 @@ const store = new Store({
                 password: credentials.password,
             })
             .then(response => {
-                console.log(response)
+                console.log('reponse', response.data)
                 const token = response.data.token
+                const currentUser = response.data
                 console.log(token)
-                    // localStorage.setItem('access_token', validateToken)
-                    // context.commit('retrieveToken', token)
+                context.commit('retrieveToken', token)
+                context.commit('setCurrentUser', currentUser)
+                localStorage.setItem('access_token', token)
+                localStorage.setItem('currentUser', response.data)
                 resolve(response)
             })
             .catch(error => {
@@ -275,21 +284,30 @@ const store = new Store({
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       if (context.getters.loggedIn) {
-        return new Promise((resolve, reject) => {
-          axios.post('/logout')
-            .then(response => {
-              //localStorage.removeItem('access_token')
-              context.commit('destroyToken')
-              resolve(response)
-              // console.log(response);
-              // context.commit('addTodo', response.data)
-            })
-            .catch(error => {
-              //localStorage.removeItem('access_token')
-              context.commit('destroyToken')
-              reject(error)
-            })
-        })
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('currentUser')
+        context.commit('destroyToken')
+        context.commit('destroyCurrentUser')
+        router.push({ name: 'SignIn' })
+        console.log('logout')
+
+        // return new Promise((resolve, reject) => {
+        //   axios.post('/logout')
+        //     .then(response => {
+        //       localStorage.removeItem('access_token')
+        //       context.commit('destroyToken')
+        //       resolve(response)
+        //       console.log('responde destroyToken', response);
+        //       // context.commit('addTodo', response.data)
+        //     })
+        //     .catch(error => {
+        //       console.log('error logout')
+        //       localStorage.removeItem('access_token')
+        //       context.commit('destroyToken')
+        //       router.push({ name: 'SignIn' })
+        //       reject(error)
+        //     })
+        // })
       }
     },
     addPin(context, payload) {

@@ -88,7 +88,81 @@
   box-shadow: none;
   max-width: 150px;
   border-radius: 0px;
+  border: none;
+  padding: 0px 8px 0px 8px;
   background-color: black;
+
+  &:hover {
+    border: 2px double white;
+    cursor: pointer;
+    // transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+}
+
+.btn-options {
+  // min-height: 25px;
+  // min-width: 60px;
+  box-shadow: none;
+  padding: 0px 8px 0px 8px;
+  border: 1px solid white;
+  border-radius: 0px;
+  background-color: transparent;
+  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  &:hover {
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+    border-bottom: 4px solid white;
+    border-right: 1px solid white;
+    cursor: pointer;
+    // transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+}
+
+.primary-action {
+  height: 25px;
+  // min-width: 60px;
+  box-shadow: none;
+  padding: 0px 8px 0px 8px;
+  border: 1px solid white;
+  border-radius: 0px;
+  background-color: transparent;
+  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  &:hover {
+    border: 2px solid white;
+    cursor: pointer;
+    // transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+}
+
+.secondary-action {
+  height: 25px;
+  // min-width: 60px;
+  box-shadow: none;
+  padding: 0px 8px 0px 8px;
+  border-top: none;
+  border-left: none;
+  border-bottom: 2px solid white;
+  border-right: none;
+  border-radius: 0px;
+  background-color: transparent;
+  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  &:hover {
+    border-bottom: 4px solid white;
+    cursor: pointer;
+    // transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+
+}
+
+.text-secondary-action {
+  color: black;
+
+  &:hover {
+    color: white;
+  }
 }
 
 // ---------------- patterns components -------------------
@@ -106,6 +180,26 @@ flex-direction: column;
 .row {
 display: flex;
 flex-direction: row;
+}
+
+.justify-items-end {
+  justify-content: flex-end;
+}
+
+.al-items-end {
+  align-items: flex-end;
+}
+
+.al-self-end {
+  align-self: flex-end;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.padding-0 {
+  padding: 0px !important;
 }
 
 .justify-around {
@@ -198,6 +292,14 @@ flex-direction: row;
 
 .border-white {
   border: 2px solid white;
+}
+
+.bl-4 {
+  border-left: 4px solid white;
+}
+
+.bl-8 {
+  border-left: 8px solid white;
 }
 
 </style>

@@ -426,10 +426,12 @@ export default {
       console.log('payload:confirmEdit', newEvent); // log do objeto
       // this.$emit('createEvent', this.newEvent.id); // emit id do evento para o componente myEvents se atualizar
       this.$store.dispatch({ type: 'addEvent', newEvent }); // envia a store a ação add event
-      this.resetFields();
       this.lastStep = 1; // seta o lastStep
       const a = this; // armazena escopo
-      setTimeout(() => { a.step = 0; }, 1000); // seta step para modo de adicionar novo evento
+      setTimeout(() => {
+        this.resetFields();
+        a.step = 0;
+      }, 1000); // seta step para modo de adicionar novo evento
     },
     resetFields() {
       this.eventId = null;

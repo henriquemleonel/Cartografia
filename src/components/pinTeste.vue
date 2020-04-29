@@ -1,11 +1,11 @@
 <template>
 
-  <div class="box" :style="{ 'background-color' : background }">
+  <div class="box" :style="{ 'background-color' : background }" :class="{ 'active' : active }">
 
     <!-- <div class="show-steps"> {{ this.step }} - {{ this.lastStep }} </div> -->
 
     <!-- first -->
-    <div class="first" v-if="step==0" :class="{ 'active' : active }">
+    <div class="first" v-if="step==0">
 
         <div class="header column">
 
@@ -28,23 +28,29 @@
 
         <!-- pin name -->
         <div class="column mg-top16">
-          <span class="subheading-2">nome do pin</span>
+          <!-- <span class="subheading-2">nome do pin</span> -->
           <q-input
             class="input"
             dense
+            borderless
             v-model="name"
+            label="nome do pin"
+            label-color="white"
             input-class="text-white"
             color="white"/>
         </div>
 
         <!-- email -->
         <div class="column mg-top8">
-          <span class="subheading-2">email</span>
+          <!-- <span class="subheading-2">email</span> -->
           <q-input
             class="input"
             dense
+            borderless
             v-model="email"
             type="email"
+            label="email"
+            label-color="white"
             input-class="text-white"
             color="white"
           />

@@ -12,10 +12,35 @@
         </template>
 
         <q-card class="card column" :style="{ 'background-color' : bg }">
-          <q-card-section>
 
-            <div class=" user-info row">
-              <q-input class="input" readonly v-model="email" color="white" label="Sua conta" label-color="white" />
+          <!-- actions perfil -->
+          <q-card-section class="padding-0">
+
+            <div class="row justify-items-end full-width">
+
+              <button class="btn-edit btn-options" @click="activeEdit()">
+                <span class="overline">editar senha</span>
+              </button>
+
+              <button class="btn-edit btn-options" @click="emitLogout()">
+                <span class="overline">sair</span>
+              </button>
+
+            </div>
+
+          </q-card-section>
+
+          <!-- user info ( no edit ) -->
+          <q-card-section class="padding-0 mg-top16">
+
+            <div class="user-info mg-top16">
+
+              <div class="column">
+                <span class="overline"> sua conta: </span>
+                <span class="caption"> {{ email }} </span>
+              </div>
+
+              <!-- <q-input class="input" readonly v-model="email" color="white" label="Sua conta" label-color="white" /> -->
               <!-- <q-btn flat size="0.8rem">
                 <q-icon name="far fa-trash-alt" size="1rem"/>
                 <q-icon name="delete_outline" />
@@ -23,10 +48,40 @@
             </div>
 
           </q-card-section>
-          <q-card-section>
 
-            <q-input class="input" v-model="password" color="white" label="senha:" label-color="white" />
+          <!-- user info ( edit ) -->
+          <q-card-section class="user-edit row no-wrap al-items-end mg-top32" v-if="editing">
+
+            <!-- inputs -->
+            <div class="column">
+
+              <div class="">
+                <span class="overline">nova senha </span>
+                <q-input dense filled square class="input" v-model="newPassword" bg-color="grey-1" color="white" />
+              </div>
+
+              <div class="mg-top8">
+                <span class="overline">repita sua senha</span>
+                <q-input dense filled square class="input" v-model="checkNewPassword" bg-color="grey-1" color="white" />
+              </div>
+
+            </div>
+
+            <!-- actions inputs -->
+            <div class="row no-wrap al-self-end">
+
+              <button class="secondary-action mg-top16" @click="cancelPasswordEdit()">
+                <span class="overline text-secondary-action">cancelar</span>
+              </button>
+
+              <button class="primary-action mg-top16 mg-left8 mg-right8" @click="confirmPasswordEdit()">
+                <span class="overline">confirmar</span>
+              </button>
+
+            </div>
+
           </q-card-section>
+
         </q-card>
       </q-expansion-item>
 
@@ -39,12 +94,17 @@ export default {
   data() {
     return {
       isActive: true,
-      bg: this.info.category.color,
-      name: this.info.name,
-      category: this.info.category.value,
+      bg: '#254C26',
+      // bg: this.info.category.color,
+      // name: this.info.name,
+      // category: this.info.category.value,
+      name: this.info.firstName.concat(' ').concat(this.info.lastName),
+      category: 'categoria teste',
       email: this.info.email,
       password: this.info.password,
-      editActive: false,
+      newPassword: '',
+      checkNewPassword: '',
+      editing: false,
     };
   },
   props: {
@@ -56,8 +116,17 @@ export default {
     },
   },
   methods: {
-    active() {
-      this.editActive = !this.editActive;
+    emitLogout() {
+      this.$emit('emitLogout');
+    },
+    passwordEdit() {
+      console.log('editar senha');
+    },
+    activeEdit() {
+      this.editing = true;
+    },
+    cancelPasswordEdit() {
+      this.editing = false;
     },
   },
   computed: {
@@ -84,6 +153,7 @@ export default {
 
 .box {
   width: 100%;
+  max-width: 400px;
   padding: 0px;
   box-sizing: border-box;
   width: inherit;
@@ -92,6 +162,13 @@ export default {
 
 .card {
   width: 100%;
+  padding: 16px 16px 32px 16px;
+}
+
+.btn-edit {
+  height: 25px;
+  min-width: 60px;
+  margin: 0px 8px 0px 8px;
 }
 
 .user-info {
@@ -100,15 +177,18 @@ export default {
 
 .user-edit {
   width: 100%;
-  margin-top: 16px;
+  margin-top: 24px;
+  // padding-left: 8px !important;
+  padding: 0px;
   align-items: center;
   transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  // border-left: 2px solid white !important;
+  // background-color: #778899;
 }
 
 .input {
-  width: 300px;
-  font-family: 'Helvetica';
-  font-weight: bold;
+  margin-top: 8px;
+  width: 95%;
 }
 
 span {

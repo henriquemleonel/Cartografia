@@ -36,9 +36,9 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: () => import(/* webpackChunkName: "profile" */ '../views/Profile.vue'),
-    // meta: {
-    //   requiresAuth: true,
-    // },
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/schedule',
@@ -77,23 +77,23 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    const accessToken = localStorage.getItem('access_token');
+    if (to.name !== 'SingIn' && !accessToken) {
+      next({
+        path: '/signIn',
+      });
+    } else {
+      next();
     }
-    const position = {};
-    if (to.hash) {
-      position.selector = to.hash;
-      if (to.hash === '#frm') {
-        position.offset = { y: 480 };
-        console.log(position);
-      }
-      if (document.querySelector(to.hash)) {
-        return position;
-      }
-    }
-    return false;
-  },
+  } else {
+    next(); // make sure to always call next()!
+  }
 });
 
 export default router;

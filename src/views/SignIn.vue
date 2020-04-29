@@ -18,6 +18,7 @@
             square
             type="email"
             :rules="emailRules"
+            lazy-rules
             label="Email"
             color="black"
             required
@@ -80,8 +81,8 @@ export default {
   data() {
     return {
       valid: false,
-      userEmail: '',
-      userPassword: '',
+      email: '',
+      password: '',
       isPwd: false,
       passwordVisible: false
     }
@@ -109,8 +110,8 @@ export default {
     signIn() {
       this.$store.
        dispatch('retrieveToken', {
-        email: this.userEmail,
-        password: this.userPassword,
+        email: this.email,
+        password: this.password,
       })
         .then(response => {
           this.$router.push({ name: 'Profile' })

@@ -9,20 +9,20 @@
           <span class="title-2 bolder line-h16"> {{ name }} </span>
 
           <div class="row spaced-32">
-            <span class="body-2 bold"> {{ date }} </span>
+            <span class="body-3 bold"> {{ date }} </span>
             <!-- <span class="body-2 bold"> {{ date.year }} </span> -->
-            <span class="body-2 bold mg-left16"> {{ hour }} </span>
+            <span class="body-3 bold mg-left16"> {{ hour }} </span>
           </div>
 
-          <!-- <div class="column spaced-16">
-            <span class="body-2 bold"> {{ this.item.street }} - {{ this.item.number }} </span>
-            <span class="body-2 bold"> {{ this.item.neighborhood }} </span>
-          </div> -->
+          <div class="column spaced-16">
+            <span class="body-2 bold"> {{ this.item.address.street }} - {{ this.item.address.number }} </span>
+            <span class="body-2 bold"> {{ this.item.address.neighborhood }} </span>
+          </div>
 
         </div>
 
         <q-btn flat class="reset-btn btn" ref="btnFirst" @click="editThisShort()">
-          <span class="body2 bolder">+</span>
+          <span class="caption bolder">editar</span>
         </q-btn>
 
     </div>
@@ -126,8 +126,8 @@ export default {
   }
 
   .btn {
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 60px;
     position: absolute;
     bottom: 16px;
     right: 16px;
@@ -143,24 +143,6 @@ export default {
   align-items: center;
   padding: 24px;
   transition: 1s expand linear;
-}
-
-.input {
-  width: 100%;
-  // height: 40px;
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 4px;
-}
-
-.input2 {
-  width: 140px;
-  // height: 35px;
-  font-size: 1rem;
-}
-
-.f-size {
-  font-size: 1rem;
 }
 
 // .edit {
@@ -187,15 +169,6 @@ export default {
       border-radius: 0px;
     }
   }
-}
-
-.link {
-  text-decoration: none;
-  color: white;
-}
-
-.img-box {
-  width: 100%;
 }
 
 .roll-out {

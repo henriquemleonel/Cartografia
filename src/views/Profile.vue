@@ -8,7 +8,7 @@
         <!-- identidada da plataforma e img -->
         <div class="row brand-box">
 
-          <logo-card class="logo" :blackMode="false"/>
+          <logo-card class="logo" :blackMode="true"/>
 
           <div class="user-img">
             <img src="../assets/statics/avatar01.jpg" style="width: 200px; height: 200px;"/>
@@ -17,12 +17,12 @@
         </div>
 
         <!-- informaçoes do usuário (editáveis) -->
-        <div class="user-info" >
+        <div class="user-info">
 
           <user-card
             class="profile-card"
             :info="getUser"
-            v-on:callEditInfo="showEditInfo()"
+            v-on:emitLogout="logout()"
           />
 
         </div>
@@ -43,28 +43,37 @@
       </div>
 
       <!--  tabela de eventos -->
-      <div class="events row">
-        <div class="event-item" v-for="item in getMyEvents" :key="item.id">
-          <short-event :item="item"/>
-          <!-- <span> {{ item.newEvent }} </span> -->
-        </div>
+      <div class="events">
+
+        <q-scroll-area
+          class="scrollArea"
+          :thumb-style="thumbStyle"
+          :bar-style="barStyle"
+        >
+
+          <div class="event-item" v-for="item in getMyEvents" :key="item.id">
+            <short-event :item="item"/>
+            <!-- <span> {{ item.newEvent }} </span> -->
+          </div>
+
+        </q-scroll-area>
       </div>
 
     </div>
 
-    <!-- <div class="show column">
-      <q-btn outlined @click="login()" label="login" style="heigth: 30px; width: 60px; background-color: white;"/>
-      <q-btn outlined @click="logout()" label="logout" style="heigth: 30px; width: 60px; background-color: white;"/>
-      show pin status and data
-      <span class="status"> pin:store:status = {{ userPinStatus }} </span>
-      <span class="pin-status"> {{ getPinUser }} </span>
+    <div class="show column">
+      <!-- <q-btn outlined @click="login()" label="login" style="heigth: 30px; width: 60px; background-color: white;"/> -->
+      <!-- <q-btn outlined @click="logout()" label="logout" style="heigth: 30px; width: 60px; background-color: white;"/> -->
+      <!-- show pin status and data -->
+      <!-- <span class="status"> pin:store:status = {{ userPinStatus }} </span> -->
+      <!-- <span class="pin-status"> {{ getPinUser }} </span> -->
 
-      show my events lenght and data
-      <span class="status"> store -> token = {{ getStateToken }} <br> </span>
-      <span class="status"> store -> key = {{ getKeyToken }} <br> </span>
-      <span class="status"> myEvents size = {{ myEventsSize }} <br> </span>
-      <span class="pin-status"> {{ getMyEvents }} </span>
-    </div> -->
+      <!-- show my events lenght and data -->
+      <!-- <span class="status"> store -> token = {{ getStateToken }} <br> </span> -->
+      <!-- <span class="status"> store -> key = {{ getKeyToken }} <br> </span> -->
+      <!-- <span class="status"> myEvents size = {{ myEventsSize }} <br> </span> -->
+      <!-- <span class="pin-status"> {{ getMyEvents }} </span> -->
+    </div>
 
   </div>
 </template>
@@ -74,6 +83,21 @@ export default {
   name: 'Profile',
   data() {
     return {
+      thumbStyle: {
+        right: '0px',
+        borderRadius: '0px',
+        backgroundColor: '#111111',
+        width: '9px',
+        heigth: '5px',
+        opacity: 0.75,
+      },
+      barStyle: {
+        right: '0px',
+        borderRadius: '0px',
+        backgroundColor: '#f5f5f5',
+        width: '9px',
+        opacity: 0.2,
+      },
     };
   },
   computed: {
@@ -119,13 +143,13 @@ export default {
     //   else
     //     this.className = 'is-blue';
     // }
-    login() {
+    setNewkey() {
       this.$store.dispatch('setKey');
-      console.log('logando');
+      console.log('setNewKey');
     },
     logout() {
-      this.$store.dispatch('logout');
-      console.log('logout');
+      this.$store.dispatch('destroyToken');
+      console.log('profile : try logout');
     },
     showEditInfo() {
       this.opemEditInfo = !this.opemEditInfo;
@@ -145,7 +169,7 @@ export default {
 
 .show {
   position: absolute;
-  top: 320px;
+  top: 500px;
   left: 24px;
   // height: 200px;
   width: 400px;
@@ -217,7 +241,8 @@ span {
 
 .pin {
   // background-color: #254C26;
-  width: 100%;
+  // width: 100%;
+  // max-width: 350px;
   margin: 2px;
   overflow: hidden;
 }
@@ -233,12 +258,18 @@ span {
   height: 100%;
   // max-width: 410px;
   margin: 2px;
+  position: relative;
+
+  .scrollArea {
+    height: 600px;
+    width: 212px;
+  }
 
   .event-item {
     width: 200px;
     height: 200px;
     margin-bottom: 4px;
-    margin-left: 4px;
+    margin-right: 4px;
   }
 
 }
