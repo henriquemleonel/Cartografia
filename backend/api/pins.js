@@ -15,7 +15,7 @@ module.exports = app => {
             existsOrError(pin.number, "Numero da casa não informada")
             existsOrError(pin.userId, "ID usuário não informado")
         } catch (msg) {
-            res.status(400).send(msg)
+            res.status(400).sgiend(msg)
         }
 
         pin.lat = -20.4336449
