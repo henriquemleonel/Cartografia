@@ -9,18 +9,16 @@ module.exports = app => {
             if (!req.body.email || !req.body.password) {
                 return res.status().send("Informe usário e senha")
             }
-    
+
             const user = await app.db('users')
                 .where({ email: req.body.email })
                 .first()
-    
+
             if (!user) return res.status(400).send("Usuário não encontrado!")
 
-            const cryptPass = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
-    
-            const isMatch = bcrypt.compareSync(req.body.password, cryptPass)
+            const isMatch = bcrypt.compareSync(req.body.password, user.password)
+            console.log(req.body.password)
             if (!isMatch) return res.status(401).send("email ou senha inválida.")
-    
             const now = Math.floor(Date.now() / 1000)
             const payload = {
                 id: user.id,
@@ -33,7 +31,7 @@ module.exports = app => {
                 iat: now,
                 exp: now + (60 * 60 * 24 * 3)
             }
-    
+
             res.json({
                 ...payload,
                 token: jwt.encode(payload, authSecret)
