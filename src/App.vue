@@ -182,7 +182,7 @@ display: flex;
 flex-direction: row;
 }
 
-.justify-items-end {
+.jus-items-end {
   justify-content: flex-end;
 }
 

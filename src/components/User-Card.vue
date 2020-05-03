@@ -50,17 +50,17 @@
           </q-card-section>
 
           <!-- user info ( edit ) -->
-          <q-card-section class="user-edit row no-wrap al-items-end mg-top32" v-if="editing">
+          <q-card-section class="user-edit al-items-end mg-top32" v-if="editing">
 
             <!-- inputs -->
-            <div class="column">
+            <div class="row">
 
               <div class="">
                 <span class="overline">nova senha </span>
                 <q-input dense filled square class="input" v-model="newPassword" bg-color="grey-1" color="white" />
               </div>
 
-              <div class="mg-top8">
+              <div class="">
                 <span class="overline">repita sua senha</span>
                 <q-input dense filled square class="input" v-model="checkNewPassword" bg-color="grey-1" color="white" />
               </div>
@@ -68,7 +68,7 @@
             </div>
 
             <!-- actions inputs -->
-            <div class="row no-wrap al-self-end">
+            <div class="row al-self-end">
 
               <button class="secondary-action mg-top16" @click="cancelPasswordEdit()">
                 <span class="overline text-secondary-action">cancelar</span>

@@ -33,7 +33,7 @@
       <div class="pin">
 
         <!-- <pin-profile/> -->
-        <pin-teste/>
+        <pin-teste :fetch="getPinStatus" :item="getPinUser"/>
 
       </div>
 
@@ -104,23 +104,18 @@ export default {
     signedIn() {
       return this.$store.getters.signedIn;
     },
+    // props de user-card
     getUser() {
       return this.$store.getters.currentUser;
     },
-    getStateToken() {
-      const tokenStatus = this.$store.state.token;
-      return tokenStatus;
-    },
-    getKeyToken() {
-      const keyToken = this.$store.state.newKey;
-      if (keyToken === null) {
-        return false;
-      }
-      return keyToken;
-    },
+    // props de pin-profile
     getPinUser() {
       return this.$store.getters.myPin;
     },
+    getPinStatus() {
+      return this.$store.getters.pinCompleted; // verifica se o usuário possui um pin
+    },
+    // show infos from store
     myEventsSize() {
       return this.$store.state.myEvents.length;
     },

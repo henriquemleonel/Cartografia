@@ -83,7 +83,8 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    const accessToken = localStorage.getItem('access_token');
+    // const accessToken = localStorage.getItem('access_token');
+    const accessToken = sessionStorage.getItem('access_token');
     if (to.name !== 'SingIn' && !accessToken) {
       next({
         path: '/signIn',

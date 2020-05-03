@@ -33,7 +33,7 @@
             color="white"/>
         </div>
 
-        <!-- date & hour -->
+        <!-- date & time -->
         <div class="row justify-between mg-top8">
 
           <div class="column">
@@ -43,7 +43,7 @@
 
           <div class="column">
             <span class="subheading-2">hora</span>
-            <q-input class="input2" dense v-model="hour" mask="##:##" input-class="text-white" color="white"/>
+            <q-input class="input2" dense v-model="time" mask="##:##" input-class="text-white" color="white"/>
           </div>
 
         </div>
@@ -223,7 +223,7 @@ export default {
       eventId: null,
       name: '',
       date: null,
-      hour: '',
+      time: '',
       ticket: '',
       street: '',
       neighborhood: '',
@@ -396,40 +396,34 @@ export default {
     confirmCreate() { // confirma criação de evento ou ediçao de shortEvent
       this.completed = true;
       this.$store.dispatch('setKey');
-      this.eventId = this.$store.getters.getKey;
-      console.log('getKey', this.eventId);
+      // this.eventId = this.$store.getters.getKey;
+      // console.log('getKey', this.eventId);
       console.log('userRef', this.getUserRef);
       const newEvent = {
-        id: this.eventId,
+        // id: this.eventId, // não precisa, o banco cria
         userRef: this.getUserRef,
         name: this.name,
-        address: {
-          street: this.street,
-          neighborhood: this.neighborhood,
-          number: this.number,
-          city: this.city,
-          cep: this.cep,
-        },
         date: this.date,
-        hour: this.hour,
+        time: this.time,
+        street: this.street,
+        neighborhood: this.neighborhood,
+        number: this.number,
+        city: this.city,
+        cep: this.cep,
         ticket: this.ticket,
         description: this.description,
         link: this.link,
-        category: {
-          label: this.category.label,
-          value: this.category.value,
-          color: this.category.color,
-        },
-        bg: this.category.color,
+        category: this.category.value, // from to addEventPost
+        bg: this.category.color, // criar função para obter bg, retirar daqui
         imgUrl: this.imgUrl,
       };
       console.log('payload:confirmEdit', newEvent); // log do objeto
       // this.$emit('createEvent', this.newEvent.id); // emit id do evento para o componente myEvents se atualizar
       this.$store.dispatch({ type: 'addEvent', newEvent }); // envia a store a ação add event
+      this.resetFields();
       this.lastStep = 1; // seta o lastStep
       const a = this; // armazena escopo
       setTimeout(() => {
-        this.resetFields();
         a.step = 0;
       }, 1000); // seta step para modo de adicionar novo evento
     },
@@ -437,7 +431,7 @@ export default {
       this.eventId = null;
       this.name = '';
       this.date = '';
-      this.hour = '';
+      this.time = '';
       this.ticket = '';
       this.street = '';
       this.neighborhood = '';

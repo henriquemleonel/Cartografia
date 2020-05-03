@@ -32,7 +32,6 @@
           <q-input
             class="input"
             dense
-            borderless
             v-model="name"
             label="nome do pin"
             label-color="white"
@@ -46,7 +45,6 @@
           <q-input
             class="input"
             dense
-            borderless
             v-model="email"
             type="email"
             label="email"
@@ -236,10 +234,10 @@ export default {
     return {
       valid: true,
       step: 0,
-      lastStep: '',
+      lastStep: 0,
       active: false,
       background: this.bgColor,
-      name: '',
+      name: 'no fetch',
       email: '',
       phone: '',
       street: '',
@@ -258,111 +256,77 @@ export default {
     };
   },
   props: {
-    // info: {
-    //   type: Object,
-    //   default: null,
-    // },
+    item: {
+      type: Object,
+      default: null,
+    },
+    fetch: {
+      type: Boolean,
+      default: false,
+    },
     bgColor: {
       type: String,
       default: '#254C26',
     },
   },
   created() {
-    this.fetchStorage();
-  },
-  updated() {
-    // this.fetcLocalStorage();
+    this.fetchData();
   },
   computed: {
-    // phoneMask() {
-    //   if (this.phone === null || this.phone === undefined) {
-    //     console.log('phone undefined');
-    //     return false;
-    //   }
-    //   let str = '';
-    //   const p = this.phone;
-    //   console.log('p', this.phone);
-    //   const ddd = p.slice(0, 2);
-    //   const prefix = p.slice(2, 7);
-    //   const sufix = p.slice(7, 11);
-    //   str = str.concat(ddd).concat('').concat(prefix).concat(' ')
-    //     .concat(sufix);
-    //   console.log(str);
-    //   return str;
-    // },
-    getKeyUser() {
+    // mascara para telefone
+    phoneMask() {
+      if (this.phone === null || this.phone === undefined) {
+        console.log('phone undefined');
+        return false;
+      }
+      let str = '';
+      const p = this.phone;
+      console.log('p', this.phone);
+      const ddd = p.slice(0, 2);
+      const prefix = p.slice(2, 7);
+      const sufix = p.slice(7, 11);
+      str = str.concat(ddd).concat('').concat(prefix).concat(' ')
+        .concat(sufix);
+      console.log(str);
+      return str;
+    },
+    // recupera referencia a usuário ( email )
+    getUserRef() {
       const aux = this.$store.getters.currentUser;
       return aux.email;
     },
-    getPinStatus() {
-      return this.$store.getters.pinCompleted; // verifica se o usuário possui um pin
-    },
-    getStateToken() {
-      const tokenStatus = this.$store.state.token;
-      if (tokenStatus === null) {
-        return false;
-      }
-      return true;
+    getUserCategory() {
+      const aux = this.$store.getters.currentUser.categoryId;
+      return aux;
     },
   },
   methods: {
-    fetchStorage() {
-      if (this.getPinStatus === false) { //  se não existe pin
+    fetchData() {
+      if (this.fetch === false) { //  se não existe pin
         console.log('null_Fetch');
-        this.name = '';
-        this.email = '';
-        this.phone = '';
-        this.street = '';
-        this.number = '';
-        this.neighborhood = '';
-        this.city = '';
-        this.cep = '';
-        this.description = '';
-        this.linkF = '';
-        this.linkIG = '';
-        this.otherLink = '';
-        this.imgUrl = '';
+        this.file = null;
         this.step = 0;
         this.lastStep = 0;
-      } else if (this.getPinStatus === true) { // há pin, get myPin na store.
+      } else if (this.fetch === true) { // há pin, get myPin na store.
         console.log('state_fetch');
         const info = this.$store.getters.myPin;
-        console.log('info', this.$store.getters.myPin);
+        console.log('myPin from store', this.$store.getters.myPin);
         this.name = info.name;
         this.email = info.email;
         this.phone = info.phone;
-        console.log('number', info.name);
-        this.number = info.number;
-        this.street = info.street;
-        this.neighborhood = info.neighborhood;
-        this.city = info.city;
-        this.cep = info.cep;
+        // this.number = info.address.number;
+        // this.street = info.address.street;
+        // this.neighborhood = info.address.neighborhood;
+        // this.city = info.address.city;
+        // this.cep = info.address.cep;
+        this.address = info.address;
         this.description = info.description;
-        this.link = info.otherLink;
-        this.linkF = info.linkF;
-        this.linkIG = info.linkIG;
+        // this.link = info.links.otherLink;
+        // this.linkF = info.links.linkF;
+        // this.linkIG = info.links.linkIG;
+        this.links = info.links;
         this.imgUrl = info.imgUrl;
-        this.step = 2;
-        this.lastStep = 2;
-      }
-    },
-    fetcLocalStorage() {
-      if (this.getPinStatus === true) {
-        console.log('localStorage_fetch'); // há pin, get myPin na localStorage
-        const info = localStorage.getItem('myPin');
-        this.name = info.name;
-        this.email = info.email;
-        this.phone = info.phone;
-        this.street = info.address.street;
-        this.number = info.address.number;
-        this.neighborhood = info.address.neighborhood;
-        this.city = info.address.city;
-        this.cep = info.address.cep;
-        this.description = info.description;
-        this.link = info.links.otherLink;
-        this.linkF = info.links.linkF;
-        this.linkIG = info.links.linkIG;
-        this.imgUrl = info.imgUrl;
+        this.file = null;
         this.step = 2;
         this.lastStep = 2;
       }
@@ -370,7 +334,7 @@ export default {
     showFirstEdit() {
       if (this.step === 0) {
         this.lastStep = 0;
-        // this.active = true;
+        this.active = true;
         const a = this;
         setTimeout(() => { a.step = 1; }, 1000);
         console.log('iniciando primeira edição', this.lastStep, this.step);
@@ -386,6 +350,7 @@ export default {
     cancelEdit() {
       console.log('cancelando', this.lastStep, this.step);
       if (this.lastStep === 0) {
+        this.active = false;
         const a = this;
         setTimeout(() => { a.step = 0; }, 1000);
         this.lastStep = 1;
@@ -401,7 +366,8 @@ export default {
     createPin() {
       console.log('pin-profile:create-pin');
       const payload = {
-        userRef: this.getKeyUser,
+        userRef: this.getUserRef,
+        category: this.getUserCategory,
         completed: true,
         name: this.name,
         email: this.email,
@@ -420,10 +386,8 @@ export default {
         imgUrl: this.imgUrl, // fazer post da imagem recuperar url
       };
       this.lastStep = 1;
-      this.step = 2;
-      // const a = this;
-      // setTimeout(() => { a.step = 2; }, 1000);
-      console.log('funfou');
+      const a = this;
+      setTimeout(() => { a.step = 2; }, 1000);
       this.$store.dispatch({ type: 'addPin', payload });
     },
     expand() {

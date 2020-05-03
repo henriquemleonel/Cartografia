@@ -11,7 +11,7 @@
           <div class="row spaced-32">
             <span class="body-3 bold"> {{ date }} </span>
             <!-- <span class="body-2 bold"> {{ date.year }} </span> -->
-            <span class="body-3 bold mg-left16"> {{ hour }} </span>
+            <span class="body-3 bold mg-left16"> {{ time }} </span>
           </div>
 
           <div class="column spaced-16">
@@ -43,12 +43,12 @@ export default {
   },
   data() {
     return {
-      id: this.item.id,
+      id: this.item.id, // emit to edit
       showThisShort: true,
       background: this.item.bg,
       name: this.item.name,
       date: this.item.date,
-      hour: this.item.hour,
+      time: this.item.time,
     };
   },
   props: {

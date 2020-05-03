@@ -13,16 +13,9 @@ Vue.use(Vuex)
 const store = new Store({
   state: {
     newKey: null,
-    token: localStorage.getItem('access_token') || null,
-    currentUser: localStorage.getItem('currentUser') || null,
-    // currentUser: {
-    //   name: 'Juliana Trujillo',
-    //   email: 'JulianaTrujillo@email.com',
-    //   category: { value: 'Cinema e AudioVisual', color: '#254C26'},  // *** transforma category em um id numérico
-    //   isValid: true, // check do fórum quanto ao usuário, começa com true
-    //   isAdmin: false,
-    //   pinCompleted: false,
-    // },
+    token: sessionStorage.getItem('access_token') || null,
+    currentUser: null,
+    pinCompleted: false,
     myPin: [],
     myEvents: [],
     pins: [],
@@ -171,17 +164,17 @@ const store = new Store({
   ],
 
   getters: {
+    loggedIn(state) {
+      return state.token !== false;
+    },
     getKey(state) {
       return state.newKey;
     },
     currentUser(state) {
       return state.currentUser;
     },
-    loggedIn(state) {
-      return state.token !== false;
-    },
     pinCompleted(state) {
-      return state.currentUser.pinCompleted;
+      return state.pinCompleted;
     },
     myPin(state) {
       return state.myPin[0];
@@ -206,10 +199,7 @@ const store = new Store({
   mutations: {
     setKey (state, payload) {
       state.newKey = payload;
-      state.token = payload;
-      localStorage.setItem('access_token', payload);
       console.log('mutations -> state/newKey : _SETKEY');
-      console.log('mutations -> localStorage : _SETKEY');
     },
     setCurrentUser (state, setNewUser) {
       state.currentUser = setNewUser;
@@ -266,11 +256,10 @@ const store = new Store({
                 console.log('reponse', response.data)
                 const token = response.data.token
                 const currentUser = response.data
-                console.log(token)
+                console.log('token', token)
                 context.commit('retrieveToken', token)
                 context.commit('setCurrentUser', currentUser)
-                localStorage.setItem('access_token', token)
-                localStorage.setItem('currentUser', response.data)
+                sessionStorage.setItem('access_token', token)
                 resolve(response)
             })
             .catch(error => {
@@ -284,8 +273,7 @@ const store = new Store({
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       if (context.getters.loggedIn) {
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('currentUser')
+        sessionStorage.removeItem('access_token')
         context.commit('destroyToken')
         context.commit('destroyCurrentUser')
         router.push({ name: 'SignIn' })
@@ -313,33 +301,27 @@ const store = new Store({
     addPin(context, payload) {
       console.log('action>mutation:addPin(payload)', payload)
       context.commit('addPin', payload);
-      localStorage.setItem('myPin', payload);
     },
     addPinPost(context, payload) {
       
       api.post('/pin', {
         userRef: payload.userRef,
+        category: payload.category,
         completed: payload.completed,
         name: payload.name,
         email: payload.email,
         phone: pyaload.phone,
-        address: {
-          street: payload.street,
-          neighborhood: payload.neighborhood,
-          number: payload.number,
-          city: payload.city,
-          cep: payload.cep,
-        },
-        coordinates: {
-          lat: payload.lat,
-          long: payload.long,
-        },
-        description: '',
-        links: {
-          linkF: '',
-          linkIG: '',
-          otherLink: ''
-        },
+        street: payload.street,
+        neighborhood: payload.neighborhood,
+        number: payload.number,
+        city: payload.city,
+        cep: payload.cep,
+        lat: payload.lat,
+        long: payload.long,
+        description: payload.description,
+        linkF: payload.linkF,
+        linkIG: payload.linkIG,
+        otherLink: payload.otherLink,
         imgUrl: payload.imgUrl,
       })
         .then(response => {
@@ -350,36 +332,25 @@ const store = new Store({
           console.log(error)
           reject(error)
         })
-      
 
     },
     addEvent(context, payload) {
       console.log('action -> mutation/myEvents : addEvent', payload)
       context.commit('addEvent', payload);
-      // localStorage.setItem('', payload);
     },
     addEventPost(context, payload) {
       
       api.post('/event', {
-        id: payload.id,
+        // id: payload.id,
         userRef: payload.userRef,
         name: payload.name,
-        address: {
-          street: payload.street,
-          neighborhood: payload.neighborhood,
-          number: payload.number,
-          city: payload.city,
-          cep: payload.cep,
-        },
-        address: {
-          street: payload.street,
-          neighborhood: payload.neighborhood,
-          number: payload.number,
-          city: payload.city,
-          cep: payload.cep,
-        },
         date: payload.date,
-        hour: payload.hour,
+        time: payload.time,
+        street: payload.street,
+        neighborhood: payload.neighborhood,
+        number: payload.number,
+        city: payload.city,
+        cep: payload.cep,
         ticket: payload.ticket,
         description: payload.description,
         link: payload.link,

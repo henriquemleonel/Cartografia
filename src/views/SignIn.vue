@@ -117,7 +117,6 @@ export default {
           this.$router.push({ name: 'Profile' })
         })
       console.log('try Login')
-      
     },
   }
 }
