@@ -3,7 +3,7 @@
 
     <div class="fixed-center">
 
-      <pin-profile :bgColor="getBg" :info="getPinUser"/>
+      <my-filter/>
 
     </div>
 
@@ -14,19 +14,19 @@
 
 .container {
   width: 100%;
-  // height: 100%;
+  height: 100vh;
   padding: 32px;
   background-color: #f5f5f5;
 }
 
 .fixed-center {
   position: absolute;
-  top: 32px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
-  border: 2px solid green;
-  width: 80%;
-  // height: 100%;
+  border: 1px solid pink;
+  min-width: 200px;
+  height: 100%;
 }
 
 </style>

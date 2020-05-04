@@ -27,8 +27,9 @@ import UserCard from './components/User-Card.vue'; // ----------- editor info do
 import PinProfile from './components/Pin-Profile.vue'; // ------- criador/editor pin no perfil
 import Event from './components/Event.vue'; // ------------------ evento da agenda
 import EventProfile from './components/Event-Profile.vue'; // --- criador/editor eventos no perfil
-import ShortEvent from './components/Short-Event.vue'; // --- evento reduzido para tabela de eventos
-import PinTeste from './components/pinTeste.vue'; // ------------- pin teste
+import ShortEvent from './components/Short-Event.vue'; // ------- evento reduzido para tabela de eventos
+import Filter from './components/Filter.vue'; // ---------------- filtro menu
+import PinTeste from './components/pinTeste.vue'; // ------------ pin teste
 
 Vue.component('logo-card', LogoCard);
 Vue.component('user-card', UserCard);
@@ -38,6 +39,7 @@ Vue.component('multicolor-line', MulticolorLine);
 Vue.component('event', Event);
 Vue.component('event-profile', EventProfile);
 Vue.component('short-event', ShortEvent);
+Vue.component('my-filter', Filter);
 
 
 Vue.component('pin-teste', PinTeste); // pin teste
