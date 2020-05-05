@@ -17,6 +17,8 @@ module.exports = app => {
 
             if (!user) return res.status(400).send("Usuário não encontrado!")
 
+            const cryptPass = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
+
             const isMatch = bcrypt.compareSync(req.body.password, user.password)
             if (!isMatch) return res.status(401).send("email ou senha inválida.")
             const now = Math.floor(Date.now() / 1000)

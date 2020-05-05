@@ -61,6 +61,8 @@ import {
   Quasar,
   QUploader,
   QFile,
+  QTabPanels,
+  QTabPanel,
   Intersection,
 } from 'quasar';
 
@@ -142,6 +144,8 @@ Vue.use(Quasar, {
     Quasar,
     QUploader,
     QFile,
+    QTabPanels,
+    QTabPanel,
   },
   plugins: {},
 });

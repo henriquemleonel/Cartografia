@@ -41,6 +41,15 @@ const routes = [
     },
   },
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
+    meta: {
+      requiresAuth: true,
+      adminAuth: true,
+    },
+  },
+  {
     path: '/schedule',
     name: 'Schedule',
     component: () => import(/* webpackChunkName: "schedule" */ '../views/Schedule.vue'),
@@ -81,11 +90,10 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
     // const accessToken = localStorage.getItem('access_token');
     const accessToken = sessionStorage.getItem('access_token');
-    if (to.name !== 'SingIn' && !accessToken) {
+    console.log(`to ${to.name}`);
+    if (to.name !== 'SignIn' && !accessToken) {
       next({
         path: '/signIn',
       });

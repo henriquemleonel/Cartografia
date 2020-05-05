@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <transition>
       <router-view :key="$route.path" />
-    </transition>
   </div>
 </template>
 

@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'filter',
+  name: 'my-filter',
   data() {
     return {
       options: [

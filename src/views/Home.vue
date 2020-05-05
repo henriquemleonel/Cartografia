@@ -17,10 +17,18 @@
     <!-- start button area -->
     <div class="button-area">
 
-      <router-link to="/signIn">
+      <router-link to="/signIn" v-if="!isLoggedIn">
         <template>
           <q-btn flat class="btn btn-primary">
             <span class="subheading-2 bold normal" to="/singIn">Entrar</span>
+          </q-btn>
+        </template>
+      </router-link>
+
+      <router-link to="/profile" v-if="isLoggedIn">
+        <template>
+          <q-btn flat class="btn btn-primary">
+            <span class="subheading-2 bold normal" to="/singIn">Perfil</span>
           </q-btn>
         </template>
       </router-link>
@@ -99,6 +107,7 @@ export default {
   },
   data() {
     return {
+      loggedIn: false,
       // url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', // url Standard tileLayer
       // url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
       url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
@@ -133,6 +142,14 @@ export default {
       delay: 2.4, opacity: 0, y: 20, ease: Expo.easeInOut,
     }, 0.2);
   },
+  computed: {
+    isLoggedIn() {
+      if (this.$store.getters.loggedIn) {
+        return true;
+      }
+      return false;
+    },
+  },
   methods: {
     zoomUpdated(zoom) {
       this.zoom = zoom;
@@ -160,6 +177,7 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Helvetica';
 }
 
 .container {
@@ -231,12 +249,13 @@ export default {
 
 .btn {
   box-shadow: none;
-  max-width: 150px;
-  max-height: 50px;
+  width: 120px;
+  height: 45px;
   border-radius: 0px;
   background-color: black;
 
   span {
+    font-family: 'Helvetica';
     color: white;
   }
 }

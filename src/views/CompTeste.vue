@@ -3,12 +3,51 @@
 
     <div class="fixed-center">
 
-      <my-filter/>
+      <!-- <my-filter/> -->
+      <div class="add">
+        <span class="spaced-32"> {{ this.category }} </span>
+        <q-input dense square outlined class="input mg-top16" v-model="category" label="Nome" />
 
+        <q-btn outlined @click="addCategorie()" class="btn-primary btn" color="black">
+          <span class="span-btn">adicionar categoria</span>
+        </q-btn>
+      </div>
     </div>
 
   </div>
 </template>
+
+<script>
+export default {
+  name: 'comp-Teste',
+  data() {
+    return {
+      category: 'no',
+    };
+  },
+  computed: {
+    getUser() {
+      return this.$store.state.currentUser;
+    },
+    getBg() {
+      return this.$store.state.currentUser.category.color;
+    },
+    getPinUser() {
+      return this.$store.state.currentUser.infoPin;
+    },
+  },
+  methods: {
+    addCategorie() {
+      this.$store.dispatch('addCategorie', {
+        name: this.category,
+      })
+        .then(() => {
+          console.log('compTest : add categorie');
+        });
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 
@@ -30,20 +69,3 @@
 }
 
 </style>
-
-<script>
-export default {
-  name: 'comp-Teste',
-  computed: {
-    getUser() {
-      return this.$store.state.currentUser;
-    },
-    getBg() {
-      return this.$store.state.currentUser.category.color;
-    },
-    getPinUser() {
-      return this.$store.state.currentUser.infoPin;
-    },
-  },
-};
-</script>

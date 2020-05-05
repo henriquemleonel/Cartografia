@@ -1,11 +1,14 @@
 <template>
   <div class="container">
-    <div class="content-center column" v-bind:class="{ 'clip-path' : active }">
+    <div class="content-center column" :style="{ 'background-color' : selected.color }">
 
+      <!-- identidade da plataforma (selo) -->
       <logo-card class="header" :blackMode="true"/>
 
+      <!-- color line -->
       <multicolor-line class="line mg-top8"/>
 
+      <!-- informações da plataforma -->
       <div class="info">
 
         <div class="column mg-top16">
@@ -48,10 +51,15 @@
 
       </div>
 
+      <!-- formulário de cadastro -->
       <div class="form column">
         <span class="headline bolder">Insira suas informações:</span>
 
-        <q-input dense square outlined class="input" v-model="name" label="Nome" />
+        <div class="row" style="justify-content: space-between">
+          <q-input dense square outlined class="input" v-model="name" label="Nome" />
+          <q-input dense square outlined class="input" v-model="lastName" label="Sobrenome" />
+        </div>
+
         <q-input dense square outlined class="input" v-model="email" label="Email" />
         <q-input dense square outlined class="input" v-model="confirmEmail" label="Confirme seu Email" />
 
@@ -62,6 +70,7 @@
 
       </div>
 
+      <!-- selecionar categoria -->
       <div class="category column">
 
         <span class="headline bold">Identifique sua categoria</span>
@@ -69,9 +78,9 @@
           Escolha sabiamente, não será possível mudar posteriormente).</span>
 
         <div class="list">
-          <q-list v-for="item in category" :key="item.category">
+          <q-list v-for="item in options" :key="item.value">
 
-            <q-item clickable @click="emit(item.category)">
+            <q-item clickable @click="emit(item)">
 
               <q-item-section avatar>
 
@@ -88,7 +97,7 @@
 
               </q-item-section>
 
-              <q-item-section class="body-2 bolder"> {{ item.category }} </q-item-section>
+              <q-item-section class="body-2 bolder"> {{ item.label }} </q-item-section>
             </q-item>
 
           </q-list>
@@ -97,6 +106,7 @@
 
       </div>
 
+      <!-- ações -->
       <div class="actions">
 
         <div class="terms row">
@@ -113,7 +123,7 @@
           <!-- <q-btn class="btn-cancel">
             <span class="span-btn-cancel">Num quero</span>
           </q-btn> -->
-          <q-btn flat class="btn-primary btn" color="black">
+          <q-btn flat @click="register()" class="btn-primary btn" color="black">
             <span class="span-btn">Cadastre-se</span>
           </q-btn>
         </div>
@@ -131,23 +141,110 @@ export default {
   name: 'About',
   data() {
     return {
-      logou: false,
       name: '',
+      lastName: '',
       email: '',
       confirmEmail: '',
       password: '',
       confirmPassword: '',
-      selected: null,
+      selected: {
+        label: 'Dança, Teatro e Circo',
+        value: '1',
+        color: '#f5f5f5',
+      }, // --- selected category
       active: false,
-      terms: false,
-      category: [
-        { category: 'Dança, teatro e circo', path: '' },
-        { category: 'Cultural e escultura', path: '' },
-        { category: 'Arte Urbana', path: '' },
-        { category: 'Arte Digital', path: '' },
-        { category: 'Cultura Popular', path: '' },
-        { category: 'Museologia e preservação', path: '' },
-        { category: 'Artesanato', path: '' },
+      terms: false, // ----- accept terms?
+      options: [
+        {
+          label: 'Dança, Teatro e Circo',
+          value: '1',
+          color: '#683931',
+        },
+        {
+          label: 'Escultura',
+          value: '2',
+          color: '#AD3B3B',
+        },
+        {
+          label: 'Arte Urbana',
+          value: '3',
+          color: '#C95B40',
+        },
+        {
+          label: 'Arte Digital',
+          value: '4',
+          color: '#DBB753',
+        },
+        {
+          label: 'Cultura Popular',
+          value: '5',
+          color: '#E6B545',
+        },
+        {
+          label: 'Museologia',
+          value: '6',
+          color: '#529E63',
+        },
+        {
+          label: 'Artesanato',
+          value: '7',
+          color: '#49833A',
+        },
+        {
+          label: 'Fotografia',
+          value: '8',
+          color: '#254C26',
+        },
+        {
+          label: 'Literatura',
+          value: '9',
+          color: '#2F5497',
+        },
+        {
+          label: 'Cinema e AudioVisual',
+          value: '10',
+          color: '#4692C1',
+        },
+        {
+          label: 'Cultura e Representação',
+          value: '11',
+          color: '#86BCD3',
+        },
+        {
+          label: 'Música',
+          value: '12',
+          color: '#D3869B',
+        },
+        {
+          label: 'Folclore',
+          value: '13',
+          color: '#CB6883',
+        },
+        {
+          label: 'Gastronomia',
+          value: '14',
+          color: '#C44B6E',
+        },
+        {
+          label: 'Moda',
+          value: '15',
+          color: '#BD6A5C',
+        },
+        {
+          label: 'Produtor Cultural',
+          value: '16',
+          color: '#AD3B3B',
+        },
+        {
+          label: 'Estabelecimento',
+          value: '17',
+          color: '#653830',
+        },
+        {
+          label: 'Instituição',
+          value: '18',
+          color: '#C95B40',
+        },
       ],
     };
   },
@@ -163,6 +260,23 @@ export default {
       console.log(el);
       console.log('selected', this.selected);
     },
+    register() {
+      this.$store.
+       dispatch('register', {
+        name: this.name,
+        lastName: this.lastName,
+        email: this.email,
+        password: this.password,
+        confirmPassword: this.confirmPassword,
+        isValid: true,
+        isAdmin: false,
+        categoryId: this.selected.value,
+      })
+        .then(response => {
+          this.$router.push({ name: 'Profile' })
+        })
+      console.log('signUp : try signUp')
+    },
   },
 };
 </script>
@@ -173,7 +287,7 @@ export default {
 @import '../styles/mixins.scss';
 
 * {
-  font-family: 'Helvetica-Normal';
+  font-family: 'Helvetica';
   box-sizing: border-box;
 }
 
@@ -182,6 +296,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   width: 700px;
+  margin: 32px;
   // border: 2px solid $f;
   padding: 32px;
   //clip-path: circle(30px at 90% 40px);
@@ -269,7 +384,7 @@ export default {
 }
 
 .clip-path {
-  background-color: pink;
+  // background-color: pink;
   clip-path: circle(100%);
   -webkit-transition: -webkit-clip-path .6s ease-out;
   transition: -webkit-clip-path .6s ease-out;

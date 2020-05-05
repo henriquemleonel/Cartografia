@@ -114,9 +114,14 @@ export default {
         password: this.password,
       })
         .then(response => {
-          this.$router.push({ name: 'Profile' })
+          console.log('response login', response);
+          const hasPermission = response.data.isAdmin;
+          if (hasPermission) {
+            this.$router.push({ name: 'Dashboard' })
+          } else {
+            this.$router.push({ name: 'Profile' })
+          }
         })
-      console.log('try Login')
     },
   }
 }

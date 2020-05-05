@@ -15,6 +15,7 @@ const store = new Store({
     newKey: null,
     token: sessionStorage.getItem('access_token') || null,
     currentUser: null,
+    isAdmin: null,
     pinCompleted: false,
     myPin: [],
     myEvents: [],
@@ -165,7 +166,10 @@ const store = new Store({
 
   getters: {
     loggedIn(state) {
-      return state.token !== false;
+      return state.token || false;
+    },
+    isAdmin(state) {
+      return state.isAdmin;
     },
     getKey(state) {
       return state.newKey;
@@ -203,6 +207,9 @@ const store = new Store({
     },
     setCurrentUser (state, setNewUser) {
       state.currentUser = setNewUser;
+    },
+    setIsAdmin (state, adminValue) {
+      state.isAdmin = adminValue;
     },
     destroyCurrentUser (state) {
       state.currentUser = null;
@@ -245,6 +252,48 @@ const store = new Store({
       console.log('KEY DO NOVO EVENTO:', key)
       context.commit('setKey', key);
     },
+    addCategorie(context, data) {
+      return new Promise((resolve, reject) => {
+        api.post('categories', {
+          name: data.name,
+        })
+          .then(response => {
+            console.log('response categorie', data.response)
+          })
+          .catch(error => {
+            console.log(error)
+            reject(error)
+          })
+      })
+    },
+    register(context, data) {
+      console.log('data register', data);
+      return new Promise((resolve, reject) => {
+        api.post('/signup', {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+          isValid: data.isValid,
+          isAdmin: data.isAdmin,
+          categoryId: data.categoryId,
+        })
+          .then(response => {
+            console.log('reponse', response.data)
+            const currentUser = response.data
+            context.commit('setCurrentUser', currentUser)
+            const token = response.data.token
+            context.commit('retrieveToken', token)
+            sessionStorage.setItem('access_token', token)
+            resolve(response)
+          })
+          .catch(error => {
+            console.log(error)
+            reject(error)
+          })
+      })
+    },
     retrieveToken(context, credentials) {
 
       return new Promise((resolve, reject) => {
@@ -259,11 +308,12 @@ const store = new Store({
                 console.log('token', token)
                 context.commit('retrieveToken', token)
                 context.commit('setCurrentUser', currentUser)
+                sessionStorage.setItem('isAdmin', currentUser.isAdmin)
                 sessionStorage.setItem('access_token', token)
                 resolve(response)
             })
             .catch(error => {
-                console.log(error)
+                console.log(error.message)
                 reject(error)
             })
       })
