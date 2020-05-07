@@ -1,0 +1,170 @@
+.bg-default {
+  background-color: f5f5f5;
+}
+
+.bg-dance {
+  background-color: #683931;
+}
+
+.bg-sculpture {
+  background-color: #AD3B3B;
+}
+
+.bg-urban-art {
+  background-color: #C95B40;
+}
+
+.bg-digital-art {
+  background-color: #DBB753;
+}
+
+.bg-pop-culture {
+  background-color: #E6B545;
+}
+
+.bg-museology {
+  background-color: #529E63;
+}
+
+.bg-hand-craft {
+  background-color: #49833A;
+}
+
+.bg-photography {
+  background-color: #254C26;
+}
+
+.bg-literature {
+  background-color: #2F5497;
+}
+
+.bg-cinema {
+  background-color: #4692C1;
+}
+
+.bg-representation {
+  background-color: #86BCD3;
+}
+
+.bg-music {
+  background-color: #D3869B;
+}
+
+.bg-folklore {
+  background-color: #683931;
+}
+
+.bg-gastronomy {
+  background-color: #C44B6E;
+}
+
+.bg-fashion {
+  background-color: #BD6A5C;
+}
+
+.bg-culture-producer {
+  background-color: #AD3B3B;
+}
+
+.bg-establishment {
+  background-color: #653830;
+}
+
+.bg-institution {
+  background-color: #C95B40;
+}
+
+.big-title {
+  font-size: 3rem;
+  letter-spacing: -0.5px;
+  line-height: 2.5rem;
+}
+
+.title-1 {
+  font-size: 2.125rem;
+}
+
+.title-2 {
+  font-size: 1.75rem;
+}
+
+.title-3 {
+  font-size: 1.125rem;
+}
+
+.headline {
+  font-size: 1.375rem;
+  letter-spacing: 0.25px;
+}
+
+.headline-2 {
+  font-size: 1.125rem;
+}
+
+.headline-3 {
+  font-size: 1rem;
+  letter-spacing: 0.15px;
+}
+
+.body-1 {
+  font-size: 1.125rem;
+  letter-spacing: 0.15px;
+}
+
+.body-2 {
+  font-size: 1rem;
+  letter-spacing: 0.15px;
+  font-size: 'Courier new' !important;
+}
+
+.body-large {
+  font-size: 1.125rem;
+  letter-spacing: 0.15px;
+  font-weight: bold;
+}
+
+.body-large2 {
+  font-size: 1rem;
+  letter-spacing: 0.15px;
+  font-weight: bold;
+}
+
+.caption {
+  font-size: 0.75rem;
+  letter-spacing: 0.4px;
+}
+
+.overline {
+  font-size: 0.625rem;
+  letter-spacing: 1.5px;
+}
+
+.btn-text {
+  font-size: 0.875em;
+  letter-spacing: 1.25px;
+}
+
+.ligth {
+  font-weight: lighter;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.bolder {
+  font-weight: bolder;
+}
+
+.text-white {
+  color: white;
+}
+
+.text-black {
+  color: black;
+}
+
+.line-h16 {
+  line-height: 1em;
+}
+/*# sourceMappingURL=variables.css.map */

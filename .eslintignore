@@ -1,0 +1,3 @@
+{
+    "ignorePatterns": ["/backend", "node_modules/"],
+}

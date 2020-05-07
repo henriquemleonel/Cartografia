@@ -35,7 +35,7 @@ module.exports = app => {
 
         user.password = encryptPassword(req.body.password)
         delete user.confirmPassword
-
+        console.log(user)
         if (user.id) {
             app.db('users')
                 .update(user)
@@ -46,7 +46,7 @@ module.exports = app => {
         } else {
             app.db('users')
                 .insert(user)
-                .then(_ => status(204).send())
+                .then(_ => res.json(user))
                 .catch(err => res.status(500).send(err))
         }
     }
