@@ -269,6 +269,8 @@ const store = new Store({
     register(context, data) {
       console.log('data register', data);
       return new Promise((resolve, reject) => {
+        console.log('promise')
+        let objectJson = JSON.stringify(data)
         api.post('/signup', {
           firstName: data.firstName,
           lastName: data.lastName,
@@ -278,6 +280,11 @@ const store = new Store({
           isValid: data.isValid,
           isAdmin: data.isAdmin,
           categoryId: data.categoryId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
         })
           .then(response => {
             console.log('reponse', response.data)
@@ -289,7 +296,7 @@ const store = new Store({
             resolve(response)
           })
           .catch(error => {
-            console.log(error)
+            console.log(error.message)
             reject(error)
           })
       })

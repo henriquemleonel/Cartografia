@@ -21,6 +21,8 @@
           </span>
         </div>
 
+        <div class="whitespace"></div>
+
         <div class="mg-top32">
           <span class="headline bold">O cadastro permitirá:</span>
         </div>
@@ -51,12 +53,14 @@
 
       </div>
 
+      <div class="whitespace"></div>
+
       <!-- formulário de cadastro -->
       <div class="form column">
         <span class="headline bolder">Insira suas informações:</span>
 
-        <div class="row" style="justify-content: space-between">
-          <q-input dense square outlined class="input" v-model="name" label="Nome" />
+        <div class="row mg-top16" style="justify-content: space-between">
+          <q-input dense square outlined class="input" v-model="firstName" label="Nome" />
           <q-input dense square outlined class="input" v-model="lastName" label="Sobrenome" />
         </div>
 
@@ -69,6 +73,8 @@
         </div>
 
       </div>
+
+      <div class="whitespace"></div>
 
       <!-- selecionar categoria -->
       <div class="category column">
@@ -112,7 +118,7 @@
         <div class="terms row">
 
           <q-checkbox v-model="terms" color="green-10"  true-value="item.category"/>
-          <span class="body-2">Eu li e concordo com os
+          <span class="body-2 altoc">Eu li e concordo com os
             <a class="link" href=""><strong>Termos de Uso</strong></a>
             e <a class="link" href="#"><strong>Privacidade.</strong></a>
           </span>
@@ -123,7 +129,7 @@
           <!-- <q-btn class="btn-cancel">
             <span class="span-btn-cancel">Num quero</span>
           </q-btn> -->
-          <q-btn flat @click="register()" class="btn-primary btn" color="black">
+          <q-btn flat @click="register()" class="btn-custom" color="black">
             <span class="span-btn">Cadastre-se</span>
           </q-btn>
         </div>
@@ -141,7 +147,7 @@ export default {
   name: 'About',
   data() {
     return {
-      name: '',
+      firstName: '',
       lastName: '',
       email: '',
       confirmEmail: '',
@@ -263,7 +269,7 @@ export default {
     register() {
       this.$store.
        dispatch('register', {
-        name: this.name,
+        firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
         password: this.password,
@@ -291,6 +297,10 @@ export default {
   box-sizing: border-box;
 }
 
+.container {
+  width: 100%;
+}
+
 .content-center {
   position: absolute;
   left: 50%;
@@ -302,6 +312,18 @@ export default {
   //clip-path: circle(30px at 90% 40px);
   z-index: 0;
   align-items: flex-start;
+
+  @include for-phone-only {
+    width: 100%;
+    margin: 0px;
+    padding: 32px;
+  }
+
+  @include for-tablet-portrait-only {
+    width: 650px;
+    margin-top: 16px;
+    padding: 32px;
+  }
 }
 
 .line {
@@ -324,6 +346,10 @@ export default {
 .terms {
   align-items: center;
   margin-left: -8px;
+
+  @include for-phone-only {
+    margin-left: 0px;
+  }
 }
 
 .headline {
@@ -334,16 +360,38 @@ export default {
   margin-bottom: 8px;
   font-size: 12px;
   min-width: 49%;
+
+  @include for-phone-only {
+    width: 100%;
+  }
 }
 
 .context {
   margin-top: 8px;
   margin-left: 16px;
+
+  @include for-phone-only {
+    margin-left: 0px;
+  }
 }
 
 // .body, .line, .form {
 //   width: 600px;
 // }
+
+.terms {
+  @include for-phone-only {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    margin-left: -8px;
+
+    .altoc {
+      margin-top: 4px;
+    margin-left: 8px;
+
+    }
+  }
+}
 
 .body-2 {
   text-align: justify;
@@ -356,7 +404,7 @@ export default {
   font-family: 'Courier New', Courier, monospace;
 }
 
-.btn {
+.btn-custom {
   box-shadow: none;
   background-color: black;
   border-radius: 0px;
@@ -366,9 +414,13 @@ export default {
   &:hover {
     transform: scale(50%);
   }
+
+  @include for-phone-only {
+    width: 100%;
+  }
 }
 
-.btn:hover {
+.btn-custom:hover {
   transform: scale(1.05);
   transition: all 0.2s linear;
 }
@@ -381,6 +433,14 @@ export default {
 
 .whitespace {
   height: 150px;
+
+  @include for-phone-only {
+    height: 16px;
+  }
+
+  @include for-tablet-portrait-only {
+    height: 25px;
+  }
 }
 
 .clip-path {
