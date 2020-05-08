@@ -5,12 +5,18 @@
 
       <!-- <my-filter/> -->
       <div class="add">
-        <span class="spaced-32"> {{ this.category }} </span>
+        <!-- <span class="spaced-32"> {{ this.category }} </span>
         <q-input dense square outlined class="input mg-top16" v-model="category" label="Nome" />
 
         <q-btn outlined @click="addCategorie()" class="btn-primary btn" color="black">
           <span class="span-btn">adicionar categoria</span>
-        </q-btn>
+        </q-btn> -->
+        <div class="categorys" v-for="(n, index) in 18" :key="index">
+          <icon-base :iconId="index" width="32"/>
+        </div>
+
+        <!-- <icon-base :iconId="1" width="32"/> -->
+
       </div>
     </div>
 
@@ -18,11 +24,15 @@
 </template>
 
 <script>
+import iconBase from '../components/iconBase.vue';
+
 export default {
   name: 'comp-Teste',
+  components: {
+    iconBase,
+  },
   data() {
     return {
-      category: 'no',
     };
   },
   computed: {

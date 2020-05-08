@@ -213,6 +213,8 @@ const store = new Store({
     },
     destroyCurrentUser (state) {
       state.currentUser = null;
+      state.myEvents = null;
+      state.myPin.slice(0, 1, []);
       console.log('mutation : destroy currentUser');
     },
     retrieveToken(state, token) {
@@ -267,10 +269,9 @@ const store = new Store({
       })
     },
     register(context, data) {
-      console.log('data register', data);
+      // console.log('data register', data);
       return new Promise((resolve, reject) => {
         console.log('promise')
-        let objectJson = JSON.stringify(data)
         api.post('/signup', {
           firstName: data.firstName,
           lastName: data.lastName,
@@ -327,33 +328,33 @@ const store = new Store({
 
     },
     destroyToken(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-      if (context.getters.loggedIn) {
-        sessionStorage.removeItem('access_token')
-        context.commit('destroyToken')
-        context.commit('destroyCurrentUser')
-        router.push({ name: 'SignIn' })
-        console.log('logout')
+      sessionStorage.removeItem('access_token')
+      context.commit('destroyToken')
+      context.commit('destroyCurrentUser')
+      router.push({ name: 'SignIn' })
+      console.log('logout')
 
-        // return new Promise((resolve, reject) => {
-        //   axios.post('/logout')
-        //     .then(response => {
-        //       localStorage.removeItem('access_token')
-        //       context.commit('destroyToken')
-        //       resolve(response)
-        //       console.log('responde destroyToken', response);
-        //       // context.commit('addTodo', response.data)
-        //     })
-        //     .catch(error => {
-        //       console.log('error logout')
-        //       localStorage.removeItem('access_token')
-        //       context.commit('destroyToken')
-        //       router.push({ name: 'SignIn' })
-        //       reject(error)
-        //     })
-        // })
-      }
+      // axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      // if (context.getters.loggedIn) {
+      //   return new Promise((resolve, reject) => {
+      //     axios.post('/logout')
+      //       .then(response => {
+      //         localStorage.removeItem('access_token')
+      //         context.commit('destroyToken')
+      //         resolve(response)
+      //         console.log('responde destroyToken', response);
+      //         // context.commit('addTodo', response.data)
+      //       })
+      //       .catch(error => {
+      //         console.log('error logout')
+      //         localStorage.removeItem('access_token')
+      //         context.commit('destroyToken')
+      //         router.push({ name: 'SignIn' })
+      //         reject(error)
+      //       })
+      //   })
+      // }
     },
     addPin(context, payload) {
       console.log('action>mutation:addPin(payload)', payload)

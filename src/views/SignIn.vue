@@ -1,13 +1,18 @@
 <template>
-  <div class="container">
+  <div class="container column">
+
+    <div class="identity">
+       <logo-card class="logo" :blackMode="true"/>
+    </div>
 
     <div class="content-center column">
 
-      <logo-card class="logo" :blackMode="true"/>
-
       <div class="card column">
 
-        <!-- <span class="title-2 bolder"> Bem vindo </span> -->
+        <span class="title big-title bolder"> Bem vindo. </span>
+        <router-link class="link" to="/signUp">
+          <span>Novo Usuário? Cadastre-se</span>
+        </router-link>
 
         <div class="input-field">
 
@@ -15,6 +20,8 @@
             v-model="email"
             class="input"
             outlined
+            clearable
+            clear-icon="close"
             square
             type="email"
             :rules="emailRules"
@@ -28,6 +35,8 @@
             v-model="password"
             class="input"
             outlined
+            clearable
+            clear-icon="close"
             square
             label="Senha"
             :type="isPwd ? 'password' : 'text'"
@@ -46,26 +55,30 @@
 
         </div>
 
-        <div class="links column">
-
-          <router-link to="/recover">
-            <span class="link bold">Esqueceu a senha?</span>
-          </router-link>
-
-          <router-link to="/signUp">
-            <span class="link bold">Não tem uma conta? Cadastre-se</span>
-          </router-link>
-
+        <div class="error-field" v-if="errorMessage !== null">
+          <span class="error-msg">* {{ errorMessage }}</span>
         </div>
 
-        <q-btn
-          flat
-          class="btn"
-          color="white"
-          @click="signIn()"
-        >
-          <span class="body bold">entrar</span>
-        </q-btn>
+        <div class="links column">
+
+          <router-link class="link" to="/recover">
+            <span>Esqueceu a senha?</span>
+          </router-link>
+
+          <!-- <router-link to="/signUp">
+            <a class="link">Novo Usuário? Cadastre-se</a>
+          </router-link> -->
+
+          <q-btn
+            flat
+            class="btn"
+            color="white"
+            @click="signIn()"
+          >
+            <span class="body bold">entrar</span>
+          </q-btn>
+
+        </div>
 
       </div>
 
@@ -83,14 +96,19 @@ export default {
       valid: false,
       email: '',
       password: '',
-      isPwd: false,
-      passwordVisible: false
+      isPwd: true,
+      passwordVisible: false,
+      errorMessage: null,
     }
   },
   created() {},
   computed: {
-    signedIn() {
-      return this.$store.state.signedIn
+    isValid() {
+      if (this.email !== '' && this.password !== '') {
+        this.valid = true;
+      } else {
+        this.valid = false;
+      }
     },
     emailRules() {
       return [
@@ -114,7 +132,7 @@ export default {
         password: this.password,
       })
         .then(response => {
-          console.log('response login', response);
+          this.errorMessage = null;
           const hasPermission = response.data.isAdmin;
           if (hasPermission) {
             this.$router.push({ name: 'Dashboard' })
@@ -122,12 +140,23 @@ export default {
             this.$router.push({ name: 'Profile' })
           }
         })
+        .catch(error => {
+          if (error.message === 'Request failed with status code 401') {
+            this.errorMessage = 'email ou senha inválida';
+          }
+          if (error.message === 'Request failed with status code 400') {
+            this.errorMessage = 'não encontramos uma conta para esse email';
+          }
+          console.log('error', error.response.data)
+        });
     },
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../styles/mixins.scss';
+
 * {
   margin: 0;
   padding: 0;
@@ -135,26 +164,60 @@ export default {
 }
 
 .container {
-  background-color: black;
+  background-color: white;
+  height: 100vh;
+  width: 100%;
+  overflow-y: hidden;
+  padding: 32px;
+  position: relative;
+}
+
+.identity {
+  position: absolute;
+  width: 100%;
+  top: 32px;
+  left: 32px;
+
+  .logo {
+    margin-top: 0px;
+    align-self: flex-start;
+  }
+
+  @include for-phone-only {
+    align-self: center;
+    margin-left: 8px;
+  }
 }
 
 .content-center {
   position: absolute;
+  top: 25%;
   left: 50%;
   transform: translateX(-50%);
-  width: 600px;
-  padding: 32px;
-  height: 100vh;
+  min-width: 350px;
   align-items: flex-start;
+  animation: 0.5s fadeInOpacity ease-in;
+
+  @include for-phone-only {
+    margin-top: 64px;
+  }
+
+  @include for-tablet-portrait-only {
+    margin-top: 64px;
+  }
 }
 
-.logo {
-  margin-top: 0px;
-  align-self: flex-start;
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 .card {
-  width: 400px;
+  width: 90%;
   padding: 0px;
   background-color: white;
   justify-content: center;
@@ -163,28 +226,45 @@ export default {
   // border: 2px solid green;
 }
 
+.title {
+  // align-self: center;
+  margin-bottom: 8px;
+  animation: 0.4s fadeInOpacity ease-in;
+}
+
 .input-field {
   width: 100%;
-  margin-top: 16px;
+  margin-top: 32px;
 }
 
 .input {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   width: inherit;
+}
+
+.error-field {
+  margin-top: 8px;
+  align-self: center;
+}
+
+.error-msg {
+  color: #bb0000;
+  animation: 0.3s fadeInOpacity ease-in;
 }
 
 .links {
   align-items: center;
   width: 100%;
-  margin-top: 8px;
+  margin-top: 16px;
   // border: 1px solid red;
 }
 
 .link {
-  text-decoration: none;
+  font-family: 'Helvetica';
+  font-weight: bold;
+  text-decoration: none !important;
   text-transform: lowercase;
   color: black;
-  align-self: center;
 
   &:hover {
     color: gray;
@@ -194,11 +274,11 @@ export default {
 .btn {
   box-shadow: none;
   align-self: center;
-  width: 120px;
+  width: 180px;
   height: 40px;
   border-radius: 0px;
   background-color: black;
-  margin-top: 16px;
+  margin-top: 8px;
 }
 
 .btn:hover {

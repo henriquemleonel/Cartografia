@@ -192,6 +192,10 @@ flex-direction: row;
   align-self: flex-end;
 }
 
+.al-self-center {
+  align-self: center;
+}
+
 .full-width {
   width: 100%;
 }

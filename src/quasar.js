@@ -64,11 +64,13 @@ import {
   QTabPanels,
   QTabPanel,
   Intersection,
+  Notify,
 } from 'quasar';
 
 Vue.use(Quasar, {
   // iconSet: { iconSet },
   config: {
+    notify: {},
     extras: [
       'material-icons',
       'fontawesome-v5',
@@ -147,5 +149,7 @@ Vue.use(Quasar, {
     QTabPanels,
     QTabPanel,
   },
-  plugins: {},
+  plugins: {
+    Notify,
+  },
 });
