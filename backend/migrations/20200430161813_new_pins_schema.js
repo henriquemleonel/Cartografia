@@ -11,8 +11,8 @@ exports.up = function(knex) {
         table.integer('number')
         table.string('cep')
             // lat e long
-        table.float('lat')
-        table.float('long')
+        table.specificType('lat', 'double precision')
+        table.specificType('long', 'double precision')
             // Outros  
         table.string('imgUrl') //OK
         table.string('linkF') //OK
