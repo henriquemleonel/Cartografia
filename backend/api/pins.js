@@ -14,33 +14,39 @@ module.exports = app => {
             existsOrError(pin.neighborhood, "Bairro não informado")
             existsOrError(pin.number, "Numero da casa não informada")
             existsOrError(pin.userId, "ID usuário não informado")
+            existsOrError(pin.cep, "CEP não informado")
         } catch (msg) {
-            res.status(400).sgiend(msg)
+            res.status(400).send(msg)
         }
-
-        pin.lat = -20.4336449
-        pin.long = -54.673046
 
         if (pin.id) {
             app.db('pins')
                 .update(pin)
                 .where({ id: pin.id })
-                .then(_ => res.status(204).send(_))
-                .catch(err => res.status(500).send())
-        } else {
-            app.db("pins")
-                .insert(pin)
-                .then(_ => res.status(204).send(_))
+                .then(newPin => res.status(204).send(newPin))
                 .catch(err => res.status(500).send(err))
-            app.db('users')
-                .where({ id: pin.userId })
-                .update({ pinCompleted: true })
-                .then(_ => res.status(204).send(_))
-                .catch(err => res.status(500).send())
+        } else {
+            app.config.locationiq.requestLocation(pin.street, "campo grande", "campo grande", "mato grosso do sul", pin.number, pin.cep)
+                .then(locReq => {
+                    console.log(locReq.data[0])
+                    pin.lat = locReq.data[0].lat
+                    pin.long = locReq.data[0].lon
+                    app.db("pins")
+                        .insert(pin)
+                        .then(newPin => res.send("Pin registrado com sucesso"))
+                        .catch(err => res.status(500).send())
+                    app.db('users')
+                        .where({ id: pin.userId })
+                        .update({ pinCompleted: true })
+                        .then(_ => _)
+                        .catch(err => res.status(500).send(err))
+                }).catch(locError => {
+                    res.status(400).send("Local não encontrado")
+                })
         }
 
-    }
 
+    }
     const remove = async(req, res) => {
         try {
             const rowsDeleted = await app.db('pins')

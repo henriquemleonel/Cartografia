@@ -9,6 +9,7 @@ app.mongoose = mongoose
 
 consign()
     .include('./config/passport.js')
+    .then("./config/locationiq.js")
     .then('./api/validation.js')
     .then('./config/middlewares.js')
     .then('./api')
