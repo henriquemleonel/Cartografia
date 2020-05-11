@@ -9,9 +9,9 @@
 
       <div class="card column">
 
-        <span class="title big-title bolder"> Bem vindo. </span>
+        <span class="title big-title bolder"> Login </span>
         <router-link class="link" to="/signUp">
-          <span>Novo Usuário? Cadastre-se</span>
+          <span class="body-2">Novo Usuário? Cadastre-se</span>
         </router-link>
 
         <div class="input-field">
@@ -62,7 +62,7 @@
         <div class="links column">
 
           <router-link class="link" to="/recover">
-            <span>Esqueceu a senha?</span>
+            <span class="body-2">Esqueceu a senha?</span>
           </router-link>
 
           <!-- <router-link to="/signUp">
@@ -161,6 +161,7 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Helvetica';
 }
 
 .container {
@@ -174,9 +175,10 @@ export default {
 
 .identity {
   position: absolute;
-  width: 100%;
+  // width: 100%;
   top: 32px;
   left: 32px;
+  animation: 0.5s fadeInOpacity ease-in;
 
   .logo {
     margin-top: 0px;
@@ -194,12 +196,12 @@ export default {
   top: 25%;
   left: 50%;
   transform: translateX(-50%);
-  min-width: 350px;
+  min-width: 380px;
   align-items: flex-start;
   animation: 0.5s fadeInOpacity ease-in;
 
   @include for-phone-only {
-    margin-top: 64px;
+    margin-top: 32px;
   }
 
   @include for-tablet-portrait-only {
@@ -217,29 +219,54 @@ export default {
 }
 
 .card {
-  width: 90%;
+  width: 100%;
   padding: 0px;
   background-color: white;
   justify-content: center;
   align-items: flex-start;
   margin-top: 32px;
   // border: 2px solid green;
+
+   @include for-phone-only {
+    width: 80%;
+  }
+
+  @include for-tablet-portrait-only {
+    width: 90%;
+  }
 }
 
 .title {
   // align-self: center;
   margin-bottom: 8px;
   animation: 0.4s fadeInOpacity ease-in;
+
+  @include for-tablet-portrait-only {
+    font-size: 2.2rem;
+    margin-bottom: 0px;
+  }
+
+  @include for-phone-only {
+    font-size: 2rem;
+    margin-bottom: 0px;
+  }
 }
 
 .input-field {
   width: 100%;
   margin-top: 32px;
+
+  @include for-phone-only {
+    margin-top: 32px;
+  }
 }
 
 .input {
   margin-bottom: 24px;
   width: inherit;
+  font-size: 1.025rem;
+  margin-bottom: 32px;
+  font-weight: bold;
 }
 
 .error-field {
@@ -287,7 +314,9 @@ export default {
 }
 
 .btn span {
-  text-transform: lowercase;
+  // text-transform: lowercase;
+  font-weight: bolder;
+  font-size: .875rem;
 }
 
 </style>

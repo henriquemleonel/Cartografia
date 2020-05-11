@@ -1,6 +1,9 @@
-// cores das categorias
+
+// minhas cores
 
 $edit: yellow;
+
+// cores das categorias
 
 $d: #683931;   // Dança, Teatro e Circo
 $cS: #AD3B3B;  // Escultura
@@ -153,7 +156,6 @@ $breakpoints: (
 .body-2 {
   font-size: 1rem;  // 16 px
   letter-spacing: 0.15px;
-  font-size: 'Courier new' !important;
 }
 
 .body-large {
@@ -188,11 +190,11 @@ $breakpoints: (
 }
 
 .bold {
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .bolder {
-  font-weight: bolder;
+  font-weight: 700;
 }
 
 .text-white {

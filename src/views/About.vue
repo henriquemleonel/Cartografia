@@ -1,21 +1,19 @@
 <template>
   <div class="container">
 
-    <!-- <logo-card class="fixed-logo" :blackMode="true"/> -->
-
     <div class="content-center column">
 
       <!-- start header section -->
-      <header class="spaced-32">
+      <header>
         <logo-card :blackMode="true"/>
 
         <multicolor-line class="line mg-top32"/>
       </header>
 
-      <section class="plat spaced-32">
+      <section class="plat mg-top32">
 
-        <span class="title-2 bold"> Sobre </span>
-        <p class="body-2 margin-top16 text">
+        <span class="title-2 bolder"> Sobre </span>
+        <p class="body-2 mg-top16 text">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores corporis dicta unde ratione
           eligendi numquam repudiandae maxime tenetur, error temporibus exercitationem quae? Minus ipsa
           ducimus eaque quae dolor, eius saepe! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
@@ -42,59 +40,20 @@
 
       </section>
 
-      <div class="white-space"></div>
-
-      <!-- start section team -->
-      <section class="team spaced-32">
-
-        <span class="title-2 bold">Nosso Time</span>
-
-        <div class="row">
-
-          <q-item class="item spaced-32" dense v-for="item in team" :key="item.name">
-            <q-item-section side>
-              <q-avatar square size="xl">
-                <img :src="item.path" />
-              </q-avatar>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>
-                <span class="body-3 bold"> {{ item.name }} </span>
-              </q-item-label>
-              <q-item-label caption>
-                <span class="caption bold"> {{ item.category }} </span>
-              </q-item-label>
-              <!-- <q-item-label>
-                <q-btn flat round type="a" target="_blank" size="0.7em" href="https://www.facebook.com/AlgoRitmo.ufms/">
-                  <q-icon size="1.8em" name="fab fa-facebook-square" color="white"></q-icon>
-                </q-btn>
-                <q-btn class="margin-left8" flat round type="a" target="_blank" size="0.7em" href="https://www.facebook.com/AlgoRitmo.ufms/">
-                  <q-icon size="1.8em" name="fab fa-instagram" color="white"></q-icon>
-                </q-btn>
-              </q-item-label> -->
-            </q-item-section>
-          </q-item>
-
-        </div>
-
-      </section>
-
-      <div class="white-space"></div>
-
       <!-- start section contato -->
-      <section class="contato spaced-32">
+      <section class="contato">
 
-        <span class="title-2 bolder">Contato</span>
+        <span class="title-3 bolder">Contato</span>
 
-        <div class="links row align-center">
+        <div class="links row">
 
-          <a class="body-3 font2 bold">cartografiadacultura.plataforma@forum.com </a>
-          <span class="mg-left16">|</span>
+          <a class="body-2 bolder">cartografiadacultura@forum.com </a>
+          <!-- <span class="mg-left8">|</span> -->
 
-          <a class="body-3 font2 bold mg-left8" target="_blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
-          <span class="mg-left16">|</span>
+          <a class="body-2 bolder mg-left16" target="_blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
+          <!-- <span class="mg-left8">|</span> -->
 
-          <a class="body-3 font2 bold mg-left8" target="_blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
+          <a class="body-2 bolder mg-left16" target="_blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
 
         </div>
 
@@ -103,26 +62,27 @@
       <div class="white-space"></div>
 
       <!-- start section colaboradores -->
-      <section class="colabor spaced-32">
+      <section class="colabor mg-top32">
 
-        <!-- <span class="title-2 bolder">Colaboradores</span> -->
+        <span class="title-3 bolder">Colaboradores</span>
 
-        <div class="row mg-top8">
+        <div class="row">
 
-          <div class="colab-item column spaced-16">
+          <!-- colab b0ox -->
+          <div class="colab-box column">
 
             <!-- <div class="line spaced-8"></div> -->
-            <div class="line"/>
+            <div class="separator"/>
 
-            <div class="colab-box spaced-16">
-              <span class="title-3 bold">Fórum Municipal de <br> Cultura de Campo Grande</span>
+            <div class="colab-item mg-top8">
+              <span class="body-2 bolder">Fórum Municipal de Cultura <br> de Campo Grande</span>
             </div>
 
-            <div class="links row align-center">
+            <div class="colab-links row">
 
-              <span class="caption font2 bold">email@email.com</span>
-              <a class="caption font2 bold mg-left16" target="blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
-              <a class="caption font2 bold mg-left16" target="blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
+              <span class="caption bolder">.email</span>
+              <a class="caption bolder mg-left16" target="blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
+              <a class="caption bolder mg-left16" target="blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
 
               <!-- <q-btn flat round type="a" target="_blank" size="md" href="https://www.facebook.com/AlgoRitmo.ufms/">
                 <q-icon size="sm" name="fab fa-facebook-square" color="white"></q-icon>
@@ -136,21 +96,22 @@
 
           </div>
 
-          <div class="colab-item column spaced-16">
+          <!-- colab box -->
+          <div class="colab-box column">
 
             <!-- <div class="line spaced-8"></div> -->
-            <div class="line"/>
+            <div class="separator"/>
 
-            <div class="colab-box spaced-16">
-              <span class="title-2 bold">Colabor</span>
+            <div class="colab-item mg-top8">
+              <span class="body-2 bolder">Colabor</span>
             </div>
             <!-- <q-img src="../assets/statics/avatar01.jpg" style="height: 170px; max-width: 300px"/> -->
 
             <div class="links row align-center">
 
-              <span class="caption font2 bold">email@email.com</span>
-              <a class="caption font2 bold mg-left16" target="blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
-              <a class="caption font2 bold mg-left16" target="blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
+              <span class="caption bolder">email</span>
+              <a class="caption bolder mg-left16" target="blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
+              <a class="caption bolder mg-left16" target="blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
 
             </div>
 
@@ -161,6 +122,60 @@
       </section>
 
       <div class="white-space"></div>
+
+      <!-- start section team -->
+      <section class="team mg-top32">
+
+        <span class="title-3 bolder">Nosso Time</span>
+
+        <div class="row">
+
+          <div class="own-team" v-for="item in team" :key="item.name">
+
+            <div class="separator"/>
+
+            <div class="team-items column">
+              <span id="line-height" class="body-2 bolder"> {{ item.name }} <br> {{ item.lastName }} </span>
+              <span class="caption"> {{ item.category }} </span>
+
+              <div class="social-media row">
+
+                <span class="caption bolder">email</span>
+                <a class="caption bolder mg-left8" target="blank" :href="item.face">.f</a>
+                <a class="caption bolder mg-left8" target="blank" :href="item.insta">.ig</a>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- <div class="team-box column" v-for="item in team" :key="item.name">
+
+            <div class="separator"/>
+
+            <div class="team-item column" :style="{ 'background-color': item.color}">
+              <span id="line-height" class="body-1 bolder text-white"> {{ item.name }} </span>
+              <span class="caption bolder text-white mg-top8"> {{ item.category }} </span>
+
+              <div class="links row absolute-bottom">
+
+                <span class="body-3 bolder text-white">.email</span>
+                <a class="body-3 bolder mg-left8 text-white" target="blank" :href="item.face">.f</a>
+                <a class="body-3 bolder mg-left8 text-white" target="blank" :href="item.insta">.ig</a>
+
+              </div>
+
+            </div>
+
+          </div> -->
+
+        </div>
+
+      </section>
+
+      <div class="white-space"></div>
+      <div class="footer" style="height: 100px;"></div>
 
     </div>
 
@@ -174,12 +189,54 @@ export default {
   data() {
     return {
       team: [
-        { name: 'Juliana Trujillo', category: 'Coordenadora', path: 'https://cdn.quasar.dev/img/parallax2.jpg' },
-        { name: 'Eliane Fraulob', category: 'Time de Design', path: 'https://cdn.quasar.dev/img/parallax2.jpg' },
-        { name: 'Henrique Leonel', category: 'Time Dev', path: 'https://cdn.quasar.dev/img/parallax2.jpg' },
-        { name: 'Max Hiroito', category: 'Time Dev', path: 'https://cdn.quasar.dev/img/parallax2.jpg' },
-        { name: 'Paulo Domingos', category: 'Time de Design', path: 'https://cdn.quasar.dev/img/parallax2.jpg' },
-        { name: 'Eduardo Azevedo', category: 'Time de Design', path: 'https://cdn.quasar.dev/img/parallax2.jpg' },
+        {
+          name: 'Juliana',
+          lastName: 'Trujillo',
+          category: 'Coordenadora',
+          face: 'https://www.facebook.com/ju.trujillo',
+          insta: 'https://www.instagram.com/julianactrujillo/',
+          color: '#C95B40',
+        },
+        {
+          name: 'Henrique',
+          lastName: 'Leonel',
+          category: 'Dev',
+          face: 'https://www.facebook.com/henriquemleonel/',
+          insta: 'https://www.instagram.com/henriquemleonel/',
+          color: '#DBB753',
+        },
+        {
+          name: 'Max',
+          lastName: 'Hiroito',
+          category: 'Dev',
+          face: 'https://www.facebook.com/max.hiroito.5',
+          insta: 'https://www.instagram.com/maxhrto/',
+          color: '#4692C1',
+        },
+        {
+          name: 'Eliane',
+          lastName: 'Fraulob',
+          category: 'Design',
+          face: 'https://www.facebook.com/elianefraulob',
+          insta: 'https://www.instagram.com/elianefraulob/',
+          color: '#529E63',
+        },
+        {
+          name: 'Paulo',
+          lastName: 'Domingos',
+          category: 'Design',
+          face: 'https://www.facebook.com/paullo.domingos',
+          insta: 'https://www.instagram.com/paullo.domingos/',
+          color: '#CB6883',
+        },
+        {
+          name: 'Eduardo',
+          lastName: 'Azevedo',
+          category: 'Design',
+          face: 'https://www.facebook.com/profile.php?id=100009339932395',
+          insta: 'https://www.instagram.com/azevedudu/',
+          color: '#AD3B3B',
+        },
       ],
     };
   },
@@ -220,6 +277,14 @@ export default {
   z-index: 0;
   align-items: flex-start;
   //border: 2px solid white;
+
+  @include for-phone-only {
+    padding: 32px;
+  }
+
+  @include for-tablet-portrait-only {
+    padding: 32px;
+  }
 }
 
 span, p, a {
@@ -234,8 +299,16 @@ a {
   text-decoration: none;
 }
 
-.links {
-  align-items: center;
+#color-email {
+  color: #f58529;
+}
+
+#color-f {
+  color: #3b5998;
+}
+
+#color-ig {
+  color: #dd2a7b;
 }
 
 .align-center {
@@ -243,7 +316,7 @@ a {
 }
 
 .white-space {
-  height: 60px;
+  height: 32px;
   //border: 2px solid green;
 }
 
@@ -251,35 +324,86 @@ header, .plat, .team, .contato, .colabor {
   width: 100%;
 }
 
-// .plat {
-//   // border: 2px solid white;
-// }
-
-// .contato, .team {
-//   // border: 2px solid yellow;
-// }
-
 .colab-box {
-  height: 60px;
-  // border: 2px solid pink;
-}
+  align-items: flex-start;
+  max-width: 280px;
+  margin-top: 16px;
+  margin-right: 32px;
+  // background-color: #E6B545;
 
-.item {
-  width: 250px;
-  // margin-bottom: 32px;
+  @include for-phone-only {
+    width: 100%;
+  }
 }
 
 .colab-item {
-  min-width: 250px;
+  // min-height: 50px;
   // border: 2px solid white;
 }
 
-.colab-item:nth-child(2) {
-  margin-left: 32px;
+.own-team {
+  width: 180px;
+  height: 80px;
+  margin: 8px 32px 16px 0px;
+  padding: 8px 8px 8px 0px;
+
+  @include for-phone-only {
+    justify-content: space-between;
+    width: 120px;
+    height: 60px;
+    margin: 16px 32px 32px 0px;
+    padding: 8px 8px 8px 0px;
+  }
+}
+
+.team-items {
+  margin-top: 8px;
+  width: 100%;
+  // padding: 16px 16px 8px 16px;
+  // background-color: #E6B545;
+  // border: 2px solid white;
+}
+
+.social-media {
+  justify-content: flex-start;
+  margin-top: 0px;
+}
+
+// .team-box {
+//   align-items: flex-start;
+//   justify-items: center;
+//   position: relative;
+// }
+
+// .team-item {
+//   position: relative;
+//   max-width: 110px;
+//   height: 150px;
+//   padding: 16px 16px 8px 16px;
+//   margin: 8px 16px 8px 0px;
+//   // background-color: #E6B545;
+//   // border: 2px solid white;
+// }
+
+#line-height {
+  line-height: 1.2rem;
+}
+
+.links {
+}
+
+.text-white {
+  color: white;
 }
 
 .line {
+  height: 4px;
+  background-color: black;
+}
+
+.separator {
   height: 2px;
+  width: 100%;
   background-color: black;
 }
 

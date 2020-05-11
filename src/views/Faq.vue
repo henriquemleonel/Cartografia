@@ -4,20 +4,30 @@
     <!-- <logo-card class="fixed-logo" :blackMode="true"/> -->
     <div class="content-center column">
 
-      <header class="spaced-32">
+      <header>
         <logo-card :blackMode="true"/>
 
         <multicolor-line class="line mg-top32"/>
       </header>
 
-      <section class="column spaced-32">
+      <section class="column mg-top16">
 
+        <!-- title -->
         <span class="title-1 bolder"> Perguntas Frequentes </span>
 
-        <span class="body-2 bold mg-top32"></span>
-        <p class="body-2 mg-top8">
-          1. A navegação pelas informações disponíveis na Plataforma Cartografia da Cultura é anônima.
-        </p>
+        <!-- questions -->
+        <div class="questions mg-top8">
+
+          <div class="item" v-for="(item, index) in questions" :key="index">
+
+            <p class="body-2 bolder mg-top16">
+              {{ index + 1 }}. {{ item.question }}
+            </p>
+            <p class="body-2"> {{ item.answer }}</p>
+
+          </div>
+
+        </div>
 
       </section>
 
@@ -34,13 +44,33 @@ export default {
   name: 'termsPage',
   data() {
     return {
+      questions: [
+        {
+          question: 'lorem ipsum dolor sit amet ipsun amet dolor sit?',
+          answer: 'claro que serase',
+        },
+        {
+          question: 'serase?',
+          answer: 'claro que serase',
+        },
+        {
+          question: 'serase?',
+          answer: 'claro que serase',
+        },
+        {
+          question: 'serase?',
+          answer: 'claro que serase',
+        },
+        {
+          question: 'serase?',
+          answer: 'claro que serase',
+        },
+        {
+          question: 'serase?',
+          answer: 'claro que serase',
+        },
+      ],
     };
-  },
-  watch: {
-  },
-  methods: {
-  },
-  computed: {
   },
 };
 </script>
@@ -49,6 +79,8 @@ export default {
 
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
+@import '../styles/typo.scss';
+
 
 .container {
   background-color: white;
@@ -68,23 +100,25 @@ export default {
   padding: 16px;
   z-index: 0;
   align-items: flex-start;
+  animation: 0.5s fadeInOpacity ease-in;
   //border: 2px solid white;
+
+  @include for-phone-only {
+    padding: 32px;
+  }
+}
+
+header {
+  width: 100%;
 }
 
 span, p, a {
   color: black;
+  font-family: 'Helvetica';
 }
 
-a {
-  text-decoration: none;
-}
-
-.link {
-  align-items: center;
-}
-
-.align-center {
-  align-items: center;
+p {
+  margin-bottom: 0px;
 }
 
 .white-space {
@@ -92,56 +126,13 @@ a {
   //border: 2px solid green;
 }
 
-header, .plat, .team, .contato, .colabor {
-  width: 100%;
-}
-
-.line {
-  height: 3px;
-  background-color: white;
-}
-
 // ----------------- transitions ------------------
-.slide-enter-active,
-.slide-leave-active {
-  transition: opacity 1s, transform 1s;
-}
-
-.slide-enter,
-.slide-leave-to {
-  opacity: 0;
-  transform: translateX(-30%);
-}
-
-.moveUp-enter-active {
-  animation: fadeIn 1s ease-in;
-}
-
-@keyframes fadeIn {
-  0%{
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.moveUp-leave-active {
-  animation: moveUp 0.5s linear;
-}
-
-@keyframes moveUp {
+@keyframes fadeInOpacity {
   0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-200px);
+  opacity: 0;
   }
   100% {
-    transform: translateY(-500px);
+  opacity: 1;
   }
 }
 </style>

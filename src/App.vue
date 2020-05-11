@@ -19,10 +19,15 @@
 * {
   box-sizing: border-box;
   padding: 0;
+  font-family: 'Helvetica-Normal';
 }
 
 .font2 {
   font-family: 'Courier New' !important;
+}
+
+.txt-al-jus {
+  text-align: justify;
 }
 
 .content-center {
@@ -239,6 +244,14 @@ flex-direction: row;
 
 .mg-top32 {
   margin-top: 32px;
+}
+
+.mg-bottom8 {
+  margin-bottom: 8px;
+}
+
+.mg-bottom16 {
+  margin-bottom: 16px;
 }
 
 .mg-left8 {

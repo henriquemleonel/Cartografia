@@ -2,14 +2,15 @@
   <div class="box" :class="{ 'black-mode' : blackMode, 'bordered' : bordered }" @click="goToHome()">
 
     <div class="top">
-      <span class="title-2 bold line-height"> Cartografia da Cultura. </span>
+      <span id="title" class="title-2 bolder"> Cartografia da Cultura. </span>
+      <span id="m-title" class="title-2 bolder"> Carto CG. </span>
       <!-- <div class="whitespace"></div> -->
     </div>
 
     <div class="bottom column">
-      <span class="caption bold"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
+      <span class="heading bold"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
       <div class="line"></div>
-      <span class="overline bold"> cultura em movimento </span>
+      <span class="caption bold"> cultura em movimento </span>
     </div>
 
   </div>
@@ -57,6 +58,9 @@ export default {
 
   @include for-phone-only {
     align-items: left;
+    height: 120px;
+    width: 120px;
+    padding: 32px 16px 8px 16px;
   }
 
   &:hover {
@@ -68,6 +72,25 @@ export default {
   text-align: left;
 }
 
+#title {
+  line-height: 1.875rem;
+
+  @include for-phone-only {
+    display: none;
+  }
+}
+
+#m-title {
+  display: none;
+
+  @include for-phone-only {
+    display: block;
+    font-size: 2rem;
+    line-height: 2.2rem;
+    font-weight: 700;
+  }
+}
+
 .bottom {
   flex-wrap: nowrap;
   line-height: 16px;
@@ -76,15 +99,14 @@ export default {
 
   @include for-phone-only {
     justify-content: flex-end;
+    display: none;
   }
-}
-
-.line-height {
-  line-height: 1.875rem;
 }
 
 .line {
   height: 2px;
+  margin-top: 4px;
+  margin-bottom: 4px;
   // background-color: black;
   width: 100%;
   background-color: black;
@@ -97,7 +119,7 @@ export default {
     background-color: white;
   }
 
-  .title-2, .caption, .overline, .nd-sub {
+  .title-2, .heading, .caption, .overline, .nd-sub {
     color: white;
   }
 }

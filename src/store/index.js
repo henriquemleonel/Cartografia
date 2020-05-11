@@ -36,7 +36,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'Festival de dança da comunidade para a comunidade, venha se divertir',
         category: { value: 'Dança', color: '#683931' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '2',
@@ -48,7 +48,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'pula fogueira',
         category: { value: 'Música', color: '#D3869B' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '3',
@@ -60,7 +60,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         category: { value: 'Teatro', color: '#683931' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '4',
@@ -72,7 +72,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira ',
         category: { value: 'Moda', color: '#BD6A5C' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '5',
@@ -84,7 +84,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
         category: { value: 'Cinema', color: '#4692C1' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '6',
@@ -96,7 +96,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira ',
         category: { value: 'Cultura Popular', color: '#E6B545' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '7',
@@ -108,7 +108,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
         category: { value: 'Fotografia', color: '#254C26' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '8',
@@ -120,7 +120,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira ',
         category: { value: 'Arte Digital', color: '#DBB753' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '9',
@@ -131,7 +131,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'Festival de dança da comunidade para a comunidade, venha se divertir',
         category: { value: 'Dança', color: '#683931' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '10',
@@ -143,7 +143,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'pula fogueira',
         category: { value: 'Música', color: '#D3869B' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
       {
         id: '11',
@@ -155,7 +155,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         category: { value: 'Teatro', color: '#683931' },
-        imgUrl: 'https://placeimg.com/500/300/nature',
+        imgUrl: '',
       },
     ]
   },

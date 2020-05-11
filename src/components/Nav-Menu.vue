@@ -20,7 +20,7 @@
 
               <li class="navigation-item">
                 <router-link class="a" type="link" :to="{ name: 'About' }" exact>
-                  <span class="headline-3 bold effect-underline">Plataforma</span>
+                  <span class="body-2 effect-underline">Plataforma</span>
                 </router-link>
               </li>
               <div class="line"/>
@@ -149,7 +149,7 @@ export default {
 
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
-
+@import '../styles/typo.scss';
 
 * {
   font-family: 'Helvetica';

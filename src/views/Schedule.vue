@@ -1,22 +1,26 @@
 <template>
-  <div class="container row no-wrap">
+  <div class="container">
 
     <!-- <logo-card class="fixed-logo" :blackMode="true"/> -->
 
-    <div class="aside column">
+    <div class="aside">
 
-      <header class="spaced-32">
+      <header>
 
         <logo-card :blackMode="true"/>
 
       </header>
 
-      <section class="recentes spaced-32">
-        <span class="body-2 bolder">recentes</span>
-      </section>
-
       <div class="white-space"></div>
 
+      <section class="filter" v-if="!handleResize">
+        <span class="body-2 bolder">+</span>
+      </section>
+
+    </div>
+
+    <div class="filter-mobile" v-if="handleResize">
+      <span class="body-2 bolder">+</span>
     </div>
 
     <div class="content">
@@ -25,17 +29,32 @@
         class="scrollArea"
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
+        v-if="!handleResize"
       >
 
-        <masonry class="items" :cols="{ default: 3, 900: 2, 600:1 }" :gutter="0">
+        <masonry class="items" :cols="{ default: 3, 1100: 2, 900: 1 }" :gutter="0">
           <div  v-for="item in allEvents" :key="item.id" v-intersection="onIntersection">
             <transition name="q-transition--scale">
-              <event-map class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
+              <my-event class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
             </transition>
           </div>
         </masonry>
 
       </q-scroll-area>
+
+      <div class="mobile-items" v-if="handleResize">
+
+        <masonry class="items" :cols="{ default: 3, 900: 2, 700:1 }" :gutter="0">
+
+          <div  v-for="item in allEvents" :key="item.id" v-intersection="onIntersection">
+            <transition name="q-transition--scale">
+              <my-event class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
+            </transition>
+          </div>
+
+        </masonry>
+
+      </div>
 
     </div>
 
@@ -68,6 +87,13 @@ export default {
       },
     };
   },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
   computed: {
     allEvents() {
       const eventsToShow = this.$store.getters.eventsFiltered;
@@ -81,6 +107,13 @@ export default {
         this.allEvents.splice(index, 3, entry.isIntersecting);
       }, 50);
     },
+    handleResize() {
+      const size = window.innerWidth;
+      if (size > 600) {
+        return false;
+      }
+      return true;
+    },
   },
   watch: {
   },
@@ -93,35 +126,97 @@ export default {
 @import '../styles/mixins.scss';
 
 .container {
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 100vh;
   padding: 0px;
-  // display: flex;
-  // justify-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  @include for-phone-only {
+    height: 100%;
+    flex-direction: column;
+  }
 }
 
 .aside {
+  position: relative;
   background-color: white;
   height: 100vh;
   flex-basis: 22%;
   min-width: 250px;
   padding: 16px;
   align-items: center;
+  z-index: 1;
+
+  @include for-phone-only {
+    height: 80px;
+    padding: 16px 16px 8px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header {
+    @include for-phone-only {
+      width: 100%;
+      padding: 0px;
+      flex-direction: column;
+    }
+  }
+
+  .filter {
+     @include for-phone-only {
+      width: 100%;
+    }
+  }
 }
 
 .content {
   // background-color: white;
-  background-color: #f5f5f5; //gelo
+  position: relative;
+  // background-color: #f5f5f5; //gelo
   height: 100%;
   flex-basis: 75%;
   overflow-X: hidden;
   z-index: 1;
+
+  @include for-phone-only {
+    width: 100%;
+    padding: 8px;
+  }
+
+  @media (min-width: 600px) and (max-width: 1200px) {
+    align-items: center;
+  }
 }
 
 .scrollArea {
   height: 100vh;
   width: 100%;
   padding-right: 8px;
+
+  @include for-phone-only {
+    display: none;
+    padding: 4px 8px 4px 8px;
+  }
+}
+
+.filter-mobile {
+  display: none;
+
+  @include for-phone-only {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    z-index: 2;
+    position: relative;
+    // position: -webkit-sticky;
+    top: 32px;
+    right: 32px;
+    background: black;
+  }
 }
 
 span {
@@ -131,6 +226,10 @@ span {
 .white-space {
   height: 60px;
   //border: 2px solid green;
+
+  @include for-phone-only {
+    display: none;
+  }
 }
 
 </style>

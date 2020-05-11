@@ -36,7 +36,7 @@ Vue.component('user-card', UserCard);
 Vue.component('pin-profile', PinProfile);
 Vue.component('my-menu', NavMenu);
 Vue.component('multicolor-line', MulticolorLine);
-Vue.component('event', Event);
+Vue.component('my-event', Event);
 Vue.component('event-profile', EventProfile);
 Vue.component('short-event', ShortEvent);
 Vue.component('my-filter', Filter);

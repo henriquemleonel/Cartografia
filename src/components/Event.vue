@@ -82,15 +82,12 @@ export default {
 .box {
   overflow: hidden;
   max-width: 350px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  margin-left: 4px;
-  margin-right: 4px;
+  margin: 8px 4px 8px 4px;
   transition: transform .2s;
 
   @include for-phone-only {
-    max-width: 450px;
-    align-self: center;
+    max-width: 400px;
+    margin: 8px 4px 24px 4px;
   }
 }
 

@@ -166,11 +166,11 @@
           <q-checkbox v-model="terms" color="black"  true-value="item.category"/>
 
           <span class="body-2 altoc">Eu li e concordo com os
-              <router-link class="link" to="/terms">
+              <router-link class="link" :to="{ path: '/terms', hash: '#terms'}">
                 <span class="bolder" :class="{ white: active}">Termos de Uso</span>
               </router-link>
               e
-              <router-link class="link" to="/terms">
+              <router-link class="link" :to="{ path: '/terms', hash: '#privacity'}">
                 <span class="bolder" :class="{ white: active}">Privacidade.</span>
               </router-link>
 
