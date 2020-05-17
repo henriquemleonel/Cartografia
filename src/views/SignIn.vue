@@ -9,9 +9,9 @@
 
       <div class="card column">
 
-        <span class="title big-title bolder"> Login </span>
+        <span class=" title title-1 bolder"> Login </span>
         <router-link class="link" to="/signUp">
-          <span class="body-2">Novo Usuário? Cadastre-se</span>
+          <span class="body-3">Novo Usuário? Cadastre-se</span>
         </router-link>
 
         <div class="input-field">
@@ -62,7 +62,7 @@
         <div class="links column">
 
           <router-link class="link" to="/recover">
-            <span class="body-2">Esqueceu a senha?</span>
+            <span class="body-3">Esqueceu a senha?</span>
           </router-link>
 
           <!-- <router-link to="/signUp">
@@ -147,7 +147,7 @@ export default {
           if (error.message === 'Request failed with status code 400') {
             this.errorMessage = 'não encontramos uma conta para esse email';
           }
-          console.log('error', error.response.data)
+          console.log('error', error.response)
         });
     },
   }
@@ -176,8 +176,8 @@ export default {
 .identity {
   position: absolute;
   // width: 100%;
-  top: 32px;
-  left: 32px;
+  top: 16px;
+  left: 16px;
   animation: 0.5s fadeInOpacity ease-in;
 
   .logo {
@@ -238,7 +238,7 @@ export default {
 
 .title {
   // align-self: center;
-  margin-bottom: 8px;
+  margin-bottom: -8px;
   animation: 0.4s fadeInOpacity ease-in;
 
   @include for-tablet-portrait-only {
@@ -254,7 +254,7 @@ export default {
 
 .input-field {
   width: 100%;
-  margin-top: 32px;
+  margin-top: 16px;
 
   @include for-phone-only {
     margin-top: 32px;
@@ -265,7 +265,7 @@ export default {
   margin-bottom: 24px;
   width: inherit;
   font-size: 1.025rem;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   font-weight: bold;
 }
 
@@ -282,7 +282,7 @@ export default {
 .links {
   align-items: center;
   width: 100%;
-  margin-top: 16px;
+  margin-top: 32px;
   // border: 1px solid red;
 }
 
@@ -301,7 +301,7 @@ export default {
 .btn {
   box-shadow: none;
   align-self: center;
-  width: 180px;
+  width: 150px;
   height: 40px;
   border-radius: 0px;
   background-color: black;

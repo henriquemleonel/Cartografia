@@ -29,24 +29,26 @@
         class="scrollArea"
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
-        v-if="!handleResize"
+        v-if="handleResize"
       >
 
-        <masonry class="items" :cols="{ default: 3, 1100: 2, 900: 1 }" :gutter="0">
-          <div  v-for="item in allEvents" :key="item.id" v-intersection="onIntersection">
+        <masonry class="items" :cols="{ default: 3, 1200: 3, 1130: 2, 600: 1 }" :gutter="{ default: '4px', 1200: '4px', 1130: '8px', 600: '4px'}">
+          <div  v-for="item in allEvents" :key="item.id">
             <transition name="q-transition--scale">
-              <my-event class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
+
+              <schedule-item class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
+
             </transition>
           </div>
         </masonry>
 
       </q-scroll-area>
 
-      <div class="mobile-items" v-if="handleResize">
+      <div class="mobile-items" v-if="!handleResize">
 
-        <masonry class="items" :cols="{ default: 3, 900: 2, 700:1 }" :gutter="0">
+        <masonry class="items" :cols="{ default: 3, 1320: 2, 600: 1 }" :gutter="0">
 
-          <div  v-for="item in allEvents" :key="item.id" v-intersection="onIntersection">
+          <div  v-for="item in allEvents" :key="item.id">
             <transition name="q-transition--scale">
               <my-event class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
             </transition>
@@ -62,16 +64,19 @@
 </template>
 
 <script>
+import ScheduleItem from '../components/ScheduleItem.vue';
 
 export default {
-  name: 'schedulePage',
+  name: 'Schedule_Page',
   components: {
+    ScheduleItem,
   },
   data() {
     return {
       newEvent: '',
       thumbStyle: {
         right: '0px',
+        top: '16px',
         borderRadius: '0px',
         backgroundColor: '#111111',
         width: '9px',
@@ -80,6 +85,7 @@ export default {
       },
       barStyle: {
         right: '0px',
+        top: '16px',
         borderRadius: '0px',
         backgroundColor: '#eeeeee',
         width: '9px',
@@ -124,13 +130,12 @@ export default {
 
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
+@import '../styles/typo.scss';
 
 .container {
-  position: relative;
   z-index: 0;
   width: 100%;
   height: 100vh;
-  padding: 0px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -142,20 +147,30 @@ export default {
 }
 
 .aside {
-  position: relative;
   background-color: white;
-  height: 100vh;
-  flex-basis: 22%;
-  min-width: 250px;
+  height: 100%;
+  // width: 220px;
   padding: 16px;
+  margin: 0px 8px 0px 0px;
   align-items: center;
   z-index: 1;
+  // border: 2px solid pink;
 
   @include for-phone-only {
     height: 80px;
     padding: 16px 16px 8px 16px;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  @include for-tablet-portrait-only {
+    margin: 0px 4px 0px 0px;
+    padding: 16px 0px 8px 16px;
+  }
+
+  @include for-desktop-up {
+    margin: 0px 0px 0px 0px;
+    padding: 16px 16px 8px 16px;
   }
 
   header {
@@ -174,12 +189,11 @@ export default {
 }
 
 .content {
-  // background-color: white;
-  position: relative;
-  // background-color: #f5f5f5; //gelo
-  height: 100%;
-  flex-basis: 75%;
-  overflow-X: hidden;
+  height: 100vh;
+  width: 100%;
+  padding: 8px 0px 0px 0px;
+  max-width: 1080px;
+  overflow: hidden;
   z-index: 1;
 
   @include for-phone-only {
@@ -187,15 +201,17 @@ export default {
     padding: 8px;
   }
 
-  @media (min-width: 600px) and (max-width: 1200px) {
-    align-items: center;
+  @include for-desktop-up {
+    align-self: center;
+    margin: 0px;
+    padding: 16px 8px 8px 0px;
   }
 }
 
 .scrollArea {
-  height: 100vh;
-  width: 100%;
-  padding-right: 8px;
+  height: inherit;
+  width: inherit;
+  padding-right: 16px;
 
   @include for-phone-only {
     display: none;

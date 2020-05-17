@@ -391,7 +391,7 @@ export default {
         })
           .then(response => {
             this.errorMessage = null;
-            this.$router.push({ name: 'Profile' })
+            this.$router.push({ name: 'SignIn' })
           })
           .catch(error => {
           if (error.message === 'Request failed with status code 401') {
@@ -400,7 +400,7 @@ export default {
           if (error.message === 'Request failed with status code 400') {
             this.errorMessage = 'não encontramos uma conta para esse email';
           }
-          console.log('error', error.response.data)
+          console.log('error', error.response)
         });
         console.log('signUp : try signUp')
       }

@@ -25,7 +25,6 @@ import NavMenu from './components/Nav-Menu.vue'; // ------------- menu de navega
 import MulticolorLine from './components/Multicolor-Line.vue'; // linha colorida
 import UserCard from './components/User-Card.vue'; // ----------- editor info do usuário
 import PinProfile from './components/Pin-Profile.vue'; // ------- criador/editor pin no perfil
-import Event from './components/Event.vue'; // ------------------ evento da agenda
 import EventProfile from './components/Event-Profile.vue'; // --- criador/editor eventos no perfil
 import ShortEvent from './components/Short-Event.vue'; // ------- evento reduzido para tabela de eventos
 import Filter from './components/Filter.vue'; // ---------------- filtro menu
@@ -36,7 +35,6 @@ Vue.component('user-card', UserCard);
 Vue.component('pin-profile', PinProfile);
 Vue.component('my-menu', NavMenu);
 Vue.component('multicolor-line', MulticolorLine);
-Vue.component('my-event', Event);
 Vue.component('event-profile', EventProfile);
 Vue.component('short-event', ShortEvent);
 Vue.component('my-filter', Filter);

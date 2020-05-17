@@ -5,18 +5,24 @@ import Vuex from 'vuex'
 import { Store } from  'vuex'
 import router from '../router/index.js'
 import createPersistedState from "vuex-persistedstate"
-import axios from 'axios'
 import api from '../config/index.js'
+// import categories from './modules/categories'
+import ModuleTopics from './modules/topics'
 
 Vue.use(Vuex)
 
 const store = new Store({
+  modules: {
+    // categories,
+    topics: ModuleTopics,
+    // users
+  },
+
   state: {
     newKey: null,
     token: sessionStorage.getItem('access_token') || null,
     currentUser: null,
     isAdmin: null,
-    pinCompleted: false,
     myPin: [],
     myEvents: [],
     pins: [],
@@ -36,7 +42,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'Festival de dança da comunidade para a comunidade, venha se divertir',
         category: { value: 'Dança', color: '#683931' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '2',
@@ -48,7 +54,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'pula fogueira',
         category: { value: 'Música', color: '#D3869B' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '3',
@@ -60,7 +66,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         category: { value: 'Teatro', color: '#683931' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '4',
@@ -72,7 +78,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira ',
         category: { value: 'Moda', color: '#BD6A5C' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '5',
@@ -84,7 +90,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
         category: { value: 'Cinema', color: '#4692C1' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '6',
@@ -96,7 +102,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira ',
         category: { value: 'Cultura Popular', color: '#E6B545' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '7',
@@ -108,7 +114,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
         category: { value: 'Fotografia', color: '#254C26' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '8',
@@ -120,7 +126,7 @@ const store = new Store({
         link: '',
         description: 'pula fogueira ',
         category: { value: 'Arte Digital', color: '#DBB753' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '9',
@@ -131,7 +137,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'Festival de dança da comunidade para a comunidade, venha se divertir',
         category: { value: 'Dança', color: '#683931' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '10',
@@ -143,7 +149,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'pula fogueira',
         category: { value: 'Música', color: '#D3869B' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
       {
         id: '11',
@@ -155,7 +161,7 @@ const store = new Store({
         link: 'https://www.facebook.com/henriquemleonel',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         category: { value: 'Teatro', color: '#683931' },
-        imgUrl: '',
+        imgUrl: '../assets/statics/avatar01.jpg',
       },
     ]
   },
@@ -181,7 +187,10 @@ const store = new Store({
       return state.pinCompleted;
     },
     myPin(state) {
-      return state.myPin[0];
+      if (state.myPin === null) {
+        return null;
+      }
+      return state.myPin.payload;
     },
     pinsFiltered(state) {
       if(state.filter === 'all') {
@@ -214,7 +223,7 @@ const store = new Store({
     destroyCurrentUser (state) {
       state.currentUser = null;
       state.myEvents = null;
-      state.myPin.slice(0, 1, []);
+      state.myPin = null;
       console.log('mutation : destroy currentUser');
     },
     retrieveToken(state, token) {
@@ -226,12 +235,12 @@ const store = new Store({
       console.log('mutation : destroy token');
     },
     addPin(state, payload) {
-      if (state.currentUser.pinCompleted === false && state.myPin[0] !== null) {
+      if (state.currentUser.pinCompleted === false && state.myPin !== null) {
         state.push(payload);
         state.currentUser.pinCompleted = true;
         console.log('mutation -> state/myPin[] : first-write', state.myPin);
       } else {
-        state.myPin.splice(0, 1, payload);
+        state.myPin = payload;
         localStorage.removeItem('myPin');
         localStorage.setItem('myPin', payload);
         console.log('mutation -> state/myPin[] : editing', state.myPin);
@@ -289,11 +298,11 @@ const store = new Store({
         })
           .then(response => {
             console.log('reponse', response.data)
-            const currentUser = response.data
-            context.commit('setCurrentUser', currentUser)
-            const token = response.data.token
-            context.commit('retrieveToken', token)
-            sessionStorage.setItem('access_token', token)
+            // const currentUser = response.data
+            // context.commit('setCurrentUser', currentUser)
+            // const token = response.data.token
+            // context.commit('retrieveToken', token)
+            // sessionStorage.setItem('access_token', token)
             resolve(response)
           })
           .catch(error => {
@@ -356,41 +365,53 @@ const store = new Store({
       //   })
       // }
     },
-    addPin(context, payload) {
+    addPinCommit(context, payload) {
       console.log('action>mutation:addPin(payload)', payload)
       context.commit('addPin', payload);
     },
-    addPinPost(context, payload) {
-      
-      api.post('/pin', {
-        userRef: payload.userRef,
-        category: payload.category,
-        completed: payload.completed,
-        name: payload.name,
-        email: payload.email,
-        phone: pyaload.phone,
-        street: payload.street,
-        neighborhood: payload.neighborhood,
-        number: payload.number,
-        city: payload.city,
-        cep: payload.cep,
-        lat: payload.lat,
-        long: payload.long,
-        description: payload.description,
-        linkF: payload.linkF,
-        linkIG: payload.linkIG,
-        otherLink: payload.otherLink,
-        imgUrl: payload.imgUrl,
-      })
-        .then(response => {
-          console.log(response)
-          context.commit('addPin', response.data)
-        })
-        .catch(error => {
-          console.log(error)
-          reject(error)
-        })
+    addPin(context, payload) {
 
+      // const authorization = sessionStorage.getItem('access_token');
+      api.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
+      return new Promise((resolve, reject) => {
+        console.log('action : addPin')
+        api.post('/pins', {
+          category: payload.category,
+          // completed: payload.completed,
+          name: payload.name,
+          email: payload.email,
+          phone: payload.phone,
+          street: payload.street,
+          neighborhood: payload.neighborhood,
+          cep: payload.cep,
+          number: payload.number,
+          city: payload.city,
+          imgUrl: payload.imgUrl,
+          // lat: payload.lat,
+          // long: payload.long,
+          description: payload.description,
+          linkF: payload.linkF,
+          linkIG: payload.linkIG,
+          otherLink: payload.otherLink,
+          // userRef: payload.userRef,
+          userId: payload.userId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': authorization,
+          }
+        })
+          .then(response => {
+            console.log('action addpin response', response)
+            context.commit('addPin', response.data)
+            resolve(response)
+          })
+          .catch(error => {
+            console.log(error)
+            reject(error)
+          })
+      })
     },
     addEvent(context, payload) {
       console.log('action -> mutation/myEvents : addEvent', payload)
@@ -424,7 +445,6 @@ const store = new Store({
         })
     },
   },
-  modules: {}
 });
 
 export default store;

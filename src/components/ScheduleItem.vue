@@ -1,14 +1,15 @@
 <template>
-  <div class="box" @click="expand()" :style="{ 'background-color': background }">
+  <div class="box" @click="expand()">
 
-    <div class="context column">
+    <div class="context column" :style="{ 'background-color': background }">
+
       <span class="title-1 bolder line-h16"> {{ name }} </span>
-      <span class="body-2 bold mg-top-8"> {{ category.value.toLowerCase() }} </span>
+      <span class="headline-3 bolder mg-top-8"> {{ category.value.toLowerCase() }} </span>
 
-      <div class="row spaced-32">
+      <div class="row mg-top8">
         <span class="body-2 bold"> {{ date.value }} </span>
         <!-- <span class="body-2 bold"> {{ date.year }} </span> -->
-        <span class="body-2 bold mg-left16"> {{ hour.substr(0, 2) + 'h' }} </span>
+        <span class="body-2 bold mg-left16"> {{ hour + 'h' }} </span>
       </div>
 
       <span class="body-2 bold spaced-32"> {{ description }} </span>
@@ -27,7 +28,8 @@
     </div>
 
     <div class="img-box">
-      <q-img :src="img" :ratio="16/9" placeholder-src="statics/avatar01.jpg"/>
+      <!-- <q-img :src="img" :ratio="16/9" placeholder-src="statics/avatar01.jpg"/> -->
+      <img class="img" src="../assets/statics/avatar01.jpg"/>
     </div>
 
   </div>
@@ -35,7 +37,7 @@
 
 <script>
 export default {
-  name: 'event-component',
+  name: 'schedule_Item',
   data() {
     return {
       id: this.item.id,
@@ -82,11 +84,12 @@ export default {
 .box {
   overflow: hidden;
   max-width: 350px;
-  margin: 8px 4px 8px 4px;
+  min-width: 290px;
+  margin: 8px 0px 0px 4px;
   transition: transform .2s;
 
   @include for-phone-only {
-    max-width: 400px;
+    width: 350px;
     margin: 8px 4px 24px 4px;
   }
 }
@@ -100,7 +103,14 @@ export default {
 }
 
 .img-box {
-  width: 100%;
+  width: 350px;
+  max-height: 280px;
+  overflow: hidden;
+
+  .img {
+    height: auto;
+    max-width: 350px;
+  }
 }
 
 span {
