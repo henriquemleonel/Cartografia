@@ -1,14 +1,14 @@
 <template>
-  <div class="container">
+  <div class="app-page">
     <div id="content" class="content-center column" :class="{ 'bg-change' : active }">
 
-      <!-- identidade da plataforma (selo) -->
+      <!-- identity (seal) -->
       <logo-card class="header" :blackMode="true"/>
 
       <!-- color line -->
       <multicolor-line class="line mg-top8"/>
 
-      <!-- informações da plataforma -->
+      <!-- info -->
       <div class="info">
 
         <div class="column mg-top16">
@@ -55,75 +55,100 @@
 
       <div class="whitespace"></div>
 
-      <!-- formulário de cadastro -->
+      <!-- form -->
       <div class="form column">
+
         <span class="headline bolder">Insira suas informações:</span>
 
-        <div class="row mg-top16" style="justify-content: space-between">
+        <div class="row field" style="justify-content: space-between">
 
+          <!-- first name -->
           <q-input
             class="input"
-            ref="firstName"
             dense
             square
-            outlined
-            v-model="firstName"
-            label="Nome*"
+            filled
+            v-model="username"
+            label="Sobrenome*"
+            bottom-slots
+            @blur="$v.username.$touch"
+            :error="$v.username.$error"
+            :error-message="usernameErrorMessage"
           />
 
+          <!-- last name -->
           <q-input
             class="input"
-            ref="lastName"
             dense
             square
-            outlined
-            v-model="lastName"
+            filled
+            v-model="lastname"
             label="Sobrenome*"
+            bottom-slots
+            @blur="$v.lastname.$touch"
+            :error="$v.lastname.$error"
+            :error-message="lastnameErrorMessage"
           />
 
         </div>
 
+        <!-- email -->
         <q-input
           class="input"
-          ref="email"
           dense
           square
-          outlined
+          filled
           v-model="email"
           label="email*"
+          @blur="$v.email.$touch"
+          :error="$v.email.$error"
+          :error-message="emailErrorMessage"
+          lazy-rules
         />
 
+        <!-- confirm email -->
         <q-input
           class="input"
           dense
           square
-          outlined
-          v-model="confirmEmail"
+          filled
+          v-model="emailConfirmation"
           label="confirme o email*"
+          @blur="$v.emailConfirmation.$touch"
+          :error="$v.emailConfirmation.$error"
+          :error-message="emailConfirmationErrorMessage"
         />
 
-        <div class="row" style="justify-content: space-between">
+        <div class="row field" style="justify-content: space-between">
 
+          <!-- password -->
           <q-input
             class="input"
-            ref="password"
             dense
             square
-            outlined
+            filled
             v-model="password"
             label="senha*"
+            @blur="$v.password.$touch"
+            :error="$v.password.$error"
+            :error-message="passwordErrorMessage"
           />
 
+          <!-- confirm password -->
           <q-input
             class="input"
             dense
             square
-            outlined
-            v-model="confirmPassword"
+            filled
+            v-model="passwordConfirmation"
             label="confirme a senha*"
+            @blur="$v.passwordConfirmation.$touch"
+            :error="$v.passwordConfirmation.$error"
+            :error-message="passwordConfirmationErrorMessage"
           />
 
         </div>
+        <!-- end row -->
 
       </div>
 
@@ -144,11 +169,11 @@
               <q-item-section avatar>
 
                 <!-- iconId -1 : index of array of icons (0 a 17) -->
-                <icon-base :iconId="item.value -1" width="20" :setWhite="active" />
+                <icon-base :iconId="item.value -1" width="16" :setWhite="active" />
 
               </q-item-section>
 
-              <q-item-section :id="item.value" class="body-2 bolder" :class="{ 'white' : active }"> {{ item.label }} </q-item-section>
+              <q-item-section :id="item.value" class="body-3 bolder" :class="{ 'white' : active }"> {{ item.label }} </q-item-section>
 
             </q-item>
 
@@ -178,19 +203,28 @@
 
         </div>
 
-        <div class="erro-field mg-top16" v-if="errorMessage !== null">
-          <span id="error" class="error-msg">
-            {{ this.errorMessage }}
-          </span>
-        </div>
-
         <div class="btn-field">
-          <!-- <q-btn class="btn-cancel">
-            <span class="span-btn-cancel">Num quero</span>
-          </q-btn> -->
-          <q-btn flat @click="register()" class="btn-custom" color="black">
+
+          <q-btn
+            flat
+            disable
+            v-if="!formIsValid"
+            class="btn-custom-disable"
+            color="black"
+          >
+            <span class="span-btn">Preencha todos os campos</span>
+          </q-btn>
+
+          <q-btn
+            flat
+            @click="register()"
+            v-if="formIsValid"
+            class="btn-custom"
+            color="black"
+          >
             <span class="span-btn">Cadastre-se</span>
           </q-btn>
+
         </div>
 
       </div>
@@ -200,143 +234,124 @@
     </div>
   </div>
 </template>
+
 <script>
 /* eslint-disable */
+import { mapGetters } from 'vuex';
 import iconBase from '../components/iconBase.vue';
+import { dirty, required, email, minLength, maxLength, sameAs } from 'vuelidate/lib/validators';
 
 export default {
-  name: 'About',
+  name: 'SignUp',
   components: {
     iconBase,
   },
   data() {
     return {
-      isValid: false,
-      errorMessage: null,
-      firstName: '',
-      lastName: '',
+      loading: false,
+      username: '',
+      lastname: '',
       email: '',
-      confirmEmail: '',
+      emailConfirmation: '',
       password: '',
-      confirmPassword: '',
-      selected: null, // --- selected category
+      passwordConfirmation: '',
+      selected: null, // --- selected category?
       lastSelected: 0,
       active: false,
       terms: false, // ----- accept terms?
-      options: [
-        {
-          label: 'Dança, Teatro e Circo',
-          value: '1',
-          color: '#683931',
-        },
-        {
-          label: 'Escultura',
-          value: '2',
-          color: '#AD3B3B',
-        },
-        {
-          label: 'Arte Urbana',
-          value: '3',
-          color: '#C95B40',
-        },
-        {
-          label: 'Arte Digital',
-          value: '4',
-          color: '#DBB753',
-        },
-        {
-          label: 'Cultura Popular',
-          value: '5',
-          color: '#E6B545',
-        },
-        {
-          label: 'Museologia',
-          value: '6',
-          color: '#529E63',
-        },
-        {
-          label: 'Artesanato',
-          value: '7',
-          color: '#49833A',
-        },
-        {
-          label: 'Fotografia',
-          value: '8',
-          color: '#254C26',
-        },
-        {
-          label: 'Literatura',
-          value: '9',
-          color: '#2F5497',
-        },
-        {
-          label: 'Cinema e AudioVisual',
-          value: '10',
-          color: '#4692C1',
-        },
-        {
-          label: 'Cultura e Representação',
-          value: '11',
-          color: '#86BCD3',
-        },
-        {
-          label: 'Música',
-          value: '12',
-          color: '#D3869B',
-        },
-        {
-          label: 'Folclore',
-          value: '13',
-          color: '#CB6883',
-        },
-        {
-          label: 'Gastronomia',
-          value: '14',
-          color: '#C44B6E',
-        },
-        {
-          label: 'Moda',
-          value: '15',
-          color: '#BD6A5C',
-        },
-        {
-          label: 'Produtor Cultural',
-          value: '16',
-          color: '#AD3B3B',
-        },
-        {
-          label: 'Estabelecimento',
-          value: '17',
-          color: '#653830',
-        },
-        {
-          label: 'Instituição',
-          value: '18',
-          color: '#C95B40',
-        },
-      ],
     };
   },
+  validations: {
+    username: {
+      required,
+      minLength: minLength(3),
+      validChars: (value) => {
+        return (/^[a-zA-Z0-9_]+$/ig).test(value)
+      }
+    },
+    lastname: {
+      required,
+      validChars: (value) => {
+        return (/^[a-zA-Z0-9_]+$/ig).test(value)
+      }
+    },
+    email: {
+      required,
+      email,
+      maxLength: maxLength(30)
+    },
+    emailConfirmation: {
+      required,
+      sameAsPassword: sameAs('email')
+    },
+    password: {
+      required,
+      minLength: minLength(8),
+      maxLength: maxLength(15)
+    },
+    passwordConfirmation: {
+      required,
+      sameAsPassword: sameAs('password')
+    }
+  },
   computed: {
+    ...mapGetters({
+      options: 'loadCategories',
+    }),
     signedIn() {
       return this.$store.state.signedIn;
     },
-    required() {
-      return [
-        v => !!v || 'requerido',
-      ];
+    formIsValid() {
+      if (this.$v.$anyError || this.selected === null || this.terms === false ) {
+        return false
+      } else {
+        return true
+      }
     },
-    emailRules() {
-      return [
-        v => !!v || 'E-mail é requerido',
-        v => /.+@.+/.test(v) || 'E-mail deve ser válido'
-      ]
+    usernameErrorMessage () {
+      if (!this.$v.username.required) {
+        return 'Esse campo é requerido'
+      } else if (!this.$v.username.validChars) {
+        return 'Este campo deve conter apenas letras, números e underline'
+      } else if (!this.$v.username.minLength) {
+        return 'Mínimo de três dígitos'
+      }
     },
-    passwordRules() {
-      return {
-        required: value => !!value || 'Requerido.',
-        min: v => v.length >= 8 || 'Mínimo 8 characters',
-        emailMatch: () => ('O email ou senha estão incorretos'),
+    lastnameErrorMessage () {
+      if (!this.$v.lastname.required) {
+        return 'Campo requerido'
+      } else if (!this.$v.lastname.validChars) {
+        return 'Este campo deve conter apenas letras, números e underline'
+      }
+    },
+    emailErrorMessage () {
+      if (!this.$v.email.required) {
+        return 'Email é requerido'
+      } else if (!this.$v.email.email) {
+        return 'Por favor insira um email válido'
+      }
+    },
+    emailConfirmationErrorMessage () {
+      if (!this.$v.emailConfirmation.required) {
+        return 'Confirmação de email é requerida'
+      } else if (!this.$v.emailConfirmation.sameAsEmail) {
+        return 'Email não confere'
+      }
+    },
+    passwordErrorMessage () {
+      if (!this.$v.password.required) {
+        return 'Senha é requerida'
+      } else if (!this.$v.password.minLength) {
+        return 'Mínimo de 8 dígitos'
+      } else if (!this.$v.password.maxLength) {
+        return 'Máximo de 15 dígitos'
+      }
+    },
+    passwordConfirmationErrorMessage () {
+      if (!this.$v.passwordConfirmation.required) {
+        return 'Confirmação de senha é requerida'
+      } else if (!this.$v.passwordConfirmation.sameAsPassword) {
+        return 'Senha não confere'
       }
     },
   },
@@ -357,34 +372,16 @@ export default {
       }
     },
     register() {
-      if (this.email == '' || this.password == '' || this.firstName == '') {
-        this.isValid = false;
-        this.errorMessage = 'confira todos os campos'
-        setTimeout(() => {
-          this.errorMessage = null;
-        }, 3000);
-      } else if (this.selected === null) {
-        this.isValid = false;
-        this.errorMessage = 'selecione ao menos uma categoria'
-        setTimeout(() => {
-          this.errorMessage = null;
-        }, 3000);
-      } else if (this.terms === false) {
-        this.errorMessage = 'você deve aceitar os Termos e Privacidade';
-        setTimeout(() => {
-          this.errorMessage = null;
-        }, 3000);
-      } else {
-        this.isValid = true;
-      }
-      if (this.isValid === true) {
+      this.$v.touch();
+      if (!this.$v.$anyError) {
+        this.loading = true;
         this.$store.
         dispatch('register', {
-          firstName: this.firstName,
-          lastName: this.lastName,
+          username: this.username,
+          lastname: this.lastname,
           email: this.email,
           password: this.password,
-          confirmPassword: this.confirmPassword,
+          passwordConfirmation: this.passwordConfirmation,
           isValid: true,
           isAdmin: false,
           categoryId: this.selected.value,
@@ -394,21 +391,16 @@ export default {
             this.$router.push({ name: 'SignIn' })
           })
           .catch(error => {
-          if (error.message === 'Request failed with status code 401') {
-            this.errorMessage = 'email ou senha inválida';
-          }
-          if (error.message === 'Request failed with status code 400') {
-            this.errorMessage = 'não encontramos uma conta para esse email';
-          }
-          console.log('error', error.response)
-        });
+            if (error.message === 'Request failed with status code 401') {
+              this.errorMessage = 'email ou senha inválida';
+            }
+            if (error.message === 'Request failed with status code 400') {
+              this.errorMessage = 'não encontramos uma conta para esse email';
+            }
+            console.log('error', error.response)
+          });
         console.log('signUp : try signUp')
       }
-    },
-  },
-  watch: {
-    selected: function() {
-      document.getElementById('error').style.color = '#fff';
     },
   },
 };
@@ -441,7 +433,7 @@ export default {
 	}
 }
 
-.container {
+.app-page {
   width: 100%;
 }
 
@@ -511,16 +503,6 @@ export default {
   margin-bottom: 8px;
 }
 
-.input {
-  margin-bottom: 16px;
-  font-size: 1rem;
-  min-width: 49%;
-
-  @include for-phone-only {
-    width: 100%;
-  }
-}
-
 .context {
   margin-top: 8px;
   margin-left: 8px;
@@ -576,15 +558,36 @@ export default {
   }
 }
 
-.error-field {
+.btn-custom-disable {
+  box-shadow: none;
+  background-color: black;
+  border-radius: 0px;
+  height: 40px;
   margin-top: 8px;
-  align-self: center;
-  // transition: 1s ease-in;
 }
 
-.error-msg {
-  color: #bb0000;
-  animation: 1s fadeInOpacity ease-in;
+.field {
+  height: 60px;
+}
+
+.input {
+  font-family: 'Helvetica-Normal';
+  font-size: 1.02rem;
+  min-width: 49%;
+  max-height: 50px;
+  margin-top: 16px;
+
+  @include for-phone-only {
+    width: 100%;
+  }
+}
+
+.error-message {
+  // color: #bb0000;
+  color:black;
+  margin-top: 8px;
+  margin-left: -8px;
+  // animation: 1s fadeInOpacity ease-in;
 }
 
 @keyframes fadeInOpacity {

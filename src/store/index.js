@@ -5,15 +5,15 @@ import Vuex from 'vuex'
 import { Store } from  'vuex'
 import router from '../router/index.js'
 import createPersistedState from "vuex-persistedstate"
-import api from '../config/index.js'
-// import categories from './modules/categories'
+import api from '../apiClient/index.js'
+import ModuleCategories from './modules/categories'
 import ModuleTopics from './modules/topics'
 
 Vue.use(Vuex)
 
 const store = new Store({
   modules: {
-    // categories,
+    categories: ModuleCategories,
     topics: ModuleTopics,
     // users
   },
@@ -262,20 +262,6 @@ const store = new Store({
       let key = autoId
       console.log('KEY DO NOVO EVENTO:', key)
       context.commit('setKey', key);
-    },
-    addCategorie(context, data) {
-      return new Promise((resolve, reject) => {
-        api.post('categories', {
-          name: data.name,
-        })
-          .then(response => {
-            console.log('response categorie', data.response)
-          })
-          .catch(error => {
-            console.log(error)
-            reject(error)
-          })
-      })
     },
     register(context, data) {
       // console.log('data register', data);

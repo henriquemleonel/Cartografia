@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="app-page">
 
     <div class="content row no-wrap">
 
@@ -32,14 +32,14 @@
       <!-- pin -->
       <div class="pin">
 
-        <!-- <pin-profile/> -->
+        <user-pin v-if="!1"/>
         <pin-teste :fetch="getPinStatus" :item="getPinUser"/>
 
       </div>
 
       <!-- evento (inserção/edição) -->
       <div class="event">
-        <event-profile />
+        <event-form/>
       </div>
 
       <!--  tabela de eventos -->
@@ -79,8 +79,21 @@
 </template>
 
 <script>
+import UserCard from '../components/User-Card.vue';
+import UserPin from '../components/Pin-Profile.vue';
+import EventForm from '../components/Event-Profile.vue';
+import ShortEvent from '../components/Short-Event.vue';
+import PinTeste from '../components/pinTeste.vue';
+
 export default {
   name: 'Profile',
+  components: {
+    UserCard,
+    UserPin,
+    EventForm,
+    ShortEvent,
+    PinTeste,
+  },
   data() {
     return {
       thumbStyle: {
@@ -181,7 +194,7 @@ export default {
   }
 }
 
-.container {
+.app-page {
   display: flex;
   // justify-content: center;
   align-items: flex-start;
