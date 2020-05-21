@@ -20,31 +20,31 @@
 
               <li class="navigation-item">
                 <router-link class="a" type="link" :to="{ name: 'About' }" exact>
-                  <span class="body-2 effect-underline">Plataforma</span>
+                  <span class="body-3 effect-underline">Plataforma</span>
                 </router-link>
               </li>
               <div class="line"/>
               <li class="navigation-item">
                 <router-link class="a" ref="link" :to="{ name: 'About', hash:'#frm'} ">
-                  <span class="body-2 effect-underline">Fórum</span>
+                  <span class="body-3 effect-underline">Fórum</span>
                 </router-link>
               </li>
               <div class="line"/>
               <li class="navigation-item">
                   <router-link class="a" ref="link" to="/terms" exact>
-                  <span class="body-2 effect-underline">Nossos Termos</span>
+                  <span class="body-3 effect-underline">Nossos Termos</span>
                   </router-link>
               </li>
               <div class="line"/>
               <li class="navigation-item">
                   <router-link class="a effect-underline" ref="link" :to="{ name: 'Faq', hash:'#frm'}" exact>
-                  <span class="body-2">F.A.Q</span>
+                  <span class="body-3">F.A.Q</span>
                   </router-link>
               </li>
               <div class="line"/>
               <li class="navigation-item">
                   <router-link class="a effect-underline" ref="link" to="/about" exact>
-                  <span class="body-2">Contato</span>
+                  <span class="body-3">Contato</span>
                   </router-link>
               </li>
             </ul>

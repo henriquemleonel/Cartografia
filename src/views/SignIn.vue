@@ -9,43 +9,52 @@
 
       <div class="card column">
 
-        <span class=" title title-1 bolder"> Login </span>
+        <span class="title title-2 bolder"> Olá novamente </span>
         <router-link class="link" to="/signUp">
           <span class="body-3">Novo Usuário? Cadastre-se</span>
         </router-link>
 
+        <div class="error-field" v-if="errorMessage !== null">
+          <span class="error-message">* {{ errorMessage }}</span>
+        </div>
+
         <div class="input-field">
 
           <q-input
-            v-model="email"
             class="input"
-            outlined
+            square
+            filled
             clearable
             clear-icon="close"
-            square
-            type="email"
-            :rules="emailRules"
-            lazy-rules
-            label="Email"
             color="black"
-            required
+            v-model="email"
+            type="email"
+            label="Email"
+            @blur="$v.email.$touch"
+            :error="$v.email.$error"
+            :error-message="emailErrorMessage"
+            lazy-rules
           />
 
           <q-input
-            v-model="password"
             class="input"
-            outlined
-            clearable
-            clear-icon="close"
             square
-            label="Senha"
-            :type="isPwd ? 'password' : 'text'"
-            hint="Mínimo de 8 caracteres"
+            filled
+            cleareble
+            clear-icon="close"
             color="black"
+            :type="isPwd ? 'password' : 'text'"
+            label="Senha"
+            v-model="password"
+            @blur="$v.password.$touch"
+            :error="$v.password.$error"
+            :error-message="passwordErrorMessage"
+            lazy-rules
+            hint="Mínimo de 8 caracteres"
           >
             <template v-slot:append>
               <q-icon
-                :name="isPwd ? 'visibility_off' : 'visibility'"
+                :name="isPwd ? 'far fa-eye' : 'far fa-eye-slash'"
                 size="18px"
                 class="cursor-pointer"
                 @click="isPwd = !isPwd"
@@ -53,10 +62,6 @@
             </template>
           </q-input>
 
-        </div>
-
-        <div class="error-field" v-if="errorMessage !== null">
-          <span class="error-msg">* {{ errorMessage }}</span>
         </div>
 
         <div class="links column">
@@ -75,7 +80,7 @@
             color="white"
             @click="signIn()"
           >
-            <span class="body bold">entrar</span>
+            <span class="body-3 bold">entrar</span>
           </q-btn>
 
         </div>
@@ -89,68 +94,65 @@
 
 <script>
 /* eslint-disable */
+import { mapActions } from 'vuex';
+import { email, required, minLength, maxLength } from 'vuelidate/lib/validators';
+
 export default {
   name: 'SignInPage',
   data() {
     return {
-      valid: false,
       email: '',
       password: '',
       isPwd: true,
-      passwordVisible: false,
       errorMessage: null,
     }
   },
-  created() {},
+  validations: {
+    email: {
+      required,
+      email,
+      maxLength: maxLength(30)
+    },
+    password: {
+      minLength: minLength(8),
+      maxLength: maxLength(15)
+    },
+  },
   computed: {
-    isValid() {
-      if (this.email !== '' && this.password !== '') {
-        this.valid = true;
-      } else {
-        this.valid = false;
+    emailErrorMessage () {
+      if (!this.$v.email.required) {
+        return 'Email é requerido'
+      } else if (!this.$v.email.email) {
+        return 'Por favor insira um email válido'
       }
     },
-    emailRules() {
-      return [
-        v => !!v || 'E-mail é requerido',
-        v => /.+@.+/.test(v) || 'E-mail deve ser válido'
-      ]
-    },
-    passwordRules() {
-      return {
-        required: value => !!value || 'Requerido.',
-        min: v => v.length >= 8 || 'Mínimo 8 characters',
-        emailMatch: () => 'O email ou senha estão incorretos'
+    passwordErrorMessage () {
+      if (!this.$v.password.minLength) {
+        return 'Mínimo de 8 dígitos'
+      } else if (!this.$v.password.maxLength) {
+        return 'Máximo de 15 dígitos'
       }
-    }
+    },
   },
   methods: {
     signIn() {
-      this.$store.
-       dispatch('retrieveToken', {
-        email: this.email,
-        password: this.password,
-      })
-        .then(response => {
-          this.errorMessage = null;
-          const hasPermission = response.data.isAdmin;
-          if (hasPermission) {
-            this.$router.push({ name: 'Dashboard' })
-          } else {
-            this.$router.push({ name: 'Profile' })
+      if (!this.$v.$anyError) {
+        this.$store.dispatch('retrieveToken', { credentials: {
+          email: this.email,
+          password: this.password,
+        }}).then((response) => {
+          console.log('res', response);
+        }).catch((error) => {
+          if(error.message === 'Request failed with status code 400') {
+            this.errorMessage = 'Não encontramos uma conta com esse email';
+          } else if (error === 'Request failed with status code 401') {
+            this.errorMessage === 'Email ou senha inválidos';
           }
+          console.log('err batata', error.message);
         })
-        .catch(error => {
-          if (error.message === 'Request failed with status code 401') {
-            this.errorMessage = 'email ou senha inválida';
-          }
-          if (error.message === 'Request failed with status code 400') {
-            this.errorMessage = 'não encontramos uma conta para esse email';
-          }
-          console.log('error', error.response)
-        });
+      }
     },
-  }
+  },
 }
 </script>
 
@@ -176,8 +178,8 @@ export default {
 .identity {
   position: absolute;
   // width: 100%;
-  top: 16px;
-  left: 16px;
+  top: 24px;
+  left: 24px;
   animation: 0.5s fadeInOpacity ease-in;
 
   .logo {
@@ -238,7 +240,7 @@ export default {
 
 .title {
   // align-self: center;
-  margin-bottom: -8px;
+  margin-bottom: -4px;
   animation: 0.4s fadeInOpacity ease-in;
 
   @include for-tablet-portrait-only {
@@ -270,11 +272,11 @@ export default {
 }
 
 .error-field {
-  margin-top: 8px;
-  align-self: center;
+  margin-top: 16px;
+  align-self: flex-start;
 }
 
-.error-msg {
+.error-message {
   color: #bb0000;
   animation: 0.3s fadeInOpacity ease-in;
 }

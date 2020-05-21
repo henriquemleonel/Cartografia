@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="about-page about-page">
 
-    <div class="content-center column">
+    <div class="content">
 
       <!-- start header section -->
       <header>
@@ -12,13 +12,15 @@
 
       <section class="plat mg-top32">
 
-        <span class="title-2 bolder"> Sobre </span>
-        <p class="body-2 mg-top16 text">
+        <span class="title-2 bolder"> Plataforma Cultural de Campo Grande </span>
+        <p class="body-3 mg-top16 text">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores corporis dicta unde ratione
           eligendi numquam repudiandae maxime tenetur, error temporibus exercitationem quae? Minus ipsa
           ducimus eaque quae dolor, eius saepe! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
           Soluta dolores commodi nulla, quidem dolore dolorem itaque expedita a iure reiciendis, amet consequuntur nihil,
           eveniet molestiae dignissimos quo blanditiis fuga magni.
+        </p>
+        <p class="body-3 text">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores corporis dicta unde ratione
           eligendi numquam repudiandae maxime tenetur, error temporibus exercitationem quae? Minus ipsa
           ducimus eaque quae dolor, eius saepe! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
@@ -26,34 +28,22 @@
           eveniet molestiae dignissimos quo blanditiis fuga magni.
         </p>
 
-        <!-- <div class="links row">
-
-          <q-btn flat round type="a" target="_blank" size="1.1em" href="https://www.facebook.com/AlgoRitmo.ufms/">
-            <q-icon size="1.3em" name="fab fa-facebook-square" color="white"></q-icon>
-          </q-btn>
-
-          <q-btn flat round  type="a" target="_blank" size="1.1em" href="https://www.instagram.com/algo.ritmo_/">
-            <q-icon size="1.3em" name="fab fa-instagram" color="white"></q-icon>
-          </q-btn>
-
-        </div> -->
-
       </section>
 
       <!-- start section contato -->
-      <section class="contato">
+      <section class="contato mg-top16">
 
-        <span class="title-3 bolder">Contato</span>
+        <!-- <span class="headline-2">Contato</span> -->
 
         <div class="links row">
 
-          <a class="body-2 bolder">cartografiadacultura@forum.com </a>
+          <a class="body-3 bolder">cartografiadacultura@forum.com </a>
           <!-- <span class="mg-left8">|</span> -->
 
-          <a class="body-2 bolder mg-left16" target="_blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
+          <a class="body-3 bolder mg-left16" target="_blank" href="https://www.facebook.com/AlgoRitmo.ufms/">.facebook</a>
           <!-- <span class="mg-left8">|</span> -->
 
-          <a class="body-2 bolder mg-left16" target="_blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
+          <a class="body-3 bolder mg-left16" target="_blank" href="https://www.instagram.com/algo.ritmo_/">.instagram</a>
 
         </div>
 
@@ -258,25 +248,22 @@ export default {
   font-family: 'Helvetica';
 }
 
-.container {
+.about-page {
   background-color: white;
   width: 100%;
   height: 100%;
   overflow: hidden;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  // justify-content: center;
+  align-items: center;
 }
 
-.content-center {
-  // background-color: black;
-  // position: absolute;
-  // left: 50%;
-  // transform: translateX(-50%);
-  width: 800px;
-  padding: 16px;
+.content {
+  width: 650px;
+  padding: 32px;
   z-index: 0;
   align-items: flex-start;
-  //border: 2px solid white;
 
   @include for-phone-only {
     padding: 32px;

@@ -30,7 +30,7 @@
           <q-input
             class="input"
             dense
-            v-model="name"
+            v-model="title"
             input-class="text-white"
             color="white"/>
         </div>
@@ -179,7 +179,7 @@
     <div class="ready" v-if="step==2">
 
       <div class="context column">
-        <span class="title-1 bolder line-h16"> {{ this.name }} </span>
+        <span class="title-1 bolder line-h16"> {{ this.title }} </span>
         <!-- <span class="body-2 bold mg-n-8"> {{ category.value.toLowerCase() }} </span> -->
 
         <span class="body-2 bold spaced-32"> {{ this.description }} </span>
@@ -231,7 +231,7 @@ export default {
       lastStep: '',
       active: false,
       background: this.bgColor,
-      name: '',
+      title: '',
       email: '',
       phone: '',
       street: '',
@@ -305,7 +305,7 @@ export default {
       console.log('pin-profile : fetchStorage');
       if (this.getPinStatus === false) { //  se não existe pin
         console.log('null_Fetch');
-        this.name = '';
+        this.title = '';
         this.email = '';
         this.phone = '';
         this.street = '';
@@ -324,10 +324,10 @@ export default {
         console.log('state_fetch');
         const info = this.$store.getters.myPin;
         console.log('info', this.$store.getters.myPin);
-        this.name = info.name;
+        this.title = info.title;
         this.email = info.email;
         this.phone = info.phone;
-        console.log('number', info.name);
+        console.log('number', info.title);
         // this.number = info.address.number;
         // this.street = info.address.street;
         // this.neighborhood = info.address.neighborhood;
@@ -348,7 +348,7 @@ export default {
       if (this.getPinStatus === true) {
         console.log('localStorage_fetch'); // há pin, get myPin na localStorage
         const info = localStorage.getItem('myPin');
-        this.name = info.name;
+        this.title = info.title;
         this.email = info.email;
         this.phone = info.phone;
         this.street = info.address.street;
@@ -399,8 +399,7 @@ export default {
       console.log('pin-profile:create-pin');
       const payload = {
         userRef: this.getKeyUser,
-        completed: true,
-        name: this.name,
+        title: this.title,
         email: this.email,
         phone: this.phone,
         address: {

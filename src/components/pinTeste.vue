@@ -26,12 +26,12 @@
 
         <span class="body-2 bolder">Edite seu Pin</span>
 
-        <!-- pin name -->
+        <!-- pin title -->
         <div class="column mg-top16">
           <!-- <span class="subheading-2">nome do pin</span> -->
           <q-input
             class="input"
-            v-model="name"
+            v-model="title"
             label="nome do pin"
             label-color="white"
             input-class="text-white"
@@ -60,8 +60,7 @@
             class="input"
             v-model="phone"
             type="tel"
-            mask="(##) ##### - ####"
-            unmasked-value
+            mask="(##) ####-####"
             label="telefone"
             label-color="white"
             input-class="text-white"
@@ -125,8 +124,7 @@
               class="input2"
               v-model="cep"
               :rules="[ val => val.length <= 8 || 'Máximo de 8 caracteres']"
-              mask="########"
-              unmasked-value
+              mask="#####-###"
               label="cep"
               label-color="white"
               input-class="text-white"
@@ -248,7 +246,7 @@
     <div class="ready" v-if="step==2">
 
       <div class="context column">
-        <span class="title-1 bolder line-h16"> {{ this.item.name }} </span>
+        <span class="title-1 bolder line-h16"> {{ this.item.title }} </span>
         <!-- <span class="body-2 bold mg-n-8"> {{ category.value.toLowerCase() }} </span> -->
 
         <span class="body-2 bold spaced-32"> {{ this.item.description }} </span>
@@ -300,7 +298,7 @@ export default {
       lastStep: 0,
       active: false,
       background: this.bgColor,
-      name: '',
+      title: '',
       email: '',
       phone: '',
       street: '',
@@ -308,8 +306,6 @@ export default {
       number: '',
       city: '',
       cep: '',
-      lat: '',
-      long: '',
       description: '',
       linkF: '',
       linkIG: '',
@@ -374,7 +370,7 @@ export default {
         console.log('state_fetch');
         const info = this.$store.getters.myPin;
         console.log('myPin from store', this.$store.getters.myPin);
-        this.name = info.name;
+        this.title = info.title;
         this.email = info.email;
         this.phone = info.phone;
         // this.number = info.address.number;
@@ -432,7 +428,7 @@ export default {
         // userRef: this.getUserRef,
         userId: this.getUserId, // id do usuário juliana
         category: this.getUserCategory,
-        name: this.name,
+        title: this.title,
         email: this.email,
         phone: this.phone,
         street: this.street,
@@ -440,8 +436,6 @@ export default {
         number: this.number,
         city: this.city,
         cep: this.cep,
-        // lat: this.lat,
-        // long: this.long,
         description: this.description,
         linkF: this.linkF,
         linkIG: this.linkIg,

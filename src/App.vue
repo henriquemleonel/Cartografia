@@ -19,7 +19,7 @@
 * {
   box-sizing: border-box;
   padding: 0;
-  font-family: 'Helvetica-Normal';
+  font-family: 'Helvetica';
 }
 
 .font2 {

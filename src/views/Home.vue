@@ -1,9 +1,9 @@
 <template>
-  <div class="container">
+  <div class="app-page">
 
     <div class="overlay" ref="overlay">
       <!-- <img class="imgPresentation" src="../assets/esboco.png" alt=""> -->
-      <h1 class="presentation" ref="presentation">CULTURA</h1>
+      <h1 class="presentation" ref="presentation">cartografia da cultura</h1>
     </div>
 
     <!-- aside menu (for web only) -->
@@ -16,7 +16,7 @@
     </div>
 
     <!-- nav menu (for phone only) -->
-    <div class="nav" :class="{ 'opemNav' : opemNav }">
+    <div class="nav-phone" :class="{ 'opemNav' : opemNav }">
 
       <div id="nav-icon" @click="opem()" :class="{ 'open' : opemNav }">
         <span></span>
@@ -55,21 +55,23 @@
     <!-- start button area -->
     <div class="button-area">
 
-      <router-link to="/signIn" v-if="!isLoggedIn">
-        <template>
-          <q-btn flat class="btn-custom">
-            <span class="subheading-2 bold normal" to="/singIn">Entrar</span>
-          </q-btn>
-        </template>
-      </router-link>
+        <q-btn
+          flat
+          class="btn-custom"
+          to="/signIn"
+          v-if="!isLoggedIn"
+        >
+          <span class="body-3 bolder" to="/singIn">Entrar</span>
+        </q-btn>
 
-      <router-link to="/profile" v-if="isLoggedIn">
-        <template>
-          <q-btn flat class="btn-custom">
-            <span class="subheading-2 bold normal" to="/singIn">Perfil</span>
-          </q-btn>
-        </template>
-      </router-link>
+        <q-btn
+          flat
+          class="btn-custom"
+          to="/profile"
+          v-if="isLoggedIn"
+        >
+          <span class="subheading-2 bolder" to="/singIn">Perfil</span>
+        </q-btn>
 
     </div>
     <!-- end button area -->
@@ -96,26 +98,22 @@
 
         <l-control-zoom v-if="handleResize()" position="bottomright" ></l-control-zoom>
 
-        <l-marker class="" :lat-lng="markerLatLng">
-          <l-popup class="align-center hover-scale05" style="max-width: 230px; padding: 0px">
-            <div class="column" style="width: 100%">
-              <div class="row align-center" style="justify-content: flex-start;">
-                <q-avatar class="" size="60px;" style="width: 60px">
-                  <img src="../assets/statics/avatar01.jpg">
-                </q-avatar>
-                <span style="margin-left: 16px; font-size: 15px; font-weight: bold">Pin de exemplo</span>
-              </div>
-              <div class="description-pin">
-                <p style="font-size: 13px; ">Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-              </div>
-              <div class="actions flex flex-end">
-                <q-btn rounded color="teal" >
-                  <q-icon size="1.2em" name="fas fa-arrow-right" />
-                </q-btn>
-              </div>
-            </div>
-          </l-popup>
-        </l-marker>
+        <div class="array" v-for="item in pins" :key="item.id">
+
+          <l-marker class="" :lat-lng="item.coordinates">
+
+            <l-icon
+              :icon-size="iconSet.iconSize"
+              :icon-anchor="iconSet.iconAnchor"
+              :icon-url="iconSet + item.categoryId + '.svg'"
+            />
+
+            <l-popup class="align-center hover-scale05" style="max-width: 230px; padding: 0px">
+              <pin-view :item="item"/>
+            </l-popup>
+
+          </l-marker>
+        </div>
         <!-- <l-control-attribution position="topleft" prefix="Algo+Ritmo - Research Group" /> -->
       </l-map>
 
@@ -127,10 +125,17 @@
 
 <script>
 import {
-  LMap, LTileLayer, LMarker, LControlZoom, LPopup,
+  LMap,
+  LTileLayer,
+  LMarker,
+  LControlZoom,
+  LPopup,
+  LIcon,
 } from 'vue2-leaflet';
+import { mapGetters } from 'vuex';
+import { gsap, TweenMax, Expo } from 'gsap';
 
-import { gsap, TweenMax, Expo } from 'gsap/all';
+import PinView from '../components/PinView.vue';
 
 gsap.registerPlugin(TweenMax, Expo);
 
@@ -142,13 +147,31 @@ export default {
     LMarker,
     LControlZoom,
     LPopup,
+    LIcon,
+    PinView,
   },
   data() {
     return {
-      loggedIn: false,
       opemNav: false,
-      // url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png', // url Standard tileLayer
-      // url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
+      map: null,
+      markers: [],
+      iconSet: {
+        iconUrl: '../assets/icons/pinsSVG/',
+        iconSize: [32, 37],
+        iconAnchor: [16, 37],
+      },
+      layers: {
+        standard: {
+          url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        },
+        stadia: {
+          name: 'alidade-smooth',
+          url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
+        },
+        carto: {
+          url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        },
+      },
       url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
       zoom: 15,
       mapOptions: {
@@ -156,7 +179,6 @@ export default {
         zoomControl: false,
       },
       center: [-20.460277, -54.612277],
-      markerLatLng: [-20.460277, -54.612277],
       bounds: null,
       // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -189,6 +211,10 @@ export default {
     }, 0.2);
   },
   computed: {
+    ...mapGetters({
+      isLoggedIn: 'isLoggedIn',
+      pins: 'loadPins',
+    }),
     isLoggedIn() {
       if (this.$store.getters.loggedIn) {
         return true;
@@ -233,7 +259,7 @@ export default {
   font-family: 'Helvetica';
 }
 
-.container {
+.app-page {
   position: relative;
   font-family: 'Poppins';
   height: 100vh;
@@ -286,7 +312,7 @@ export default {
   // border: 1px solid black;
   position: absolute;
   top: 24px;
-  left: 24px;
+  left: 16px;
   z-index: 2;
   overflow: hidden;
   flex-wrap: nowrap;
@@ -296,8 +322,46 @@ export default {
   }
 }
 
-// -------------------------------------- nav-menu for phone -------------------
-.nav {
+.map-container {
+  position: absolute;
+  z-index: 0;
+  top: 0px;
+  // left: 50%;
+  // transform: translate(-50%, -50%);
+  height: 100vh;
+  width: 100%;
+  // overflow: hidden;
+}
+
+.button-area {
+  position: absolute;
+  top: 24px;
+  right: 16px;
+  z-index: 2;
+  overflow: hidden;
+
+  @include for-phone-only {
+    display: none;
+  }
+}
+
+.btn-custom {
+  box-shadow: none;
+  height: 40px;
+  min-width: 100px;
+  border-radius: 0px;
+  background-color: black;
+
+  span {
+    font-family: 'Helvetica';
+    text-transform: none;
+    font-weight: 700;
+    color: white;
+  }
+}
+
+// -------------------------------------- for phone view -------------------
+.nav-phone {
   width: 50px;
   height: 50px;
   z-index: 3;
@@ -462,57 +526,5 @@ export default {
 }
 
 // ---------------------------------- end nav-menu for phone ----------------
-
-.button-area {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  z-index: 2;
-  overflow: hidden;
-
-  @include for-phone-only {
-    display: none;
-  }
-}
-
-.btn-custom {
-  box-shadow: none;
-  width: 120px;
-  height: 45px;
-  border-radius: 0px;
-  background-color: black;
-
-  span {
-    font-family: 'Helvetica';
-    font-weight: 700;
-    font-size: 1.025rem;
-    color: white;
-  }
-}
-
-.normal {
-  text-transform: none;
-}
-
-.nav {
-  width: inherit;
-}
-
-// .wrapper {
-//   // background: url('../assets/unsplash02.jpg') no-repeat 50% 50%;
-//   // background-size: cover;
-//   height: 100vh;
-// }
-
-.map-container {
-  position: absolute;
-  z-index: 0;
-  top: 0px;
-  // left: 50%;
-  // transform: translate(-50%, -50%);
-  height: 100vh;
-  width: 100%;
-  // overflow: hidden;
-}
 
 </style>
