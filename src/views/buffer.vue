@@ -81,19 +81,19 @@
 
       <l-map
         style="width: 100%, height: 100%"
-        :zoom="zoomSet.zoom"
-        :center="mapOptions.center"
-        :options="zoomSet.options"
-        :min-zoom="zoomSet.minZoom"
-        :max-zoom="zoomSet.maxZoom"
+        :zoom="zoom"
+        :center="center"
+        :options="mapOptions1"
+        :min-zoom="13"
+        :max-zoom="16"
         @update:zoom="zoomUpdated"
         @update:center="centerUpdated"
         @update:bounds="boundsUpdated"
       >
 
         <l-tile-layer
-          :url="layers.carto.url"
-          :attribution="mapOptions.attribution"
+          :url="url"
+          :attribution="attribution"
         ></l-tile-layer>
 
         <l-control-zoom v-if="handleResize()" position="bottomright" ></l-control-zoom>
@@ -106,18 +106,11 @@
               :icon-size="iconSet.iconSize"
               :icon-anchor="iconSet.iconAnchor"
             >
-              <img
-                :id="`img-icon#${item.id}`"
-                class="img-icon"
-                :height="iconSet.iconSize[0]"
-                :width="iconSet.iconSize[1]"
-                v-bind:src="require(`../assets/icons/pins/${item.categoryId}.png`)"
-              >
-
+              <img :id="`img-icon#${item.id}`" class="img-icon" v-bind:src="require(`../assets/icons/pins/${item.categoryId}.png`)">
             </l-icon>
 
-            <l-popup class="l-popup" :options="popupOptions">
-              <pin-view class="pin-view" :pinView="getPinById(item.id)"/>
+            <l-popup class="l-popup">
+              <pin-view :item="getPinById(item.id)"/>
             </l-popup>
 
           </l-marker>
@@ -164,12 +157,16 @@ export default {
   data() {
     return {
       opemNav: false,
-      oldCenter: [-20.460277, -54.612277],
-      mapOptions: {
-        center: [-20.455662, -54.592933],
-        bounds: null,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+      zoom: 15,
+      mapOptions1: {
+        zoomSnap: 0.5,
+        zoomControl: false,
       },
+      center: [-20.460277, -54.612277],
+      bounds: null,
+      // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       layers: {
         standard: {
           url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -182,8 +179,14 @@ export default {
           url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
         },
       },
+      markers: [],
+      iconSet: {
+        iconUrl: '../assets/icons/pinsSVG/',
+        iconSize: [32, 37],
+        iconAnchor: [16, 37],
+      },
       zoomSet: {
-        zoom: 14,
+        zoom: 15,
         minZoom: 13,
         maxZoom: 16,
         options: {
@@ -191,14 +194,11 @@ export default {
           zoomControl: false,
         },
       },
-      iconSet: {
-        iconSize: [24, 24],
-        iconAnchor: [10, -5],
+      mapOptions: {
+        center: [-20.460277, -54.612277],
+        bounds: null,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       },
-      popupOptions: {
-        autoPan: false,
-      },
-      markers: [],
     };
   },
   created() {
@@ -359,32 +359,22 @@ export default {
 }
 
 .marker-item {
-  display: none !important;
-  // max-height: 40px;
-  // max-width: 40px;
+  display: block !important;
+  max-height: 40px;
+  max-width: 40px;
   z-index: 1;
 }
 
 .img-icon {
   display: block;
-  // height: 24px;
-  // width: 24px;
+  height: 24px;
+  width: 24px;
 }
 
 .l-popup {
   box-shadow: none;
-  border-radius: 0px;
-  padding: 0px;
-  // width: 350px;
-  height: 475px;
-  z-index: 1;
-}
-
-.pin-view {
-  position: relative;
-  top: -20px;
-  left: -25px;
-  z-index: 2;
+  border-radius: 50px;
+  background-color: red;
 }
 
 .button-area {

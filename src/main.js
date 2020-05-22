@@ -10,6 +10,8 @@ import { gsap } from 'gsap';
 
 import Vuelidate from 'vuelidate';
 
+import 'leaflet/dist/leaflet.css';
+
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';

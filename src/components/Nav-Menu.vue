@@ -164,11 +164,13 @@ export default {
 
 .item {
   background-color: black;
+  transition: filter 0.3s;
 
   &:hover {
-    background-color: #1d1e22;
+    // background-color: #1d1e22;
     // background-color:#fa7f72;
-    transition: 0.3s linear;
+    filter: brightness(90%);
+
     .menu-text {
       color: white;
     }

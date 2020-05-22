@@ -1,28 +1,33 @@
 <template>
-  <div class="app-component">
+  <div class="pin-component">
 
-    <div class="content" :style="{ 'background-color' : category.color }">
-      <span class="title-1 bolder line-h16"> {{ this.item.title }} </span>
+    <div class="content" :style="{ 'background-color' : getColor.color }">
+
+      <!-- <span>{{ options }}</span> -->
+      <!-- <span>{{ getColor }}</span> -->
+      <!-- <span>{{ pinView }}</span> -->
+
+      <span class="title-1 bolder line-h16"> {{ this.pinView.title }} </span>
         <!-- <span class="body-2 bold mg-n-8"> {{ category.value.toLowerCase() }} </span> -->
 
-        <span class="body-2 bold spaced-32"> {{ this.item.description }} </span>
+      <span class="body-2 bolder spaced-32"> {{ this.pinView.description }} </span>
 
-        <div class="row spaced-16">
-          <span class="body-2 bold"> {{ this.item.street }} - {{ this.item.neighborhood }} - {{ this.item.number }} </span>
-        </div>
+      <div class="row spaced-16">
+        <span class="body-2 bolder"> {{ this.pinView.street }} - {{ this.pinView.neighborhood }} - {{ this.pinView.number }} </span>
+      </div>
 
-        <span class="body-2 bold spaced-16"> {{ this.item.phone }} </span>
+      <span class="body-2 bolder spaced-16"> {{ this.pinView.phone }} </span>
 
-        <div class="links row mg-top16">
-          <a class="link caption bold" target="blank" :href="this.item.linkF">.facebook</a>
-          <a class="link caption bold mg-left16" target="blank" :href="this.item.linkIG">.instagram</a>
-          <a class="link caption bold mg-left16" target="blank" :href="this.item.otherLink">.link</a>
-        </div>
+      <div class="links row mg-top16">
+        <a class="link caption bolder" target="blank" :href="this.pinView.linkF">.facebook</a>
+        <a class="link caption bolder mg-left16" target="blank" :href="this.pinView.linkIG">.instagram</a>
+        <a class="link caption bolder mg-left16" target="blank" :href="this.pinView.otherLink">.link</a>
+      </div>
 
       </div>
 
       <div class="img-box">
-        <q-img :src="this.item.imgUrl" :ratio="16/9" />
+        <img class="img" :src="this.pinView.imgUrl" width="350px"/>
       </div>
 
   </div>
@@ -35,7 +40,7 @@ export default {
   name: 'pinView',
   data() {
     return {
-      categoryId: this.item.categoryId,
+      categoryId: this.pinView.categoryId,
       title: '',
       email: '',
       phone: '',
@@ -49,15 +54,10 @@ export default {
       linkIG: '',
       otherLink: '',
       imgUrl: '',
-      category: {
-        label: '',
-        value: '',
-        color: '#b8cad4',
-      },
     };
   },
   props: {
-    item: {
+    pinView: {
       type: Object,
       default: null,
     },
@@ -69,16 +69,57 @@ export default {
     ...mapGetters({
       options: 'loadCategories',
     }),
+    getColor() {
+      const target = this.options.find((item) => item.value === this.categoryId.toString());
+      return target;
+    },
   },
-  // methods: {
-  //   setCategory() {
-  //     const index = this.options.findIndex((e) => e.value === this.categoryId);
-  //     this.category = this.options[index];
-  //   },
-  // },
+  methods: {
+    // setColor() {
+    //   const target = this.options.find((item) => item.categoryId === this.item.categoryId);
+    // },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
+
+.pin-component {
+  width: 300px;
+}
+
+.content {
+  padding: 32px 32px 16px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+span {
+  color: white;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: brightness(90%);
+  }
+}
+
+.img-box {
+  width: inherit;
+  // height: auto;
+  overflow: hidden;
+
+  .img {
+    height: auto;
+    max-height: 200px;
+    width: 350px;
+  }
+}
 
 </style>
