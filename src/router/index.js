@@ -80,6 +80,11 @@ const routes = [
     name: 'Teste',
     component: () => import(/* webpackChunkName: "teste" */ '../views/CompTeste.vue'),
   },
+  {
+    path: '/buffer',
+    name: 'Buffer',
+    component: () => import(/* webpackChunkName: "teste" */ '../views/buffer.vue'),
+  },
 ];
 
 const scrollBehavior = (to, from, savedPosition) => {

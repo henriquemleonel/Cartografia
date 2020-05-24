@@ -167,9 +167,8 @@ export default {
   transition: filter 0.3s;
 
   &:hover {
-    // background-color: #1d1e22;
+    background-color: #1d1e22;
     // background-color:#fa7f72;
-    filter: brightness(90%);
 
     .menu-text {
       color: white;

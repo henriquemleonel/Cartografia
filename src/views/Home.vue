@@ -103,6 +103,7 @@
           <l-marker class="marker-item" v-for="item in markers" :key="item.id" :lat-lng="item.coordinates">
 
             <l-icon
+              class="icon-marker"
               :icon-size="iconSet.iconSize"
               :icon-anchor="iconSet.iconAnchor"
             >
@@ -116,7 +117,7 @@
 
             </l-icon>
 
-            <l-popup class="l-popup" :options="popupOptions">
+            <l-popup class="l-popup" :content="PinView" :options="popupOptions">
               <pin-view class="pin-view" :pinView="getPinById(item.id)"/>
             </l-popup>
 
@@ -336,7 +337,7 @@ export default {
   width: 200px;
   // border: 1px solid black;
   position: absolute;
-  top: 24px;
+  top: 16px;
   left: 16px;
   z-index: 2;
   overflow: hidden;
@@ -360,15 +361,16 @@ export default {
 
 .marker-item {
   display: none !important;
-  // max-height: 40px;
-  // max-width: 40px;
   z-index: 1;
+  transition: transform 0.5s;
 }
 
 .img-icon {
   display: block;
-  // height: 24px;
-  // width: 24px;
+
+  &:hover {
+    transform: scale(1.2);
+  }
 }
 
 .l-popup {

@@ -6,7 +6,6 @@
       <h1 class="presentation" ref="presentation">cartografia da cultura</h1>
     </div>
 
-    <!-- aside menu (for web only) -->
     <div class="aside column">
 
       <logo-card/>
@@ -15,85 +14,24 @@
 
     </div>
 
-    <!-- nav menu (for phone only) -->
-    <div class="nav-phone" :class="{ 'opemNav' : opemNav }">
-
-      <div id="nav-icon" @click="opem()" :class="{ 'open' : opemNav }">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-
-      <div class="nav-menu" v-if="opemNav">
-
-        <logo-card class="logo" :blackMode="true"/>
-
-        <div class="routes column">
-
-          <router-link class="link mg-top32" to="/about">
-            <span class="body-2">Sobre</span>
-          </router-link>
-
-          <router-link class="link mg-top32" to="/schedule">
-            <span class="body-2">Agenda</span>
-          </router-link>
-
-          <router-link class="link mg-top32" to="/debates">
-            <span class="body-2">Debates</span>
-          </router-link>
-
-          <router-link class="link mg-top32" to="/about">
-            <span class="body-2">sei lá</span>
-          </router-link>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- start button area -->
-    <div class="button-area">
-
-        <q-btn
-          flat
-          class="btn-custom"
-          to="/signIn"
-          v-if="!isLoggedIn"
-        >
-          <span class="body-3 bolder" to="/singIn">Entrar</span>
-        </q-btn>
-
-        <q-btn
-          flat
-          class="btn-custom"
-          to="/profile"
-          v-if="isLoggedIn"
-        >
-          <span class="subheading-2 bolder" to="/singIn">Perfil</span>
-        </q-btn>
-
-    </div>
-    <!-- end button area -->
-
     <!-- start map -->
     <div class="map-container">
 
       <l-map
         style="width: 100%, height: 100%"
-        :zoom="zoom"
-        :center="center"
-        :options="mapOptions1"
-        :min-zoom="13"
-        :max-zoom="16"
+        :zoom="zoomSet.zoom"
+        :center="mapOptions.center"
+        :options="zoomSet.options"
+        :min-zoom="zoomSet.minZoom"
+        :max-zoom="zoomSet.maxZoom"
         @update:zoom="zoomUpdated"
         @update:center="centerUpdated"
         @update:bounds="boundsUpdated"
       >
 
         <l-tile-layer
-          :url="url"
-          :attribution="attribution"
+          :url="layers.carto.url"
+          :attribution="mapOptions.attribution"
         ></l-tile-layer>
 
         <l-control-zoom v-if="handleResize()" position="bottomright" ></l-control-zoom>
@@ -103,14 +41,22 @@
           <l-marker class="marker-item" v-for="item in markers" :key="item.id" :lat-lng="item.coordinates">
 
             <l-icon
+              class="icon-marker"
               :icon-size="iconSet.iconSize"
               :icon-anchor="iconSet.iconAnchor"
             >
-              <img :id="`img-icon#${item.id}`" class="img-icon" v-bind:src="require(`../assets/icons/pins/${item.categoryId}.png`)">
+              <img
+                :id="`img-icon#${item.id}`"
+                class="img-icon"
+                :height="iconSet.iconSize[0]"
+                :width="iconSet.iconSize[1]"
+                v-bind:src="require(`../assets/icons/pins/${item.categoryId}.png`)"
+              >
+
             </l-icon>
 
-            <l-popup class="l-popup">
-              <pin-view :item="getPinById(item.id)"/>
+            <l-popup :options="popupOptions">
+              <pin-view :pinView="getPinById(item.id)"/>
             </l-popup>
 
           </l-marker>
@@ -157,16 +103,12 @@ export default {
   data() {
     return {
       opemNav: false,
-      url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      zoom: 15,
-      mapOptions1: {
-        zoomSnap: 0.5,
-        zoomControl: false,
+      oldCenter: [-20.460277, -54.612277],
+      mapOptions: {
+        center: [-20.455662, -54.592933],
+        bounds: null,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       },
-      center: [-20.460277, -54.612277],
-      bounds: null,
-      // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       layers: {
         standard: {
           url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -179,14 +121,8 @@ export default {
           url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
         },
       },
-      markers: [],
-      iconSet: {
-        iconUrl: '../assets/icons/pinsSVG/',
-        iconSize: [32, 37],
-        iconAnchor: [16, 37],
-      },
       zoomSet: {
-        zoom: 15,
+        zoom: 14,
         minZoom: 13,
         maxZoom: 16,
         options: {
@@ -194,11 +130,18 @@ export default {
           zoomControl: false,
         },
       },
-      mapOptions: {
-        center: [-20.460277, -54.612277],
-        bounds: null,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      iconSet: {
+        iconSize: [24, 24],
+        iconAnchor: [15, -8],
       },
+      popupOptions: {
+        autoPan: true,
+        keepInView: true,
+        autoPanPaddingTopLeft: [240, 16],
+        closeButton: false,
+        className: 'my-custom-popup',
+      },
+      markers: [],
     };
   },
   created() {
@@ -299,6 +242,7 @@ export default {
   height: 100vh;
   background: #fff;
   top: 0%;
+  display: none;
 }
 
 .overlay img {
@@ -332,11 +276,11 @@ export default {
 }
 
 .aside {
-  height: 100vh;
+  // height: 100%;
   width: 200px;
   // border: 1px solid black;
   position: absolute;
-  top: 24px;
+  top: 16px;
   left: 16px;
   z-index: 2;
   overflow: hidden;
@@ -359,23 +303,27 @@ export default {
 }
 
 .marker-item {
-  display: block !important;
-  max-height: 40px;
-  max-width: 40px;
+  display: none !important;
   z-index: 1;
+  height: 50px;
+  width: 50px;
+  transition: transform 0.5s;
 }
 
 .img-icon {
   display: block;
-  height: 24px;
-  width: 24px;
+
+  &:hover {
+    transform: scale(1.2);
+  }
 }
 
-.l-popup {
-  box-shadow: none;
-  border-radius: 50px;
-  background-color: red;
-}
+// .pin-view {
+//   position: relative;
+//   top: 0px;
+//   left: 0px;
+//   z-index: 2;
+// }
 
 .button-area {
   position: absolute;

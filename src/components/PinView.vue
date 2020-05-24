@@ -30,7 +30,11 @@
         <img class="img" :src="this.pinView.imgUrl" width="350px"/>
       </div>
 
+      <div class="pin-view-tip-container" :style="{ 'background-color' : getColor.color }">
+      </div>
+
   </div>
+
 </template>
 
 <script>
@@ -88,12 +92,18 @@ export default {
 
 .pin-component {
   width: 300px;
+  background-color: transparent !important;
+  margin: 0px;
+  padding: 0px;
+  position: relative;
 }
 
 .content {
   padding: 32px 32px 16px 32px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 2;
 }
 
 span {
@@ -114,12 +124,27 @@ span {
   width: inherit;
   // height: auto;
   overflow: hidden;
+  position: relative;
+  z-index: 2;
 
   .img {
-    height: auto;
+    height: inherit;
     max-height: 200px;
-    width: 350px;
+    width: inherit;
+    margin-bottom: -10px;
   }
+}
+
+.pin-view-tip-container {
+  height: 20px;
+  width: 20px;
+  overflow: hidden;
+  position: absolute;
+  left: 50%;
+  z-index: 0;
+  transform: translateX(-50%);
+  margin: 0;
+  clip-path: polygon(100% 0, 0 0, 48% 85%);
 }
 
 </style>

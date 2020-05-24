@@ -11,6 +11,7 @@ import { gsap } from 'gsap';
 import Vuelidate from 'vuelidate';
 
 import 'leaflet/dist/leaflet.css';
+// import './styles/leaflet_custom/customLeafletStyleSheet.css';
 
 import App from './App.vue';
 import './registerServiceWorker';
