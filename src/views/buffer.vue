@@ -14,6 +14,88 @@
 
     </div>
 
+    <!-- nav menu (for phone only) -->
+    <div class="nav-phone" :class="{ 'opemNav' : opemNav }">
+
+      <div id="nav-icon" @click="opem()" :class="{ 'open' : opemNav }">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <div class="nav-menu" v-if="opemNav">
+
+        <logo-card class="logo" :blackMode="true"/>
+
+        <div class="routes column">
+
+          <router-link class="link mg-top32" to="/about">
+            <span class="body-2">Sobre</span>
+          </router-link>
+
+          <router-link class="link mg-top32" to="/schedule">
+            <span class="body-2">Agenda</span>
+          </router-link>
+
+          <router-link class="link mg-top32" to="/debates">
+            <span class="body-2">Debates</span>
+          </router-link>
+
+          <router-link class="link mg-top32" to="/about">
+            <span class="body-2">sei lá</span>
+          </router-link>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- start button area -->
+    <div class="button-area" style="display: none;">
+
+        <q-btn
+          flat
+          class="btn-custom"
+          to="/signIn"
+          v-if="!isLoggedIn"
+        >
+          <span class="body-3 bolder" to="/singIn">Entrar</span>
+        </q-btn>
+
+        <q-btn
+          flat
+          class="btn-custom"
+          to="/profile"
+          v-if="isLoggedIn"
+        >
+          <span class="subheading-2 bolder" to="/singIn">Perfil</span>
+        </q-btn>
+
+    </div>
+    <!-- end button area -->
+
+    <div class="filter-content" style="z-index: 3; width: 200px; position: absolute; top: 80px; left: 16px; background-color: #f5f5f5;">
+      <!-- <span>{{ categories }}</span> -->
+      <div v-for="item in categories" :key="item.value">
+        <q-checkbox v-model="filterSelections" :val="item.value" :label="item.label" v-on:change="filter()" color="black"/>
+      </div>
+    </div>
+
+    <!-- <div class="selections" style="z-index: 3; height: 50px; width: 100%; position: absolute; top: 16px; left: 0px; background-color: black;">
+      <span style="color: white;"> {{ filterSelections }} </span>
+    </div>
+    <div class="markers-done" style="z-index: 3; width: 300px; position: absolute; top: 80px; right: 16px; background-color: black;">
+      <div v-for="item in markers" :key="item.id">
+        <span style="color: white;">{{ item }}</span>
+      </div>
+    </div>
+    <div class="markers-filtered" style="z-index: 3; width: 400px; position: absolute; bottom: 16px; right: 250px; background-color: black;">
+      <div v-for="item in markesFiltered" :key="item.id">
+        <span style="color: white;">{{ item }}</span>
+      </div>
+    </div> -->
+
     <!-- start map -->
     <div class="map-container">
 
@@ -38,7 +120,7 @@
 
         <div class="my-markes">
 
-          <l-marker class="marker-item" v-for="item in markers" :key="item.id" :lat-lng="item.coordinates">
+          <l-marker class="marker-item" v-for="item in markesFiltered" :key="item.id" :lat-lng="item.coordinates">
 
             <l-icon
               class="icon-marker"
@@ -139,9 +221,9 @@ export default {
         keepInView: true,
         autoPanPaddingTopLeft: [240, 16],
         closeButton: false,
-        className: 'my-custom-popup',
       },
       markers: [],
+      filterSelections: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
     };
   },
   created() {
@@ -158,16 +240,16 @@ export default {
   computed: {
     ...mapGetters({
       isLoggedIn: 'isLoggedIn',
+      categories: 'loadCategories',
       loadPins: 'loadPins',
     }),
-    isLoggedIn() {
-      if (this.$store.getters.loggedIn) {
-        return true;
+    markesFiltered() {
+      if (this.filterSelections.lehgth === 0) {
+        return this.markers;
       }
-      return false;
-    },
-    currentLayer() {
-      return this.layers.carto.url;
+      const vm = this;
+      const filter = this.markers.filter((item) => vm.filterSelections.includes(item.categoryId.toString()));
+      return filter;
     },
   },
   methods: {
@@ -242,7 +324,6 @@ export default {
   height: 100vh;
   background: #fff;
   top: 0%;
-  display: none;
 }
 
 .overlay img {
@@ -276,9 +357,8 @@ export default {
 }
 
 .aside {
-  // height: 100%;
+  display: none;
   width: 200px;
-  // border: 1px solid black;
   position: absolute;
   top: 16px;
   left: 16px;
@@ -295,11 +375,9 @@ export default {
   position: absolute;
   z-index: 0;
   top: 0px;
-  // left: 50%;
-  // transform: translate(-50%, -50%);
   height: 100vh;
   width: 100%;
-  // overflow: hidden;
+  overflow: hidden;
 }
 
 .marker-item {
@@ -318,16 +396,9 @@ export default {
   }
 }
 
-// .pin-view {
-//   position: relative;
-//   top: 0px;
-//   left: 0px;
-//   z-index: 2;
-// }
-
 .button-area {
   position: absolute;
-  top: 24px;
+  top: 16px;
   right: 16px;
   z-index: 2;
   overflow: hidden;

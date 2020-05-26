@@ -6,7 +6,6 @@
       <h1 class="presentation" ref="presentation">cartografia da cultura</h1>
     </div>
 
-    <!-- aside menu (for web only) -->
     <div class="aside column">
 
       <logo-card/>
@@ -76,6 +75,17 @@
     </div>
     <!-- end button area -->
 
+    <div class="filter-content" style="z-index: 3; height: 100%; width: 200px; position: absolute; top: 62px; right: 16px">
+      <!-- <span>{{ categories }}</span> -->
+      <div v-for="item in categories" :key="item.value">
+        <q-checkbox v-model="filterSelections" :val="item.label" :label="item.label" @click="onFilter()" color="black"/>
+      </div>
+    </div>
+
+    <div class="selections" style="z-index: 3; height: 100%; width: 200px; position: absolute; top: 16px; right: 350px">
+      <span style="color: red;"> {{ filterSelections }} </span>
+    </div>
+
     <!-- start map -->
     <div class="map-container">
 
@@ -117,8 +127,8 @@
 
             </l-icon>
 
-            <l-popup class="l-popup" :content="PinView" :options="popupOptions">
-              <pin-view class="pin-view" :pinView="getPinById(item.id)"/>
+            <l-popup :options="popupOptions">
+              <pin-view :pinView="getPinById(item.id)"/>
             </l-popup>
 
           </l-marker>
@@ -165,6 +175,7 @@ export default {
   data() {
     return {
       opemNav: false,
+      filterSelections: [],
       oldCenter: [-20.460277, -54.612277],
       mapOptions: {
         center: [-20.455662, -54.592933],
@@ -194,10 +205,13 @@ export default {
       },
       iconSet: {
         iconSize: [24, 24],
-        iconAnchor: [10, -5],
+        iconAnchor: [15, -8],
       },
       popupOptions: {
-        autoPan: false,
+        autoPan: true,
+        keepInView: true,
+        autoPanPaddingTopLeft: [240, 16],
+        closeButton: false,
       },
       markers: [],
     };
@@ -216,17 +230,9 @@ export default {
   computed: {
     ...mapGetters({
       isLoggedIn: 'isLoggedIn',
+      categories: 'loadCategories',
       loadPins: 'loadPins',
     }),
-    isLoggedIn() {
-      if (this.$store.getters.loggedIn) {
-        return true;
-      }
-      return false;
-    },
-    currentLayer() {
-      return this.layers.carto.url;
-    },
   },
   methods: {
     opem() {
@@ -246,6 +252,11 @@ export default {
     getPinById(id) {
       const target = this.loadPins.find((item) => item.id === id);
       return target;
+    },
+    onFilter() {
+      const vm = this;
+      const markesFiltered = this.markers.filter((item) => item.label.includes(vm.filterSelections));
+      this.markers = markesFiltered;
     },
     zoomUpdated(newZoom) {
       this.zoomSet.zoom = newZoom;
@@ -333,9 +344,7 @@ export default {
 }
 
 .aside {
-  height: 100vh;
   width: 200px;
-  // border: 1px solid black;
   position: absolute;
   top: 16px;
   left: 16px;
@@ -352,16 +361,16 @@ export default {
   position: absolute;
   z-index: 0;
   top: 0px;
-  // left: 50%;
-  // transform: translate(-50%, -50%);
   height: 100vh;
   width: 100%;
-  // overflow: hidden;
+  overflow: hidden;
 }
 
 .marker-item {
   display: none !important;
   z-index: 1;
+  height: 50px;
+  width: 50px;
   transition: transform 0.5s;
 }
 
@@ -373,25 +382,9 @@ export default {
   }
 }
 
-.l-popup {
-  box-shadow: none;
-  border-radius: 0px;
-  padding: 0px;
-  // width: 350px;
-  height: 475px;
-  z-index: 1;
-}
-
-.pin-view {
-  position: relative;
-  top: -20px;
-  left: -25px;
-  z-index: 2;
-}
-
 .button-area {
   position: absolute;
-  top: 24px;
+  top: 16px;
   right: 16px;
   z-index: 2;
   overflow: hidden;
