@@ -21,14 +21,10 @@ import store from './store';
 import './quasar';
 
 import LogoCard from './components/Logo-Card.vue'; // ----------- logo da plataforma
-import NavMenu from './components/Nav-Menu.vue'; // ------------- menu de navegação do mapa
 import MulticolorLine from './components/Multicolor-Line.vue'; // linha colorida
-import Filter from './components/Filter.vue'; // ---------------- filtro menu
 
 Vue.component('logo-card', LogoCard);
-Vue.component('my-menu', NavMenu);
 Vue.component('multicolor-line', MulticolorLine);
-Vue.component('my-filter', Filter);
 
 // font awesome setups
 library.add(faUserSecret);

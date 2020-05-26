@@ -10,7 +10,7 @@
 
       <logo-card/>
 
-      <my-menu/>
+      <my-menu v-on:callFilter="filterThis($event)"/>
 
     </div>
 
@@ -75,17 +75,6 @@
     </div>
     <!-- end button area -->
 
-    <div class="filter-content" style="z-index: 3; height: 100%; width: 200px; position: absolute; top: 62px; right: 16px">
-      <!-- <span>{{ categories }}</span> -->
-      <div v-for="item in categories" :key="item.value">
-        <q-checkbox v-model="filterSelections" :val="item.label" :label="item.label" @click="onFilter()" color="black"/>
-      </div>
-    </div>
-
-    <div class="selections" style="z-index: 3; height: 100%; width: 200px; position: absolute; top: 16px; right: 350px">
-      <span style="color: red;"> {{ filterSelections }} </span>
-    </div>
-
     <!-- start map -->
     <div class="map-container">
 
@@ -110,7 +99,7 @@
 
         <div class="my-markes">
 
-          <l-marker class="marker-item" v-for="item in markers" :key="item.id" :lat-lng="item.coordinates">
+          <l-marker class="marker-item" v-for="item in markesFiltered" :key="item.id" :lat-lng="item.coordinates">
 
             <l-icon
               class="icon-marker"
@@ -158,6 +147,7 @@ import { mapGetters } from 'vuex';
 import { gsap, TweenMax, Expo } from 'gsap';
 
 import PinView from '../components/PinView.vue';
+import MyMenu from '../components/Menu.vue';
 
 gsap.registerPlugin(TweenMax, Expo);
 
@@ -171,11 +161,11 @@ export default {
     LPopup,
     LIcon,
     PinView,
+    MyMenu,
   },
   data() {
     return {
       opemNav: false,
-      filterSelections: [],
       oldCenter: [-20.460277, -54.612277],
       mapOptions: {
         center: [-20.455662, -54.592933],
@@ -214,6 +204,7 @@ export default {
         closeButton: false,
       },
       markers: [],
+      filterSelections: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
     };
   },
   created() {
@@ -233,8 +224,26 @@ export default {
       categories: 'loadCategories',
       loadPins: 'loadPins',
     }),
+    markesFiltered() {
+      if (this.filterSelections.lehgth === 0) {
+        return this.markers;
+      }
+      const vm = this;
+      const filter = this.markers.filter((item) => vm.filterSelections.includes(item.categoryId.toString()));
+      return filter;
+    },
   },
   methods: {
+    filterThis(el) {
+      if (this.filterSelections.includes(el)) {
+        // console.log('removeThisFilter', el);
+        const index = this.filterSelections.indexOf(el.toString());
+        this.filterSelections.splice(index, 1);
+      } else {
+        // console.log('addThisFilter', el);
+        this.filterSelections.push(el.toString());
+      }
+    },
     opem() {
       this.opemNav = !this.opemNav;
     },
@@ -252,11 +261,6 @@ export default {
     getPinById(id) {
       const target = this.loadPins.find((item) => item.id === id);
       return target;
-    },
-    onFilter() {
-      const vm = this;
-      const markesFiltered = this.markers.filter((item) => item.label.includes(vm.filterSelections));
-      this.markers = markesFiltered;
     },
     zoomUpdated(newZoom) {
       this.zoomSet.zoom = newZoom;
@@ -344,6 +348,7 @@ export default {
 }
 
 .aside {
+  // display: none;
   width: 200px;
   position: absolute;
   top: 16px;

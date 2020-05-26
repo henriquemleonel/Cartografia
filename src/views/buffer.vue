@@ -10,7 +10,7 @@
 
       <logo-card/>
 
-      <my-menu/>
+      <my-menu v-on:callFilter="filterThis($event)"/>
 
     </div>
 
@@ -52,7 +52,7 @@
     </div>
 
     <!-- start button area -->
-    <div class="button-area" style="display: none;">
+    <div class="button-area">
 
         <q-btn
           flat
@@ -74,27 +74,6 @@
 
     </div>
     <!-- end button area -->
-
-    <div class="filter-content" style="z-index: 3; width: 200px; position: absolute; top: 80px; left: 16px; background-color: #f5f5f5;">
-      <!-- <span>{{ categories }}</span> -->
-      <div v-for="item in categories" :key="item.value">
-        <q-checkbox v-model="filterSelections" :val="item.value" :label="item.label" v-on:change="filter()" color="black"/>
-      </div>
-    </div>
-
-    <!-- <div class="selections" style="z-index: 3; height: 50px; width: 100%; position: absolute; top: 16px; left: 0px; background-color: black;">
-      <span style="color: white;"> {{ filterSelections }} </span>
-    </div>
-    <div class="markers-done" style="z-index: 3; width: 300px; position: absolute; top: 80px; right: 16px; background-color: black;">
-      <div v-for="item in markers" :key="item.id">
-        <span style="color: white;">{{ item }}</span>
-      </div>
-    </div>
-    <div class="markers-filtered" style="z-index: 3; width: 400px; position: absolute; bottom: 16px; right: 250px; background-color: black;">
-      <div v-for="item in markesFiltered" :key="item.id">
-        <span style="color: white;">{{ item }}</span>
-      </div>
-    </div> -->
 
     <!-- start map -->
     <div class="map-container">
@@ -168,6 +147,7 @@ import { mapGetters } from 'vuex';
 import { gsap, TweenMax, Expo } from 'gsap';
 
 import PinView from '../components/PinView.vue';
+import MyMenu from '../components/Menu.vue';
 
 gsap.registerPlugin(TweenMax, Expo);
 
@@ -181,6 +161,7 @@ export default {
     LPopup,
     LIcon,
     PinView,
+    MyMenu,
   },
   data() {
     return {
@@ -253,6 +234,16 @@ export default {
     },
   },
   methods: {
+    filterThis(el) {
+      if (this.filterSelections.includes(el)) {
+        // console.log('removeThisFilter', el);
+        const index = this.filterSelections.indexOf(el.toString());
+        this.filterSelections.splice(index, 1);
+      } else {
+        // console.log('addThisFilter', el);
+        this.filterSelections.push(el.toString());
+      }
+    },
     opem() {
       this.opemNav = !this.opemNav;
     },
@@ -357,7 +348,7 @@ export default {
 }
 
 .aside {
-  display: none;
+  // display: none;
   width: 200px;
   position: absolute;
   top: 16px;
