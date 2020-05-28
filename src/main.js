@@ -11,7 +11,6 @@ import { gsap } from 'gsap';
 import Vuelidate from 'vuelidate';
 
 import 'leaflet/dist/leaflet.css';
-// import './styles/leaflet_custom/customLeafletStyleSheet.css';
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -20,8 +19,8 @@ import store from './store';
 
 import './quasar';
 
-import LogoCard from './components/Logo-Card.vue'; // ----------- logo da plataforma
-import MulticolorLine from './components/Multicolor-Line.vue'; // linha colorida
+import LogoCard from './components/Logo.vue'; // logo da plataforma
+import MulticolorLine from './components/ColorLine.vue';
 
 Vue.component('logo-card', LogoCard);
 Vue.component('multicolor-line', MulticolorLine);

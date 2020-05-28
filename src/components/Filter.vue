@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      options: 'loadCategories',
+      options: 'categories/loadCategories',
     }),
   },
   methods: {

@@ -1,15 +1,11 @@
 <template>
-  <div class="container">
+  <div class="app-page">
 
     <!-- <logo-card class="fixed-logo" :blackMode="true"/> -->
 
     <div class="aside">
 
-      <header>
-
-        <logo-card :blackMode="true"/>
-
-      </header>
+      <logo-card class="identity" :blackMode="true"/>
 
       <div class="white-space"></div>
 
@@ -32,13 +28,11 @@
         v-if="handleResize"
       >
 
-        <masonry class="items" :cols="{ default: 3, 1200: 3, 1130: 2, 600: 1 }" :gutter="{ default: '4px', 1200: '4px', 1130: '8px', 600: '4px'}">
-          <div  v-for="item in allEvents" :key="item.id">
-            <transition name="q-transition--scale">
+        <masonry class="items" :cols="{ default: 3, 1200: 3, 1130: 2, 600: 1 }" :gutter="{ default: '8px' }">
+          <div  v-for="item in events" :key="item.id">
 
-              <schedule-item class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
+            <schedule-item class="item" :item="item" v-if="events[item.id - 1]"/>
 
-            </transition>
           </div>
         </masonry>
 
@@ -48,9 +42,9 @@
 
         <masonry class="items" :cols="{ default: 3, 1320: 2, 600: 1 }" :gutter="0">
 
-          <div  v-for="item in allEvents" :key="item.id">
+          <div  v-for="item in events" :key="item.id">
             <transition name="q-transition--scale">
-              <my-event class="item" :item="item" v-if="allEvents[item.id - 1]" :bgColor="item.category.color"/>
+              <my-event class="item" :item="item" v-if="events[item.id - 1]"/>
             </transition>
           </div>
 
@@ -64,6 +58,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import ScheduleItem from '../components/ScheduleItem.vue';
 
 export default {
@@ -101,16 +96,15 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   computed: {
-    allEvents() {
-      const eventsToShow = this.$store.getters.eventsFiltered;
-      return eventsToShow;
-    },
+    ...mapGetters({
+      events: 'events/loadEvents',
+    }),
   },
   methods: {
     onIntersection(entry) {
       const index = parseInt(entry.target.dataset.id, 10);
       setTimeout(() => {
-        this.allEvents.splice(index, 3, entry.isIntersecting);
+        this.events.splice(index, 3, entry.isIntersecting);
       }, 50);
     },
     handleResize() {
@@ -132,13 +126,13 @@ export default {
 @import '../styles/mixins.scss';
 @import '../styles/typo.scss';
 
-.container {
+.app-page {
   z-index: 0;
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
 
   @include for-phone-only {
     height: 100%;
@@ -149,18 +143,17 @@ export default {
 .aside {
   background-color: white;
   height: 100%;
-  // width: 220px;
+  width: 350px;
   padding: 16px;
-  margin: 0px 8px 0px 0px;
-  align-items: center;
+  margin: 8px 8px 0px 0px;
   z-index: 1;
-  // border: 2px solid pink;
+  display: flex;
+  flex-direction: column;
 
   @include for-phone-only {
     height: 80px;
     padding: 16px 16px 8px 16px;
     flex-direction: column;
-    align-items: flex-start;
   }
 
   @include for-tablet-portrait-only {
@@ -169,15 +162,19 @@ export default {
   }
 
   @include for-desktop-up {
-    margin: 0px 0px 0px 0px;
-    padding: 16px 16px 8px 16px;
+    margin: 0px;
+    padding: 24px 32px 8px 32px;
+    align-self: flex-start;
   }
 
-  header {
+  .identity {
+    align-self: center;
+    // margin-top: 32px;
+
     @include for-phone-only {
       width: 100%;
       padding: 0px;
-      flex-direction: column;
+      align-self: center;
     }
   }
 
@@ -190,9 +187,8 @@ export default {
 
 .content {
   height: 100vh;
-  width: 100%;
+  width: calc(100% - 350px);
   padding: 8px 0px 0px 0px;
-  max-width: 1080px;
   overflow: hidden;
   z-index: 1;
 
@@ -205,12 +201,17 @@ export default {
     align-self: center;
     margin: 0px;
     padding: 16px 8px 8px 0px;
+    max-width: 1240px;
   }
 }
 
+.item {
+  margin: 8px;
+}
+
 .scrollArea {
-  height: inherit;
-  width: inherit;
+  height: 100%;
+  width: 100%;
   padding-right: 16px;
 
   @include for-phone-only {

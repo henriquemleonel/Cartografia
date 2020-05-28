@@ -58,12 +58,17 @@ const routes = [
     // },
   },
   {
-    path: '/debates',
-    name: 'Debates',
-    component: () => import(/* webpackChunkName: "debates" */ '../views/Debates.vue'),
+    path: '/topics',
+    name: 'Topics',
+    component: () => import(/* webpackChunkName: "Topics" */ '../views/Topics.vue'),
     // meta: {
     //   requiresAuth: true,
     // },
+  },
+  {
+    path: '/topics/:topicId',
+    name: 'TopicItem',
+    component: () => import(/* webpackChunkName: "topic" */ '../views/Topic.vue'),
   },
   {
     path: '/terms',

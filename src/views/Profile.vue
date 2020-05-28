@@ -32,14 +32,14 @@
       <!-- pin -->
       <div class="pin">
 
-        <user-pin v-if="!1"/>
+        <pin-editor v-if="!1"/>
         <pin-teste :fetch="getPinStatus" :item="getPinUser"/>
 
       </div>
 
       <!-- evento (inserção/edição) -->
       <div class="event">
-        <event-form/>
+        <event-editor/>
       </div>
 
       <!--  tabela de eventos -->
@@ -52,7 +52,7 @@
         >
 
           <div class="event-item" v-for="item in getMyEvents" :key="item.id">
-            <short-event :item="item"/>
+            <collaped-event-view :item="item"/>
             <!-- <span> {{ item.newEvent }} </span> -->
           </div>
 
@@ -79,19 +79,20 @@
 </template>
 
 <script>
-import UserCard from '../components/User-Card.vue';
-import UserPin from '../components/Pin-Profile.vue';
-import EventForm from '../components/Event-Profile.vue';
-import ShortEvent from '../components/Short-Event.vue';
+import { mapGetters } from 'vuex';
+import UserCard from '../components/UserCard.vue';
+import PinEditor from '../components/PinEditor.vue';
+import EventEditor from '../components/EventEditor.vue';
+import CollapedEventView from '../components/CollapsedEvent.vue';
 import PinTeste from '../components/pinTeste.vue';
 
 export default {
   name: 'Profile',
   components: {
     UserCard,
-    UserPin,
-    EventForm,
-    ShortEvent,
+    PinEditor,
+    EventEditor,
+    CollapedEventView,
     PinTeste,
   },
   data() {
@@ -117,25 +118,12 @@ export default {
     signedIn() {
       return this.$store.getters.signedIn;
     },
-    // props de user-card
-    getUser() {
-      return this.$store.getters.currentUser;
-    },
-    // props de pin-profile
-    getPinUser() {
-      return this.$store.getters.myPin;
-    },
-    getPinStatus() {
-      return this.$store.getters.pinCompleted; // verifica se o usuário possui um pin
-    },
-    // show infos from store
-    myEventsSize() {
-      return this.$store.state.myEvents.length;
-    },
-    getMyEvents() {
-      const showMyEvents = this.$store.getters.myEvents;
-      return showMyEvents;
-    },
+    ...mapGetters({
+      currentUser: 'users/getCurrentUser',
+      myPin: 'users/getMyPin',
+      myPinState: 'users/getMyPinState',
+      myEvents: 'users/getMyEvents',
+    }),
   },
   methods: {
     // logout() {

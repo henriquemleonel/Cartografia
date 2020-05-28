@@ -13,7 +13,7 @@
       class="content"
     >
 
-      <masonry class="grid" :cols="{ default: 3, 1200: 3, 1130: 2, 600: 1 }" :gutter="{ default: '4px', 1200: '4px', 1130: '8px', 600: '4px'}">
+      <masonry class="grid" :cols="{ default: 3, 1200: 3, 1130: 2, 600: 1 }" :gutter="{ default: '16px', 1200: '4px', 1130: '8px', 600: '4px'}">
 
         <!-- topic-item -->
         <topic-item

@@ -1,29 +1,26 @@
 <template>
-  <div class="box" @click="expand()">
+  <div class="app-component">
 
-    <div class="context column" :style="{ 'background-color': background }">
+    <div class="content column" :style="{ 'background-color': category.color }">
 
-      <span class="title-1 bolder line-h16"> {{ name }} </span>
-      <span class="headline-3 bolder mg-top-8"> {{ category.value.toLowerCase() }} </span>
+      <span class="big-title bolder line-h16"> {{ title }} </span>
+      <span class="caption bolder mg-top8"> {{ category.label }} </span>
 
-      <div class="row mg-top8">
-        <span class="body-2 bold"> {{ date.value }} </span>
+      <div class="row mg-top16">
+        <span class="body-2 bolder"> {{ formatDate }} </span>
         <!-- <span class="body-2 bold"> {{ date.year }} </span> -->
-        <span class="body-2 bold mg-left16"> {{ hour + 'h' }} </span>
+        <span class="body-2 bolder mg-left16"> {{ formatTime }} </span>
       </div>
 
-      <span class="body-2 bold spaced-32"> {{ description }} </span>
+      <span class="body-2 bolder mg-top32"> {{ description }} </span>
 
-      <span class="body-2  bold spaced-16">Entrada: r${{ ticket }} </span>
-
-      <div class="row spaced-8">
-        <span class="body-2 bold"> {{ address.street }} - {{ address.neighborhood }} </span>
+      <div class="row mg-top32">
+        <span class="body-3"> {{ address.street }}, {{ address.neighborhood }} </span>
       </div>
 
-      <div class="links row mg-top16">
-        <a class=" link caption bold" target="blank" :href="link">.facebook</a>
-        <a class=" link caption bold mg-left16" target="blank" :href="link">.facebook</a>
-      </div>
+      <span class="body-3">Entrada: {{ ticket }} </span>
+
+      <a class=" link body-3 bolder mg-top16" target="blank" :href="link">.link do evento</a>
 
     </div>
 
@@ -36,43 +33,70 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'schedule_Item',
   data() {
     return {
       id: this.item.id,
-      name: this.item.name,
+      title: this.item.title,
       date: this.item.date,
-      hour: this.item.hour,
+      time: this.item.time,
       address: this.item.address,
       ticket: this.item.ticket,
       link: this.item.link,
       description: this.item.description,
-      category: this.item.category,
+      categoryId: this.item.categoryId,
+      category: {
+        label: '',
+        value: '0',
+        color: '#000',
+      },
       img: this.item.imgUrl,
-      background: this.bgColor,
     };
   },
   props: {
     item: {
       type: Object,
-    },
-    bgColor: {
-      type: String,
+      default: null,
     },
   },
   computed: {
+    ...mapGetters({
+      options: 'categories/loadCategories',
+    }),
+    formatDate() {
+      const d = new Date(this.date);
+      const monthNames = ['Jan', 'Fev', 'Mar', 'Abril', 'Maio', 'Junho', 'Julho', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const month = monthNames[d.getMonth()];
+      let day;
+      if (d.getDate().toString().length === 1) {
+        day = `0${d.getDate()}`;
+      } else {
+        day = d.getDate();
+      }
+      return `${day} de ${month}`;
+    },
+    formatTime() {
+      const t = this.time;
+      return `${t.substr(0, 2)}h`;
+    },
+  },
+  mounted() {
+    this.setCategory();
   },
   methods: {
-    expand() {
-      console.log('expanded');
+    setCategory() {
+      const vm = this;
+      const el = this.options.find((item) => item.value === vm.categoryId.toString());
+      this.category = el;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
@@ -81,12 +105,18 @@ export default {
   box-sizing: border-box;
 }
 
-.box {
+.app-component {
   overflow: hidden;
-  max-width: 350px;
-  min-width: 290px;
-  margin: 8px 0px 0px 4px;
+  width: 350px;
+  min-width: 350px;
+  margin: 8px 8px 0px 4px;
   transition: transform .2s;
+  overflow: hidden;
+
+  @include for-desktop-up {
+    width: 400px;
+    min-width: 350px;
+  }
 
   @include for-phone-only {
     width: 350px;
@@ -94,8 +124,8 @@ export default {
   }
 }
 
-.context {
-  padding: 24px;
+.content {
+  padding: 32px;
 }
 
 .line-h16 {
@@ -103,13 +133,15 @@ export default {
 }
 
 .img-box {
-  width: 350px;
-  max-height: 280px;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  max-height: 250px;
   overflow: hidden;
 
   .img {
     height: auto;
-    max-width: 350px;
+    width: 100%;
   }
 }
 

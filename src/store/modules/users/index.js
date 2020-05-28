@@ -1,11 +1,12 @@
 import api from '../../../apiClient';
 
 export default {
+  namespaced: true,
   state: {
     currentUser: null,
     isAdmin: null,
-    userPin: null,
-    userEvents: null,
+    myPin: null,
+    myEvents: null,
   },
 
   getters: {
@@ -16,6 +17,11 @@ export default {
     isAdmin(state) {
       return (state.isAdmin !== null);
     },
+    getCurrentUser: (state) => state.currentUser,
+    getMyPin: (state) => state.myPin,
+    getMyPinState: (state) => state.myPin !== null,
+    getMyEvents: (state) => state.myPin,
+
   },
 
   actions: {

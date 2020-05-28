@@ -4,11 +4,7 @@
     <!-- aside -->
     <div class="aside">
 
-      <header>
-
-        <logo-card :blackMode="true"/>
-
-      </header>
+      <logo-card class="identity" :blackMode="true"/>
 
       <div class="white-space"></div>
 
@@ -149,7 +145,7 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
 
   @include for-phone-only {
     height: 100%;
@@ -160,18 +156,17 @@ export default {
 .aside {
   background-color: white;
   height: 100%;
-  // width: 220px;
+  width: 350px;
   padding: 16px;
-  margin: 0px 8px 0px 0px;
-  align-items: center;
+  margin: 8px 8px 0px 0px;
   z-index: 1;
-  // border: 2px solid pink;
+  display: flex;
+  flex-direction: column;
 
   @include for-phone-only {
     height: 80px;
     padding: 16px 16px 8px 16px;
     flex-direction: column;
-    align-items: flex-start;
   }
 
   @include for-tablet-portrait-only {
@@ -180,15 +175,19 @@ export default {
   }
 
   @include for-desktop-up {
-    margin: 0px 0px 0px 0px;
-    padding: 16px 16px 8px 16px;
+    margin: 0px;
+    padding: 24px 32px 8px 32px;
+    align-self: flex-start;
   }
 
-  header {
+  .identity {
+    align-self: center;
+    // margin-top: 32px;
+
     @include for-phone-only {
       width: 100%;
       padding: 0px;
-      flex-direction: column;
+      align-self: center;
     }
   }
 

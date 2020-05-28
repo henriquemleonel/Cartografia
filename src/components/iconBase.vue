@@ -24,7 +24,7 @@
 <script>
 /* eslint-disable */
 export default {
-  name: 'iconBase',
+  name: 'IconBase',
   props: {
     iconId: {
       type: [Number, String],

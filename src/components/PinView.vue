@@ -71,7 +71,7 @@ export default {
   // },
   computed: {
     ...mapGetters({
-      options: 'loadCategories',
+      options: 'categories/loadCategories',
     }),
     getColor() {
       const target = this.options.find((item) => item.value === this.categoryId.toString());

@@ -1,8 +1,8 @@
 import api from '../../apiClient';
 
 export default {
+  namespaced: true,
   state: {
-    namespaced: true,
     categories: [
       {
         label: 'Dança, Teatro e Circo',

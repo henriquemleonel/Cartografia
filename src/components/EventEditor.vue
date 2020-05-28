@@ -250,7 +250,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      options: 'loadCategories',
+      options: 'categories/loadCategories',
     }),
     // getUserRef() {
     //   const aux = this.$store.getters.currentUser;
