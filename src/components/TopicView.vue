@@ -30,7 +30,7 @@
 
       <div class="author row mg-top16">
 
-        <span class="body-3 bolder text-uppercase"> {{ topic.owner }} </span>
+        <span class="body-3 bolder text-uppercase"> {{ topic.owner.name }} </span>
         <span class="body-3 mg-left8"> | </span>
         <span class=" body-3 bolder mg-left8"> {{ formatDate }} </span>
 
@@ -57,7 +57,7 @@
         <!-- botao editar -->
         <base-button
           class="user-button mg-left8"
-          v-if="!isLoggedIn  && !currentUser && !currentUser.canDeleteTopic(topic)"
+          v-if="isLoggedIn  && currentUser && canEditTopic(currentUser.user.id, topic.owner.id)"
           :to="{ name: 'EditTopic', params: { topicId: topic.id } }"
         >
           <i class="fas fa-pencil-alt reply-icon"></i>
@@ -67,7 +67,7 @@
         <!-- v-if cond = > && currentUser && currentUser.canDeleteTopic(topic) -->
         <base-button
           class="user-button mg-left8"
-          v-if="!isLoggedIn  && !currentUser && !currentUser.canDeleteTopic(topic)"
+          v-if="isLoggedIn  && currentUser && canEditTopic(currentUser.user.id, topic.owner.id)"
           @click="showConfirmDialog = true"
         >
           <i class="fas fa-trash reply-icon"></i>
@@ -171,6 +171,12 @@ export default {
         this.$refs.replyForm.focus();
       }
     },
+    canEditTopic(userId, ownerId) {
+      if (userId === ownerId) {
+        return true;
+      }
+      return false;
+    },
   },
 };
 </script>
@@ -180,10 +186,10 @@ export default {
 @import '../styles/mixins.scss';
 
 .topic-view {
-  background: #FFF;
+  background: #f5f5f5;
   border-radius: 3px;
   padding: 32px;
-  border: 2px solid red;
+  // border: 2px solid red;
   max-width: 850px;
 }
 

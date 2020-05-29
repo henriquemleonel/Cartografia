@@ -49,20 +49,6 @@ const store = new Store({
     setIsAdmin (state, adminValue) {
       state.isAdmin = adminValue;
     },
-    destroyCurrentUser (state) {
-      state.currentUser = null;
-      state.myEvents = null;
-      state.myPin = null;
-      console.log('mutation : destroy currentUser');
-    },
-    retrieveToken(state, token) {
-      state.token = token;
-      console.log('mutation : retrieveToken');
-    },
-    destroyToken (state) {
-      state.token = null;
-      console.log('mutation : destroy token');
-    },
     addPin(state, payload) {
       if (state.currentUser.pinCompleted === false && state.myPin !== null) {
         state.push(payload);
@@ -95,95 +81,7 @@ const store = new Store({
       let key = autoId
       console.log('KEY DO NOVO EVENTO:', key)
       context.commit('setKey', key);
-    },
-    register(context, data) {
-      // console.log('data register', data);
-      return new Promise((resolve, reject) => {
-        console.log('promise')
-        api.post('/signup', {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          password: data.password,
-          confirmPassword: data.confirmPassword,
-          isValid: data.isValid,
-          isAdmin: data.isAdmin,
-          categoryId: data.categoryId,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        })
-          .then(response => {
-            console.log('reponse', response.data)
-            // const currentUser = response.data
-            // context.commit('setCurrentUser', currentUser)
-            // const token = response.data.token
-            // context.commit('retrieveToken', token)
-            // sessionStorage.setItem('access_token', token)
-            resolve(response)
-          })
-          .catch(error => {
-            console.log(error.message)
-            reject(error)
-          })
-      })
-    },
-    retrieveToken(context, credentials) {
-
-      return new Promise((resolve, reject) => {
-        api.post('/signin', {
-                email: credentials.email,
-                password: credentials.password,
-            })
-            .then(response => {
-                console.log('reponse', response.data)
-                const token = response.data.token
-                const currentUser = response.data
-                console.log('token', token)
-                context.commit('retrieveToken', token)
-                context.commit('setCurrentUser', currentUser)
-                sessionStorage.setItem('isAdmin', currentUser.isAdmin)
-                sessionStorage.setItem('access_token', token)
-                resolve(response)
-            })
-            .catch(error => {
-                console.log(error.message)
-                reject(error)
-            })
-      })
-
-    },
-    destroyToken(context) {
-
-      sessionStorage.removeItem('access_token')
-      context.commit('destroyToken')
-      context.commit('destroyCurrentUser')
-      router.push({ name: 'SignIn' })
-      console.log('logout')
-
-      // axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-      // if (context.getters.loggedIn) {
-      //   return new Promise((resolve, reject) => {
-      //     axios.post('/logout')
-      //       .then(response => {
-      //         localStorage.removeItem('access_token')
-      //         context.commit('destroyToken')
-      //         resolve(response)
-      //         console.log('responde destroyToken', response);
-      //         // context.commit('addTodo', response.data)
-      //       })
-      //       .catch(error => {
-      //         console.log('error logout')
-      //         localStorage.removeItem('access_token')
-      //         context.commit('destroyToken')
-      //         router.push({ name: 'SignIn' })
-      //         reject(error)
-      //       })
-      //   })
-      // }
-    },
+    },    
     addPinCommit(context, payload) {
       console.log('action>mutation:addPin(payload)', payload)
       context.commit('addPin', payload);

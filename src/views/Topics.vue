@@ -203,7 +203,7 @@ export default {
   width: 100%;
   padding: 8px 0px 0px 0px;
   max-width: 1080px;
-  overflow: hidden;
+  // overflow: hidden;
   z-index: 1;
 
   @include for-phone-only {

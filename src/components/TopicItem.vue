@@ -10,7 +10,7 @@
       <!-- topicOwner & date -->
       <div class="row">
 
-        <span class="body-2 bold"> {{ owner }} </span>
+        <span class="body-2 bold"> {{ owner.name }} </span>
 
         <span class="body-2 bold  mg-left8">| {{ formatDate }} </span>
 
@@ -19,6 +19,7 @@
       <span class="body-2 bold mg-top32"> {{ description }} </span>
 
       <div class="row mg-top32">
+        <!-- <i class="far fa-thumbs-up"></i> -->
         <span class="caption bolder"> {{ likes }} likes </span>
         <span class="caption bolder mg-left8"> | </span>
         <span class="caption bolder mg-left8"> {{ dislikes }} dislikes </span>
@@ -117,11 +118,16 @@ export default {
   overflow: hidden;
   width: 350px;
   margin: 8px 4px 0px 0px;
-  transition: transform .2s;
+  transition: 0.2s ease-in;
 
   @include for-phone-only {
     width: 350px;
     margin: 8px 4px 24px 4px;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+    cursor: pointer;
   }
 }
 

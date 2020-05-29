@@ -68,13 +68,15 @@
         <q-card>
           <q-card-section>
 
-            <router-link to="/schedule">
-              <template>
-                <q-btn flat class="btn btn-primary">
-                  <span class="subheading-2 bold normal">Ver agenda</span>
-                </q-btn>
-              </template>
-            </router-link>
+            <div class="recents">falta recentes</div>
+
+            <base-button
+              class="submenu-button"
+              :to="{ name: 'Schedule' }"
+            >
+              <!-- <i class="fas fa-pencil-alt reply-icon"></i> -->
+              <span class="body-3 bolder mg-left8"> Ver Agenda </span>
+            </base-button>
 
           </q-card-section>
         </q-card>
@@ -94,13 +96,15 @@
         <q-card>
           <q-card-section>
 
-            <router-link to="/debates">
-              <template>
-                <q-btn flat class="btn btn-primary">
-                  <span class="subheading-2 bold normal">Ver diálogos</span>
-                </q-btn>
-              </template>
-            </router-link>
+            <div class="recents">falta recentes</div>
+
+            <base-button
+              class="submenu-button"
+              :to="{ name: 'Topics' }"
+            >
+              <!-- <i class="fas fa-pencil-alt reply-icon"></i> -->
+              <span class="body-3 bolder mg-left8"> Ver Diálogos </span>
+            </base-button>
 
           </q-card-section>
         </q-card>
@@ -131,11 +135,13 @@
 
 <script>
 import MyFilter from './Filter.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
   name: 'Menu-Component',
   components: {
     MyFilter,
+    BaseButton,
   },
   data() {
     return {

@@ -1,11 +1,11 @@
 <template>
-  <div class="container column">
+  <div class="app-page column">
 
     <div class="identity">
        <logo-card class="logo" :blackMode="true"/>
     </div>
 
-    <div class="content-center column">
+    <div class="content column">
 
       <div class="card column">
 
@@ -115,7 +115,7 @@ export default {
     },
     password: {
       minLength: minLength(8),
-      maxLength: maxLength(15)
+      maxLength: maxLength(20)
     },
   },
   computed: {
@@ -137,18 +137,23 @@ export default {
   methods: {
     signIn() {
       if (!this.$v.$anyError) {
-        this.$store.dispatch('retrieveToken', { credentials: {
+        this.$store.dispatch('users/retrieveToken', { credentials: {
           email: this.email,
           password: this.password,
         }}).then((response) => {
-          console.log('res', response);
+          console.log('SIGN_IN', response);
+          if (response.data.isAdmin) {
+            this.$router.push({ name: 'Dashboard' });
+          } else {
+            this.$router.push({ name: 'Profile' });
+          }
         }).catch((error) => {
           if(error.message === 'Request failed with status code 400') {
             this.errorMessage = 'Não encontramos uma conta com esse email';
           } else if (error === 'Request failed with status code 401') {
             this.errorMessage === 'Email ou senha inválidos';
           }
-          console.log('err batata', error.message);
+          console.log('err', error.message);
         })
       }
     },
@@ -166,7 +171,7 @@ export default {
   font-family: 'Helvetica';
 }
 
-.container {
+.app-page {
   background-color: white;
   height: 100vh;
   width: 100%;

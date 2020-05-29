@@ -1,26 +1,18 @@
 import api from '../../../apiClient';
-import permissionsCheckers from './Permissions';
+import permissions from './Permissions';
 
 export default {
   namespaced: true,
   state: {
-    // currentUser: null,
-    currentUser: {
-      firstName: 'Henrique',
-      lastName: 'Leonel',
-      email: 'henrique@email.com ',
-      isValid: true,
-      isAdmin: false,
-      categoryId: 15,
-    },
-    isAdmin: false,
+    currentUser: null,
+    isAdmin: null,
     myPin: null,
     myEvents: null,
   },
 
   getters: {
     isLoggedIn(state) {
-      const token = sessionStorage.getItem('access_token');
+      const token = localStorage.getItem('access_token');
       return (state.currentUser !== null) && (token !== null);
     },
     isAdmin(state) {
@@ -29,7 +21,7 @@ export default {
     getCurrentUser: (state) => state.currentUser,
     getMyPin: (state) => state.myPin,
     getMyPinState: (state) => state.myPin !== null,
-    getMyEvents: (state) => state.myPin,
+    getMyEvents: (state) => state.myEvents,
 
   },
 
@@ -62,14 +54,11 @@ export default {
           password: credentials.password,
         })
           .then((response) => {
-            console.log('reponse', response.data);
-            const { token } = response.data.token;
-            const currentUser = response.data;
-            console.log('token', token);
-            commit('retrieveToken', token);
-            commit('setCurrentUser', currentUser);
-            sessionStorage.setItem('isAdmin', currentUser.isAdmin);
-            sessionStorage.setItem('access_token', token);
+            console.log('reponse LOGIN', response.data);
+            // const { token } = response.data.token;
+            // const { currentUser } = response.data;
+            commit('SET_CURRENT_USER', response.data);
+            localStorage.setItem('access_token', response.data.token);
             resolve(response);
           })
           .catch((error) => {
@@ -78,14 +67,30 @@ export default {
           });
       });
     },
+    destroyToken(state) {
+      localStorage.removeItem('access_token');
+      state.commit('destroyToken');
+      state.commit('destroyCurrentUser');
+      console.log('logout');
+    },
   },
 
   mutations: {
-    setCurrentUser(state, { user }) {
+
+    SET_CURRENT_USER(state, user) {
+      console.log('mutation set current user', user);
       state.currentUser = {
-        ...user,
-        ...permissionsCheckers,
+        user,
+        permissions,
       };
+    },
+
+    DESTROY_CURRENT_USER(state) {
+      state.currentUser = null;
+      state.myEvents = null;
+      state.myPin = null;
+      state.isAdmin = null;
+      console.log('mutation : destroy currentUser');
     },
   },
 };

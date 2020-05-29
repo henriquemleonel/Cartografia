@@ -70,6 +70,7 @@ export default {
 
 .content {
   // justify-self: center;
+  min-width: 800px;
   max-width: 900px;
   // height: inherit;
 }
