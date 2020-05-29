@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'topicItem',
@@ -86,14 +86,18 @@ export default {
     this.setCategory();
   },
   methods: {
+    ...mapActions('topics', [
+      'loadCurrentTopic',
+    ]),
     setCategory() {
       const vm = this;
       const el = this.options.find((item) => item.value === vm.categoryId.toString());
       this.category = el;
     },
     emitThisTopic() {
-      console.log('topic_id', this.title);
-      this.$router.push({ name: 'Dashboard', params: { topicId: this.id } });
+      console.log('topic_clicked', this.id);
+      this.loadCurrentTopic({ topicId: this.id });
+      this.$router.push({ name: 'TopicPage', params: { topicId: this.id } });
     },
   },
 };

@@ -25,6 +25,7 @@ const store = new Store({
   state: {
     namespaced: true,
     newKey: null,
+    nextRoute: null,
   },
 
   plugins: [
@@ -78,6 +79,10 @@ const store = new Store({
       console.log('mutation -> state/myEvents[] : add', payload);
       state.myEvents.push(payload.newEvent);
     },
+
+    SET_NEXT_ROUTE (state, { route }) {
+      state.nextRoute = route
+    }
   },
 
   actions: {
@@ -258,6 +263,10 @@ const store = new Store({
           reject(error)
         })
     },
+
+    setNextRoute ({ commit }, { route }) {
+      commit('SET_NEXT_ROUTE', { route })
+    }
   },
 });
 

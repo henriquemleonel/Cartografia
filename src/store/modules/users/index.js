@@ -1,10 +1,19 @@
 import api from '../../../apiClient';
+import permissionsCheckers from './Permissions';
 
 export default {
   namespaced: true,
   state: {
-    currentUser: null,
-    isAdmin: null,
+    // currentUser: null,
+    currentUser: {
+      firstName: 'Henrique',
+      lastName: 'Leonel',
+      email: 'henrique@email.com ',
+      isValid: true,
+      isAdmin: false,
+      categoryId: 15,
+    },
+    isAdmin: false,
     myPin: null,
     myEvents: null,
   },
@@ -73,7 +82,10 @@ export default {
 
   mutations: {
     setCurrentUser(state, { user }) {
-      state.currentUser = user;
+      state.currentUser = {
+        ...user,
+        ...permissionsCheckers,
+      };
     },
   },
 };

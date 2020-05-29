@@ -9,7 +9,10 @@ export default {
         id: 1,
         title: 'Dance_Fest',
         categoryId: 1,
-        owner: 'jão',
+        owner: {
+          name: 'jão',
+          id: 12,
+        },
         date: '2020/04/28',
         description: 'Festival de dança da comunidade para a comunidade, venha se divertir',
         likes: 170,
@@ -22,7 +25,10 @@ export default {
         id: 2,
         title: 'Festival Forró',
         categoryId: 5,
-        owner: 'maria',
+        owner: {
+          name: 'maria',
+          id: 19,
+        },
         date: '2020/05/04',
         description: 'pula fogueira',
         likes: 170,
@@ -33,11 +39,14 @@ export default {
       },
       {
         id: 3,
-        title: '"Como não viver em isolamento"',
+        title: 'Como não viver em isolamento',
         categoryId: 1,
-        owner: 'anna',
+        owner: {
+          name: 'anna',
+          id: 28,
+        },
         date: '2020/05/07',
-        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica ede impressos,',
+        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         likes: 170,
         dislikes: 64,
         suport: 234,
@@ -48,7 +57,10 @@ export default {
         id: 4,
         title: 'Fashion Trends CG',
         categoryId: 15,
-        owner: 'benta',
+        owner: {
+          name: 'benta',
+          id: 32,
+        },
         date: '2020/05/13',
         description: 'indústria tipográfica ede impressos,',
         likes: 170,
@@ -61,7 +73,10 @@ export default {
         id: 5,
         title: 'Mis Hitchcok',
         categoryId: 10,
-        owner: 'martiello',
+        owner: {
+          name: 'martiello',
+          id: 67,
+        },
         date: '2020/05/22',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
         likes: 170,
@@ -74,7 +89,10 @@ export default {
         id: 6,
         title: 'Festa Junina',
         categoryId: 5,
-        owner: 'claudio',
+        owner: {
+          name: 'claudio',
+          id: 189,
+        },
         date: '20202/05/28',
         description: 'pula fogueira ',
         likes: 170,
@@ -87,7 +105,10 @@ export default {
         id: 7,
         title: 'Photo Export',
         categoryId: 8,
-        owner: 'melissa',
+        owner: {
+          name: 'mellisa',
+          id: 78,
+        },
         date: '2020/06/01',
         description: 'photo graph u',
         likes: 170,
@@ -100,7 +121,10 @@ export default {
         id: 8,
         title: 'Praça Imigrantes',
         categoryId: 7,
-        owner: 'melissa',
+        owner: {
+          name: 'enzo',
+          id: 45,
+        },
         date: '2020/06/05',
         description: 'photo graph u',
         likes: 170,
@@ -113,7 +137,10 @@ export default {
         id: 9,
         title: 'Morada Baís',
         categoryId: 6,
-        owner: 'melissa',
+        owner: {
+          name: 'marcio',
+          id: 7,
+        },
         date: '2020/07/05',
         description: 'photo graph u',
         likes: 170,
@@ -131,20 +158,29 @@ export default {
       commit('SET_TOPICS_LIST', state.list);
     },
 
-    loadCurrentTopic(state, { commit }, { id }) {
-      const { topic } = state.list.map((e) => e.id).indexOf(id);
-      commit('SET_CURRENT_TOPIC', { topic });
-    },
+    // loadCurrentTopic(state, { commit }, { id }) {
+    //   const { topic } = state.list.map((e) => e.id).indexOf(id);
+    //   console.log('current', topic);
+    //   commit('SET_CURRENT_TOPIC', { topic });
+    // },
 
     // async loadTopics({ commit }, { filters }) {
     //   // const topics = await apiClient.getTopics(filters)
     //   commit('SET_TOPICS_LIST', { topics });
     // },
 
-    // async loadCurrentTopic({ commit }, { topicId }) {
-    //   const topic = await apiClient.getTopic(topicId);
-    //   commit('SET_CURRENT_TOPIC', { topic });
+    // loadCurrentTopic({ commit }, { topicId }) {
+    //   // get topic data from api
+    //   commit('SET_CURRENT_TOPIC', { topic }) // seta o topico recebido como o atual
     // },
+
+    loadCurrentTopic({ state, commit }, { topicId }) {
+      console.log('store/topics: topicId', topicId);
+      // const { topic } = state.list.find((item) => item.id === topicId.toString());
+      const topic = state.list.find((el) => el.id === topicId);
+      console.log('current', topic);
+      commit('SET_CURRENT_TOPIC', { topic }); // seta o topico recebido como o atual
+    },
 
     // async createTopic({ commit }, { data }) {
     //   const topicId = (await apiClient.createTopic(data)).id;
@@ -178,12 +214,12 @@ export default {
   },
 
   mutations: {
-    SET_TOPICS_LIST({ topics }) {
-      this.state.list = topics;
+    SET_TOPICS_LIST(state, { topics }) {
+      state.list = topics;
     },
 
-    SET_CURRENT_TOPIC({ topic }) {
-      this.state.current = topic;
+    SET_CURRENT_TOPIC(state, { topic }) {
+      state.current = topic;
     },
 
     // ADD_REPLY_TO_CURRENT_TOPIC({ state }, { reply }) {
@@ -209,5 +245,6 @@ export default {
 
   getters: {
     loadTopics: (state) => state.list,
+    getCurrentTopic: (state) => state.current,
   },
 };

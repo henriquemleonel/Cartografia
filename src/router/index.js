@@ -58,7 +58,7 @@ const routes = [
     // },
   },
   {
-    path: '/topics',
+    path: '/topics', // todos os tópicos (debates)
     name: 'Topics',
     component: () => import(/* webpackChunkName: "Topics" */ '../views/Topics.vue'),
     // meta: {
@@ -66,9 +66,9 @@ const routes = [
     // },
   },
   {
-    path: '/topics/:topicId',
-    name: 'TopicItem',
-    component: () => import(/* webpackChunkName: "topic" */ '../views/Topic.vue'),
+    path: '/topics/:topicId', // página de um tópico
+    name: 'TopicPage',
+    component: () => import(/* webpackChunkName: "topic" */ '../views/TopicPage.vue'),
   },
   {
     path: '/terms',
@@ -141,7 +141,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     // const accessToken = localStorage.getItem('access_token');
-    const accessToken = sessionStorage.getItem('access_token');
+    // const accessToken = sessionStorage.getItem('access_token');
+    const accessToken = true;
     console.log(`to ${to.name}`);
     if (to.name !== 'SignIn' && !accessToken) {
       next({
