@@ -9,23 +9,49 @@ export default {
         id: 1,
         title: 'Dance_Fest',
         categoryId: 1,
-        owner: {
+        user: {
           name: 'jão',
           id: 12,
         },
         date: '2020/04/28',
-        description: 'Festival de dança da comunidade para a comunidade, venha se divertir',
+        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         likes: 170,
         dislikes: 64,
         suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        replies: [
+          {
+            id: 1,
+            user: {
+              id: 2,
+              name: 'Juliana Trujillo',
+              categoryId: 8,
+              avatar: '',
+            },
+            content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
+            createdAt: '2019-03-27',
+            numberOfLikes: 0,
+          },
+          {
+            id: 2,
+            user: {
+              id: 27,
+              name: 'Henrique Leonel',
+              categoryId: 15,
+              avatar: '',
+            },
+            content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
+            createdAt: '2019-03-27',
+            numberOfLikes: 0,
+          },
+        ],
       },
       {
         id: 2,
         title: 'Festival Forró',
         categoryId: 5,
-        owner: {
+        user: {
           name: 'maria',
           id: 19,
         },
@@ -41,7 +67,7 @@ export default {
         id: 3,
         title: 'Como não viver em isolamento',
         categoryId: 1,
-        owner: {
+        user: {
           name: 'anna',
           id: 28,
         },
@@ -57,7 +83,7 @@ export default {
         id: 4,
         title: 'Fashion Trends CG',
         categoryId: 15,
-        owner: {
+        user: {
           name: 'benta',
           id: 32,
         },
@@ -73,7 +99,7 @@ export default {
         id: 5,
         title: 'Mis Hitchcok',
         categoryId: 10,
-        owner: {
+        user: {
           name: 'martiello',
           id: 67,
         },
@@ -89,7 +115,7 @@ export default {
         id: 6,
         title: 'Festa Junina',
         categoryId: 5,
-        owner: {
+        user: {
           name: 'claudio',
           id: 189,
         },
@@ -105,7 +131,7 @@ export default {
         id: 7,
         title: 'Photo Export',
         categoryId: 8,
-        owner: {
+        user: {
           name: 'mellisa',
           id: 78,
         },
@@ -121,7 +147,7 @@ export default {
         id: 8,
         title: 'Praça Imigrantes',
         categoryId: 7,
-        owner: {
+        user: {
           name: 'enzo',
           id: 45,
         },
@@ -137,7 +163,7 @@ export default {
         id: 9,
         title: 'Morada Baís',
         categoryId: 6,
-        owner: {
+        user: {
           name: 'marcio',
           id: 7,
         },
@@ -211,6 +237,12 @@ export default {
     //   commit('UPDATE_REPLY', { replyId, data });
     //   return replyId;
     // },
+
+    // async likeReply({ state, commit }, { replyId }) {
+    //   await apiClient.updateReply(state.current.id, replyId, data);
+    //   commit('LIKE_REPLY', { replyId });
+    //   return replyId;
+    // },
   },
 
   mutations: {
@@ -240,6 +272,11 @@ export default {
     //   if (replyIndex !== -1) {
     //     Vue.set(state.current.replies, replyIndex, { ...state.current.replies[replyIndex], ...data });
     //   }
+    // },
+
+    // LIKE_REPLY({ state }, { replyId }) {
+    //   const replyIndex = state.current.replies.find((reply) => reply.id === replyId);
+    //   state.current.replies[replyIndex].numberOfReplies++;
     // },
   },
 

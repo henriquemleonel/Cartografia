@@ -10,7 +10,7 @@
       <!-- topicOwner & date -->
       <div class="row">
 
-        <span class="body-2 bold"> {{ owner.name }} </span>
+        <span class="body-2 bold"> {{ user.name }} </span>
 
         <span class="body-2 bold  mg-left8">| {{ formatDate }} </span>
 
@@ -45,7 +45,7 @@ export default {
     return {
       id: this.topic.id,
       title: this.topic.title,
-      owner: this.topic.owner,
+      user: this.topic.user,
       date: this.topic.date,
       description: this.topic.description,
       categoryId: this.topic.categoryId,

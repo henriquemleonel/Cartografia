@@ -30,7 +30,7 @@
 
       <div class="author row mg-top16">
 
-        <span class="body-3 bolder text-uppercase"> {{ topic.owner.name }} </span>
+        <span class="body-3 bolder text-uppercase"> {{ topic.user.name }} </span>
         <span class="body-3 mg-left8"> | </span>
         <span class=" body-3 bolder mg-left8"> {{ formatDate }} </span>
 
@@ -40,7 +40,14 @@
 
     </div>
 
-    <div class="topic-footer column">
+    <div class="topic-footer">
+
+      <div class="topic-footer-reply">
+
+        <span class="topic-footer-title headline bolder">Comentários</span>
+        <span class="caption bolder mg-left8">( {{ topic.replies.length !== 0 ? topic.replies.length : 'Seja o primero a comentar.' }} )</span>
+
+      </div>
 
       <div class="action-buttons">
 
@@ -57,7 +64,7 @@
         <!-- botao editar -->
         <base-button
           class="user-button mg-left8"
-          v-if="isLoggedIn  && currentUser && canEditTopic(currentUser.user.id, topic.owner.id)"
+          v-if="isLoggedIn  && currentUser && canEditTopic(currentUser.user.id, topic.user.id)"
           :to="{ name: 'EditTopic', params: { topicId: topic.id } }"
         >
           <i class="fas fa-pencil-alt reply-icon"></i>
@@ -67,19 +74,12 @@
         <!-- v-if cond = > && currentUser && currentUser.canDeleteTopic(topic) -->
         <base-button
           class="user-button mg-left8"
-          v-if="isLoggedIn  && currentUser && canEditTopic(currentUser.user.id, topic.owner.id)"
+          v-if="isLoggedIn  && currentUser && canEditTopic(currentUser.user.id, topic.user.id)"
           @click="showConfirmDialog = true"
         >
           <i class="fas fa-trash reply-icon"></i>
           <span class="body-3 bolder mg-left8"> Excluir </span>
         </base-button>
-
-      </div>
-
-      <div class="topic-footer-reply">
-
-        <span class="topic-footer-title headline bolder">Comentários</span>
-        <span class="caption bolder mg-left8">( {{ topic.numberOfReplies !== 0 ? topic.numberOfReplies : 'Seja o primero a comentar.' }} )</span>
 
       </div>
 
@@ -89,9 +89,8 @@
       <div class="replies-content">
         <reply
           v-for="reply in topic.replies"
-          :key="reply._id"
+          :key="reply.id"
           :reply="reply"
-          :category-slug="topic.category.slug"
         />
       </div>
     </div>
@@ -115,6 +114,7 @@ import { mapActions, mapGetters } from 'vuex';
 import BaseButton from './BaseButton.vue';
 import BaseConfirmDialog from './BaseConfirmDialog.vue';
 import ReplyForm from './ReplyForm.vue';
+import Reply from './Reply.vue';
 import Logo from './Logo.vue';
 
 export default {
@@ -124,6 +124,7 @@ export default {
     BaseButton,
     BaseConfirmDialog,
     ReplyForm,
+    Reply,
   },
   props: {
     topic: {
@@ -206,16 +207,17 @@ export default {
 
 .topic-footer {
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
-  position: relative;
+  // position: relative;
   margin-top: 45px;
-  padding-bottom: 20px;
+  padding-bottom: 8px;
   // border: 2px solid green;
 }
 
 .topic-footer-reply {
-  width: 100%;
-  position: relative;
+  width: 50%;
+  // position: relative;
   display: flex;
   justify-items: flex-end;
   // border: 2px solid red;
@@ -227,11 +229,14 @@ export default {
 }
 
 .action-buttons {
+  width: 50%;
   display: flex;
   flex-direction: row;
-  position: absolute;
-  right: 32px;
-  top: 0px;
+  align-items: flex-end;
+  justify-items: flex-end;
+  // position: relative;
+  // right: 32px;
+  // top: 0px;
 }
 
 .user-button {

@@ -198,7 +198,7 @@ export default {
   }
 }
 
-.content-center {
+.content {
   position: absolute;
   top: 25%;
   left: 50%;
