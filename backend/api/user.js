@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt-nodejs')
+const multer = require('multer')
 
 module.exports = app => {
     const { existsOrError, notExistsOrError, equalsOrError } = app.api.validation
@@ -84,5 +85,57 @@ module.exports = app => {
         }
     }
 
-    return { save, get, getById, remove }
+    const savePhoto = async(req, res) => {
+        const user = {...req.body }
+        const fileplace = {...req.file }
+        console.log(user)
+        console.log(fileplace)
+        try {
+            existsOrError(user.id, 'Id do usuário não informado')
+                // existsOrError(user.image, 'Imagem está vazia')
+        } catch (msg) {
+            res.status(400).send(msg)
+        }
+        console.log('Passei por aqui')
+            // var storage = multer.diskStorage({
+            //     destination: function(req, file, cb) {
+            //         cb(null, './img/users/')
+            //     },
+            //     filename: function(req, file, cb) {
+            //         cb(null, Date.now().toString() + '-' + user.id)
+            //     }
+            // })
+            // const upload = multer({ storage }).single('image')
+            // console.log(upload)
+        try {
+            let rowsupdate = await app.db('users')
+                .where({ id: user.id })
+                .update({ imgUrl: fileplace.path })
+            res.status(204).send()
+        } catch (msg) {
+            res.status(400).send(msg)
+        }
+
+    }
+
+    const testPhoto = async(req, res) => {
+        res.send(`
+        <html>
+                <head> 
+                    <title> Nova imagem </title>
+                </head>
+                </body>
+                    <!-- O enctype é de extrema importância! Não funciona sem! -->
+                    <form action="/save-image"  method="POST" enctype="multipart/form-data">
+                        <!-- O NAME do input deve ser exatamente igual ao especificado na rota -->
+                        <input type='number' name='id'>
+                        <input type="file" name="image">
+                        <button type="submit"> Enviar </button>
+                    </form>
+                </body>
+            </html>
+        `)
+    }
+
+    return { save, get, getById, remove, savePhoto, testPhoto }
 }

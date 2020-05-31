@@ -1,5 +1,5 @@
 const admin = require("./admin.js")
-
+const multer = require('../config/multerconfig.js')('users')
 
 module.exports = app => {
     app.post('/signup', app.api.user.save)
@@ -56,5 +56,9 @@ module.exports = app => {
 
     app.route('/stats')
         .get(app.api.stats.get)
+
+    app.route('/save-image')
+        .post(multer.single('image'), app.api.user.savePhoto)
+        .get(app.api.user.testPhoto)
 
 }
