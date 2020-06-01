@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt-nodejs')
+const multer = require('../config/multerconfig.js')('users')
+const router = require('express').Router()
 
 module.exports = app => {
     const { existsOrError, notExistsOrError, equalsOrError } = app.api.validation
@@ -84,5 +86,80 @@ module.exports = app => {
         }
     }
 
-    return { save, get, getById, remove }
+    const savePhoto = async(req, res) => {
+        // var storage = multer.diskStorage({
+        //     destination: function(req, file, cb) {
+        //         cb(null, './img/users/')
+        //     },
+        //     filename: function(req, file, cb) {
+        //         cb(null, Date.now().toString() + '-' + user.id)
+        //     }
+        // // })
+        // router.post('./save-image2', multer.single('image'), async(req, res, next) => {
+        //     const user = {...req.body }
+        //     const fileplace = {...req.file }
+        //     console.log(user)
+        //     console.log(fileplace)
+        //     try {
+        //         existsOrError(user.id, 'Id do usuário não informado')
+        //             // existsOrError(user.image, 'Imagem está vazia')
+        //     } catch (msg) {
+        //         res.status(400).send(msg)
+        //     }
+        //     console.log('Passei por aqui')
+        //     try {
+        //         let rowsupdate = await app.db('users')
+        //             .where({ id: user.id })
+        //             .update({ imgUrl: fileplace.path })
+        //         res.status(204).send()
+        //     } catch (msg) {
+        //         res.status(400).send(msg)
+        //     }
+        // })
+
+        const user = {...req.body }
+        const fileplace = {...req.file }
+            // console.log(user)
+            // console.log(fileplace)
+        try {
+            existsOrError(user.id, 'Id do usuário não informado')
+        } catch (msg) {
+            res.status(400).send(msg)
+        }
+        console.log('Passei por aqui')
+        try {
+            let rowsUpdated = await app.db('users')
+                .where({ id: user.id })
+                .update({ imgUrl: fileplace.path })
+            console.log("resposta: " + rowsUpdated)
+            res.send(fileplace.path)
+        } catch (msg) {
+            res.status(400).send('Tipo de arquivo Inválido')
+        }
+
+    }
+
+    const testPhoto = async(req, res) => {
+        res.send(`
+        <html>
+                <head> 
+                    <title> Teste de Imagem </title>
+                </head>
+                </body>
+                    <!-- O enctype é de extrema importância! Não funciona sem! -->
+                    <form action="/save-image/user/"  method="POST" enctype="multipart/form-data">
+                        <p> Cuidado com o NAME!!! Tem que estar o mesmo que está escrito dessa forma para dar certo </p>
+                        <p>  <xmp style='font-size:20px;background-color:green;width:30vw;display:block;text-align:center;color:white;'>"<input type="file" name="image">" </xmp></p>
+                        <h3> id do dono da imagem </h3></br>
+                        <input type='number' name='id'>
+                        <h3> Upload da imagem </h3></br>
+                        <input type="file" name="image"></br>
+                        <button type="submit"> Enviar </button>
+                    </form>
+                </body>
+            </html>
+        `)
+    }
+
+    return { save, get, getById, remove, savePhoto, testPhoto }
 }
