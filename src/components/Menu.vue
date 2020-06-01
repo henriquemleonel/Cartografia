@@ -1,10 +1,10 @@
 <template>
 
-  <div class="box">
+  <div class="menu-component">
     <q-list>
 
       <!-- item Sobre -->
-      <q-expansion-item class="item" group="somegroup" expand-icon-class="text-black">
+      <q-expansion-item class="item" v-if="!expand" group="somegroup" expand-icon-class="text-black">
 
         <template v-slot:header>
           <q-item-section>
@@ -20,31 +20,31 @@
 
               <li class="navigation-item">
                 <router-link class="a" type="link" :to="{ name: 'About' }" exact>
-                  <span class="body-2 effect-underline">Plataforma</span>
+                  <span class="body-3 effect-underline">Plataforma</span>
                 </router-link>
               </li>
               <div class="line"/>
               <li class="navigation-item">
                 <router-link class="a" ref="link" :to="{ name: 'About', hash:'#frm'} ">
-                  <span class="body-2 effect-underline">Fórum</span>
+                  <span class="body-3 effect-underline">Fórum</span>
                 </router-link>
               </li>
               <div class="line"/>
               <li class="navigation-item">
                   <router-link class="a" ref="link" to="/terms" exact>
-                  <span class="body-2 effect-underline">Nossos Termos</span>
+                  <span class="body-3 effect-underline">Nossos Termos</span>
                   </router-link>
               </li>
               <div class="line"/>
               <li class="navigation-item">
                   <router-link class="a effect-underline" ref="link" :to="{ name: 'Faq', hash:'#frm'}" exact>
-                  <span class="body-2">F.A.Q</span>
+                  <span class="body-3">F.A.Q</span>
                   </router-link>
               </li>
               <div class="line"/>
               <li class="navigation-item">
                   <router-link class="a effect-underline" ref="link" to="/about" exact>
-                  <span class="body-2">Contato</span>
+                  <span class="body-3">Contato</span>
                   </router-link>
               </li>
             </ul>
@@ -54,10 +54,10 @@
 
       </q-expansion-item>
 
-      <q-separator class="separator" />
+      <q-separator class="separator" v-if="!expand" />
 
       <!-- item Agenda -->
-      <q-expansion-item class="item" group="somegroup" expand-icon-class="text-black">
+      <q-expansion-item class="item" v-if="!expand" group="somegroup" expand-icon-class="text-black">
 
         <template v-slot:header>
           <q-item-section>
@@ -68,22 +68,24 @@
         <q-card>
           <q-card-section>
 
-            <router-link to="/schedule">
-              <template>
-                <q-btn flat class="btn btn-primary">
-                  <span class="subheading-2 bold normal">Ver agenda</span>
-                </q-btn>
-              </template>
-            </router-link>
+            <div class="recents">falta recentes</div>
+
+            <base-button
+              class="submenu-button"
+              :to="{ name: 'Schedule' }"
+            >
+              <!-- <i class="fas fa-pencil-alt reply-icon"></i> -->
+              <span class="body-3 bolder mg-left8"> Ver Agenda </span>
+            </base-button>
 
           </q-card-section>
         </q-card>
       </q-expansion-item>
 
-      <q-separator class="separator" />
+      <q-separator class="separator" v-if="!expand" />
 
       <!-- item Diálogo -->
-      <q-expansion-item class="item" group="somegroup" expand-icon-class="text-black">
+      <q-expansion-item class="item" v-if="!expand" group="somegroup" expand-icon-class="text-black">
 
         <template v-slot:header>
           <q-item-section>
@@ -94,36 +96,36 @@
         <q-card>
           <q-card-section>
 
-            <router-link to="/debates">
-              <template>
-                <q-btn flat class="btn btn-primary">
-                  <span class="subheading-2 bold normal">Ver diálogos</span>
-                </q-btn>
-              </template>
-            </router-link>
+            <div class="recents">falta recentes</div>
+
+            <base-button
+              class="submenu-button"
+              :to="{ name: 'Topics' }"
+            >
+              <!-- <i class="fas fa-pencil-alt reply-icon"></i> -->
+              <span class="body-3 bolder mg-left8"> Ver Diálogos </span>
+            </base-button>
 
           </q-card-section>
         </q-card>
       </q-expansion-item>
 
-      <q-separator class="separator" />
+      <q-separator class="separator" v-if="!expand" />
 
       <!-- item filtro -->
-      <q-expansion-item class="item" group="somegroup" expand-icon-class="text-black">
+      <div class="my-item">
 
-        <template v-slot:header>
-          <q-item-section>
-            <span class="menu-text subheading-2">Filtro</span>
-          </q-item-section>
-        </template>
-
-        <q-card>
-          <q-card-section>
-              dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
+        <q-card class="my-card" :class="{ 'my-card-expanded' : expand }">
+          <q-card-section class="my-card-section">
+              <My-filter v-on:callFilter="passCall($event)"/>
           </q-card-section>
         </q-card>
-      </q-expansion-item>
+
+        <div class="my-item-header" @click="expandItem()">
+          <span class="menu-text subheading-2">Filtro</span>
+        </div>
+
+      </div>
 
     </q-list>
 
@@ -132,15 +134,27 @@
 </template>
 
 <script>
+import MyFilter from './Filter.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
-  name: 'nav-component',
+  name: 'Menu-Component',
+  components: {
+    MyFilter,
+    BaseButton,
+  },
   data() {
     return {
-
+      expand: false,
     };
   },
   methods: {
+    expandItem() {
+      this.expand = !this.expand;
+    },
+    passCall(el) {
+      this.$emit('callFilter', el);
+    },
   },
 };
 </script>
@@ -151,12 +165,14 @@ export default {
 @import '../styles/mixins.scss';
 @import '../styles/typo.scss';
 
+$item-height : 48px;
+
 * {
   font-family: 'Helvetica';
   letter-spacing: 1px;
 }
 
-.box {
+.menu-component {
   width: 100%;
   margin-top: 8px;
   margin-bottom: 8px;
@@ -164,15 +180,75 @@ export default {
 
 .item {
   background-color: black;
+  transition: filter 0.3s;
+  z-index: 1;
+  position: relative;
 
   &:hover {
     background-color: #1d1e22;
     // background-color:#fa7f72;
-    transition: 0.3s linear;
+
     .menu-text {
       color: white;
     }
   }
+}
+
+.card-section {
+  padding: 8px 0px 4px 0px;
+}
+
+.my-item {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .my-item-header {
+    background-color: black;
+    height: $item-height;
+    padding: 8px 16px 8px 16px;
+    display: flex;
+    z-index: 1;
+    position: relative;
+
+    &:hover {
+      background-color: #1d1e22;
+      cursor: pointer;
+
+      .menu-text {
+        color: white;
+      }
+    }
+  }
+
+  .my-item-header span {
+    align-self: center;
+  }
+
+  .my-card {
+    border-radius: 0px;
+    box-shadow: none;
+    z-index: 2;
+    position: relative;
+    display: none;
+
+    .my-card-section {
+      padding: 8px 0px 4px 0px;
+      display: none;
+    }
+  }
+
+  .my-card-expanded {
+    display: block;
+    transition: 0.8s linear;
+
+    .my-card-section {
+      padding: 8px 0px 4px 0px;
+      display: block;
+    }
+  }
+
 }
 
 .menu-text {

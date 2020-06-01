@@ -1,6 +1,6 @@
 <template>
 
-  <div class="box" :style="{ 'background-color' : background }" :class="{ 'active' : active }">
+  <div class="box" :style="{ 'background-color' : background }" :class="{ 'active' : active}">
 
     <!-- <div class="show-steps"> {{ this.step }} - {{ this.lastStep }} </div> -->
 
@@ -26,13 +26,12 @@
 
         <span class="body-2 bolder">Edite seu Pin</span>
 
-        <!-- pin name -->
+        <!-- pin title -->
         <div class="column mg-top16">
           <!-- <span class="subheading-2">nome do pin</span> -->
           <q-input
             class="input"
-            dense
-            v-model="name"
+            v-model="title"
             label="nome do pin"
             label-color="white"
             input-class="text-white"
@@ -44,7 +43,6 @@
           <!-- <span class="subheading-2">email</span> -->
           <q-input
             class="input"
-            dense
             v-model="email"
             type="email"
             label="email"
@@ -56,44 +54,63 @@
 
         <!-- phone -->
         <div class="column mg-top8">
-          <span class="subheading-2">telefone</span>
+          <!-- <span class="subheading-2">telefone</span> -->
 
           <q-input
             class="input"
-            dense
             v-model="phone"
             type="tel"
-            mask="(##) ##### - ####"
-            unmasked-value
+            mask="(##) ####-####"
+            label="telefone"
+            label-color="white"
             input-class="text-white"
             color="white"
           />
         </div>
 
-        <!-- address -->
+        <!-- street -->
         <div class="column mg-top8">
-          <span class="subheading-2">rua - logradouro</span>
-          <q-input class="input" dense v-model="street" input-class="text-white" color="white"/>
+          <!-- <span class="subheading-2">rua - logradouro</span> -->
+
+          <q-input
+            class="input"
+            v-model="street"
+            label="rua - logradouro"
+            label-color="white"
+            input-class="text-white"
+            color="white"
+          />
+
         </div>
 
+        <!-- neighborhood -->
         <div class="column mg-top8">
-          <span class="subheading-2">bairro</span>
-          <q-input class="input" dense v-model="neighborhood" input-class="text-white" color="white"/>
+          <!-- <span class="subheading-2">bairro</span> -->
+
+          <q-input
+            class="input"
+            v-model="neighborhood"
+            label="bairro"
+            label-color="white"
+            input-class="text-white"
+            color="white"
+          />
+
         </div>
 
         <!-- number & cep -->
         <div class="row justify-between mg-top8">
 
           <div class="column">
-
-            <span class="subheading-2">número</span>
+            <!-- <span class="subheading-2">número</span> -->
 
             <q-input
               class="input2"
-              dense
               v-model="number"
               :rules="[ val => val.length <= 5 || 'Máximo de 5 caracteres']"
               mask="#####"
+              label="número"
+              label-color="white"
               input-class="text-white"
               color="white"
             />
@@ -101,15 +118,15 @@
           </div>
 
           <div class="column">
-            <span class="subheading-2">cep</span>
+            <!-- <span class="subheading-2">cep</span> -->
 
             <q-input
               class="input2"
-              dense
               v-model="cep"
-              :rules="[ val => val.length <= 8 || 'Máximo de 5 caracteres']"
-              mask="##-######"
-              unmasked-value
+              :rules="[ val => val.length <= 8 || 'Máximo de 8 caracteres']"
+              mask="#####-###"
+              label="cep"
+              label-color="white"
               input-class="text-white"
               color="white"
             />
@@ -119,49 +136,83 @@
         </div>
 
         <!-- description -->
-        <div class="column mg-top8">
-          <span class="subheading-2">descrição</span>
+        <div class="column">
+          <!-- <span class="subheading-2">descrição</span> -->
 
           <q-input
             autogrow
             class="f-size"
-            dense
             v-model="description"
             hint="Máximo 2000 caracteres"
             :rules="[ val => val.length <= 2000 || 'Máximo de 2000 caracteres']"
+            label="descrição"
+            label-color="white"
             input-class="text-white"
             color="white"/>
 
         </div>
 
-        <!-- links -->
+        <!-- link -->
         <div class="column mg-top8">
-          <span class="subheading-2">link</span>
-          <q-input class="input f-size" dense v-model="otherLink" input-class="text-white" color="white"/>
+          <!-- <span class="subheading-2">link</span> -->
+
+          <q-input
+            class="input f-size"
+            v-model="otherLink"
+            label="link"
+            label-color="white"
+            input-class="text-white"
+            color="white"
+          />
+
         </div>
 
+        <!-- facebook -->
         <div class="column mg-top8">
-          <span class="subheading-2">facebook</span>
-          <q-input class="input f-size" dense v-model="linkF" input-class="text-white" color="white"/>
+          <!-- <span class="subheading-2">facebook</span> -->
+
+          <q-input
+            class="input f-size"
+            v-model="linkF"
+            label="facebook"
+            label-color="white"
+            input-class="text-white"
+            color="white"
+          />
+
         </div>
 
+        <!-- instagram -->
         <div class="column mg-top8">
-          <span class="subheading-2">instagram</span>
-          <q-input class="input f-size" dense v-model="linkIG" input-class="text-white" color="white"/>
+          <!-- <span class="subheading-2">instagram</span> -->
+
+          <q-input
+            class="input f-size"
+            v-model="linkIG"
+            label="instagram"
+            label-color="white"
+            input-class="text-white"
+            color="white"
+          />
+
         </div>
 
         <!-- file picker -->
         <q-file
-          label="Insira uma imagem"
           v-model="file"
           :max-file-size="2048"
           counter
+          outlined
+          square
+          class="mg-top16"
           color="white"
+          label="Insira uma imagem"
+          label-color="white"
           input-class="text-white"
         >
-          <template v-slot:prepend>
-            <!-- <q-icon name="attach_file" /> -->
-          </template>
+          <!-- <template v-slot:prepend>
+            <q-icon name="attach_file" />
+          </template> -->
         </q-file>
 
       </div>
@@ -169,11 +220,21 @@
       <!-- actions edit -->
       <div class="mg-top32" align="right">
 
-        <q-btn class="mg-right8" flat color="white" @click="cancelEdit()">
+        <q-btn
+          class="reset-btn btn mg-right8"
+          flat
+          color="white"
+          @click="cancelEdit()"
+        >
           <span class="caption">Cancelar</span>
         </q-btn>
 
-        <q-btn outline color="white" @click="createPin()">
+        <q-btn
+          class="reset-btn primary-action"
+          flat
+          color="white"
+          @click="createPin()"
+        >
           <span class="caption">Finalizar</span>
         </q-btn>
 
@@ -185,27 +246,27 @@
     <div class="ready" v-if="step==2">
 
       <div class="context column">
-        <span class="title-1 bolder line-h16"> {{ this.name }} </span>
+        <span class="title-1 bolder line-h16"> {{ this.item.title }} </span>
         <!-- <span class="body-2 bold mg-n-8"> {{ category.value.toLowerCase() }} </span> -->
 
-        <span class="body-2 bold spaced-32"> {{ this.description }} </span>
+        <span class="body-2 bold spaced-32"> {{ this.item.description }} </span>
 
         <div class="row spaced-16">
-          <span class="body-2 bold"> {{ this.street }} - {{ this.neighborhood }} - {{ this.number }} </span>
+          <span class="body-2 bold"> {{ this.itme.street }} - {{ this.item.neighborhood }} - {{ this.item.number }} </span>
         </div>
 
-        <span class="body-2 bold spaced-16"> {{ this.phone }} </span>
+        <span class="body-2 bold spaced-16"> {{ this.item.phone }} </span>
 
         <div class="links row mg-top16">
-          <a class="link caption bold" target="blank" :href="this.linkF">.facebook</a>
-          <a class="link caption bold mg-left16" target="blank" :href="this.linkIG">.instagram</a>
-          <a class="link caption bold mg-left16" target="blank" :href="this.otherLink">.link</a>
+          <a class="link caption bold" target="blank" :href="this.item.linkF">.facebook</a>
+          <a class="link caption bold mg-left16" target="blank" :href="this.item.linkIG">.instagram</a>
+          <a class="link caption bold mg-left16" target="blank" :href="this.item.otherLink">.link</a>
         </div>
 
       </div>
 
       <div class="img-box">
-        <q-img :src="this.imgUrl" :ratio="16/9" />
+        <q-img :src="this.item.imgUrl" :ratio="16/9" />
       </div>
 
       <div class="action">
@@ -237,7 +298,7 @@ export default {
       lastStep: 0,
       active: false,
       background: this.bgColor,
-      name: 'no fetch',
+      title: '',
       email: '',
       phone: '',
       street: '',
@@ -245,8 +306,6 @@ export default {
       number: '',
       city: '',
       cep: '',
-      lat: '',
-      long: '',
       description: '',
       linkF: '',
       linkIG: '',
@@ -291,9 +350,9 @@ export default {
       return str;
     },
     // recupera referencia a usuário ( email )
-    getUserRef() {
-      const aux = this.$store.getters.currentUser;
-      return aux.email;
+    getUserId() {
+      const aux = this.$store.getters.currentUser.id;
+      return aux;
     },
     getUserCategory() {
       const aux = this.$store.getters.currentUser.categoryId;
@@ -311,7 +370,7 @@ export default {
         console.log('state_fetch');
         const info = this.$store.getters.myPin;
         console.log('myPin from store', this.$store.getters.myPin);
-        this.name = info.name;
+        this.title = info.title;
         this.email = info.email;
         this.phone = info.phone;
         // this.number = info.address.number;
@@ -321,10 +380,10 @@ export default {
         // this.cep = info.address.cep;
         this.address = info.address;
         this.description = info.description;
-        // this.link = info.links.otherLink;
-        // this.linkF = info.links.linkF;
-        // this.linkIG = info.links.linkIG;
-        this.links = info.links;
+        this.link = info.otherLink;
+        this.linkF = info.linkF;
+        this.linkIG = info.linkIG;
+        // this.links = info.links;
         this.imgUrl = info.imgUrl;
         this.file = null;
         this.step = 2;
@@ -336,7 +395,7 @@ export default {
         this.lastStep = 0;
         this.active = true;
         const a = this;
-        setTimeout(() => { a.step = 1; }, 1000);
+        setTimeout(() => { a.step = 1; }, 800);
         console.log('iniciando primeira edição', this.lastStep, this.step);
       }
     },
@@ -366,10 +425,10 @@ export default {
     createPin() {
       console.log('pin-profile:create-pin');
       const payload = {
-        userRef: this.getUserRef,
+        // userRef: this.getUserRef,
+        userId: this.getUserId, // id do usuário juliana
         category: this.getUserCategory,
-        completed: true,
-        name: this.name,
+        title: this.title,
         email: this.email,
         phone: this.phone,
         street: this.street,
@@ -377,18 +436,27 @@ export default {
         number: this.number,
         city: this.city,
         cep: this.cep,
-        lat: this.lat,
-        long: this.long,
         description: this.description,
-        linkF: this.face,
-        linkIG: this.insta,
-        otherLink: this.link,
+        linkF: this.linkF,
+        linkIG: this.linkIg,
+        otherLink: this.otherLink,
         imgUrl: this.imgUrl, // fazer post da imagem recuperar url
       };
-      this.lastStep = 1;
-      const a = this;
-      setTimeout(() => { a.step = 2; }, 1000);
-      this.$store.dispatch({ type: 'addPin', payload });
+      // console.log(payload);
+      Promise((resolve, reject) => {
+        this.$store.dispatch('addPin', payload)
+          .then((response) => {
+            console.log(response);
+            this.lastStep = 1;
+            const a = this;
+            setTimeout(() => { a.step = 2; }, 1000);
+            this.fetchData();
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      });
     },
     expand() {
       this.state = !this.state;
@@ -417,14 +485,11 @@ export default {
 }
 
 .box {
-  transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 0.8s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .active {
-  // width: 350px;
-  // height: 100%;
-  // transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
-  animation: expand 1s linear;
+  animation: expand .8s linear;
 }
 
 @keyframes expand {
@@ -432,18 +497,25 @@ export default {
     width: 200px;
     height: 200px;
   }
-  50% {
-    width: 350px;
-  }
   100% {
     width: 350px;
     height: 100%;
   }
 }
 
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .editMode {
   height: 100%;
   width: 350px !important;
+  animation: 1.2s fadeInOpacity ease-in;
 }
 
 .first {

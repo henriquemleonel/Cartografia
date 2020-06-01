@@ -3,33 +3,20 @@
 
     <div class="fixed-center">
 
-      <!-- <my-filter/> -->
-      <div class="add">
-        <!-- <span class="spaced-32"> {{ this.category }} </span>
-        <q-input dense square outlined class="input mg-top16" v-model="category" label="Nome" />
+      <my-menu/>
 
-        <q-btn outlined @click="addCategorie()" class="btn-primary btn" color="black">
-          <span class="span-btn">adicionar categoria</span>
-        </q-btn> -->
-        <div class="categorys" v-for="(n, index) in 18" :key="index">
-          <icon-base :iconId="index" width="32"/>
-        </div>
-
-        <!-- <icon-base :iconId="1" width="32"/> -->
-
-      </div>
     </div>
 
   </div>
 </template>
 
 <script>
-import iconBase from '../components/iconBase.vue';
+import MyMenu from '../components/Menu.vue';
 
 export default {
   name: 'comp-Teste',
   components: {
-    iconBase,
+    MyMenu,
   },
   data() {
     return {
@@ -75,7 +62,7 @@ export default {
   transform: translateX(-50%);
   border: 1px solid pink;
   min-width: 200px;
-  height: 100%;
+  // height: 100%;
 }
 
 </style>

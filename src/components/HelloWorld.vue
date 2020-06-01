@@ -1,14 +1,12 @@
 <template>
-  <div class="container">
-    <div class="column">
-      
-    </div>
+  <div class="app-component">
+
   </div>
 </template>
 
 <script>
 export default {
-  name="hello-word",
+  name: 'hello-word',
   data() {
     return {
     };

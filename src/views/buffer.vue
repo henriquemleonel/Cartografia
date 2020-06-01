@@ -130,10 +130,6 @@
     </div>
     <!-- end map -->
 
-    <!-- <div class="show" style="position: absolute; top: 150px; left: 40%; z-index: 3;">
-      {{ pins }}
-    </div> -->
-
   </div>
 </template>
 
@@ -224,8 +220,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoggedIn: 'users/isLoggedIn',
-      pins: 'pins/loadPins',
+      isLoggedIn: 'isLoggedIn',
+      categories: 'loadCategories',
+      loadPins: 'loadPins',
     }),
     markesFiltered() {
       if (this.filterSelections.lehgth === 0) {
@@ -250,12 +247,19 @@ export default {
     opem() {
       this.opemNav = !this.opemNav;
     },
+    handleResize() {
+      const size = window.innerWidth;
+      if (size < 1200) {
+        return false;
+      }
+      return true;
+    },
     setCoordinates() {
       const vm = this;
-      this.pins.forEach((item) => vm.markers.push({ id: item.id, categoryId: item.categoryId, coordinates: item.coordinates }));
+      this.loadPins.forEach((item) => vm.markers.push({ id: item.id, categoryId: item.categoryId, coordinates: item.coordinates }));
     },
     getPinById(id) {
-      const target = this.pins.find((item) => item.id === id);
+      const target = this.loadPins.find((item) => item.id === id);
       return target;
     },
     zoomUpdated(newZoom) {
@@ -281,13 +285,6 @@ export default {
         top: '-100%',
         ease: Expo.easeInOut,
       });
-    },
-    handleResize() {
-      const size = window.innerWidth;
-      if (size < 1200) {
-        return false;
-      }
-      return true;
     },
   },
 };

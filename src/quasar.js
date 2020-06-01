@@ -82,7 +82,7 @@ Vue.use(Quasar, {
       accent: '#E6B545',
       // dark: '',
       positive: '#E6B545',
-      // negative: '#E6B545',
+      negative: '#bb0000',
       // info: '#E6B545',
       // warning: '',
     },

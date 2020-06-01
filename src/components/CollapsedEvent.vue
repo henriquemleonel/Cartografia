@@ -2,14 +2,14 @@
 
   <div class="box">
 
-    <div class="first" v-if="showThisShort" :style="{ 'background-color': background }">
+    <div class="first" v-if="showThisShort" :style="{ 'background-color': category.color }">
 
         <div class="header column">
 
-          <span class="title-2 bolder line-h16"> {{ name }} </span>
+          <span class="title-2 bolder line-h16"> {{ title }} </span>
 
           <div class="row spaced-32">
-            <span class="body-3 bold"> {{ date }} </span>
+            <span class="body-3 bold"> {{ formatDate }} </span>
             <!-- <span class="body-2 bold"> {{ date.year }} </span> -->
             <span class="body-3 bold mg-left16"> {{ time }} </span>
           </div>
@@ -21,7 +21,7 @@
 
         </div>
 
-        <q-btn flat class="reset-btn btn" ref="btnFirst" @click="editThisShort()">
+        <q-btn flat class="reset-btn btn" ref="btnFirst" @click="emitThisEvent()">
           <span class="caption bolder">editar</span>
         </q-btn>
 
@@ -32,23 +32,28 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 
 // import { gsap, TweenMax, Expo } from 'gsap/all';
 
 // gsap.registerPlugin(TweenMax, Expo);
 
 export default {
-  name: 'short-Event',
+  name: 'Collapsed-Event-View',
   components: {
   },
   data() {
     return {
       id: this.item.id, // emit to edit
-      showThisShort: true,
-      background: this.item.bg,
-      name: this.item.name,
+      title: this.item.title,
       date: this.item.date,
       time: this.item.time,
+      category: {
+        label: '',
+        value: '0',
+        color: '#000',
+      },
+      showThisShort: true,
     };
   },
   props: {
@@ -58,15 +63,35 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({
+      options: 'categories/loadCategories',
+    }),
+    formatDate() {
+      const d = new Date(this.date);
+      const monthNames = ['Jan', 'Fev', 'Mar', 'Abril', 'Maio', 'Junho', 'Julho', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const month = monthNames[d.getMonth()];
+      let day;
+      if (d.getDate().toString().length === 1) {
+        day = `0${d.getDate()}`;
+      } else {
+        day = d.getDate();
+      }
+      return `${day} de ${month}`;
+    },
+  },
+  mounted() {
+    this.setCategory();
   },
   methods: {
-    editThisShort() {
-      this.$emit('eventToEdit', this.id);
+    emitThisEvent() {
+      this.$emit('eventIdToEdit', this.id);
       console.log('shortEvent to edit : (id)', this.id); // emitindo que o shortEvent a ser editado
       // this.showThisShort = false;
     },
-    expand() {
-      this.state = !this.state;
+    setCategory() {
+      const vm = this;
+      const el = this.options.find((item) => item.value === vm.categoryId.toString());
+      this.category = el;
     },
   },
 };

@@ -1,26 +1,43 @@
 <template>
-  <div class="app-page">
+  <div class="app-page topics-page">
 
-    <!-- <logo-card class="fixed-logo" :blackMode="true"/> -->
-
+    <!-- aside -->
     <div class="aside">
 
       <logo-card class="identity" :blackMode="true"/>
 
       <div class="white-space"></div>
 
-      <section class="filter" v-if="!handleResize">
-        <span class="body-2 bolder">+</span>
+      <section
+        class="filter"
+        v-if="handleResize"
+      >
+
+        <h2 class="body-2 bolder">filtro here</h2>
+
       </section>
 
     </div>
+    <!-- end aside -->
 
-    <div class="filter-mobile" v-if="handleResize">
-      <span class="body-2 bolder">+</span>
+    <!-- filter to mobile -->
+    <div
+      class="filter-mobile"
+      v-if="handleResize"
+    >
+
+      <span
+        class="body-2 bolder"
+      >
+        +
+      </span>
+
     </div>
 
+    <!-- content -->
     <div class="content">
 
+      <!-- scroll area -->
       <q-scroll-area
         class="scrollArea"
         :thumb-style="thumbStyle"
@@ -28,43 +45,46 @@
         v-if="handleResize"
       >
 
-        <masonry class="items" :cols="{ default: 3, 1200: 3, 1130: 2, 600: 1 }" :gutter="{ default: '8px' }">
-          <div  v-for="item in events" :key="item.id">
+        <!-- <masonry class="grid" :cols="{ default: 3, 1200: 3, 1130: 2, 600: 1 }" :gutter="{ default: '4px', 1200: '4px', 1130: '8px', 600: '4px'}">
 
-            <schedule-item class="item" :item="item" v-if="events[item.id - 1]"/>
+          topic-list
+          <div
+            class="topics-list"
+            v-for="item in allEvents"
+            :key="item.id"
+          >
+
+              topic-item
+              <topic-item
+                class="topic-item"
+                :item="item"
+                v-if="allEvents[item.id - 1]"
+                :bgColor="item.category.color"
+              />
 
           </div>
-        </masonry>
+          end topic-list
+
+        </masonry> -->
+
+        <topics-list/>
 
       </q-scroll-area>
-
-      <div class="mobile-items" v-if="!handleResize">
-
-        <masonry class="items" :cols="{ default: 3, 1320: 2, 600: 1 }" :gutter="0">
-
-          <div  v-for="item in events" :key="item.id">
-            <transition name="q-transition--scale">
-              <my-event class="item" :item="item" v-if="events[item.id - 1]"/>
-            </transition>
-          </div>
-
-        </masonry>
-
-      </div>
+      <!-- end scroll-area -->
 
     </div>
+    <!-- end content -->
 
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import ScheduleItem from '../components/ScheduleItem.vue';
+import TopicsList from '../components/TopicsList.vue';
 
 export default {
-  name: 'Schedule_Page',
+  name: 'schedulePage',
   components: {
-    ScheduleItem,
+    TopicsList,
   },
   data() {
     return {
@@ -96,17 +116,12 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   computed: {
-    ...mapGetters({
-      events: 'events/loadEvents',
-    }),
+    allTopics() {
+      const eventsToShow = this.$store.getters.eventsFiltered;
+      return eventsToShow;
+    },
   },
   methods: {
-    onIntersection(entry) {
-      const index = parseInt(entry.target.dataset.id, 10);
-      setTimeout(() => {
-        this.events.splice(index, 3, entry.isIntersecting);
-      }, 50);
-    },
     handleResize() {
       const size = window.innerWidth;
       if (size > 600) {
@@ -114,8 +129,6 @@ export default {
       }
       return true;
     },
-  },
-  watch: {
   },
 };
 </script>
@@ -126,7 +139,7 @@ export default {
 @import '../styles/mixins.scss';
 @import '../styles/typo.scss';
 
-.app-page {
+.topics-page {
   z-index: 0;
   width: 100%;
   height: 100vh;
@@ -187,9 +200,10 @@ export default {
 
 .content {
   height: 100vh;
-  width: calc(100% - 350px);
+  width: 100%;
   padding: 8px 0px 0px 0px;
-  overflow: hidden;
+  max-width: 1080px;
+  // overflow: hidden;
   z-index: 1;
 
   @include for-phone-only {
@@ -201,16 +215,11 @@ export default {
     align-self: center;
     margin: 0px;
     padding: 16px 8px 8px 0px;
-    max-width: 1240px;
   }
 }
 
-.item {
-  margin: 8px;
-}
-
 .scrollArea {
-  height: 100%;
+  height: 100vh;
   width: 100%;
   padding-right: 16px;
 

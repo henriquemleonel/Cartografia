@@ -15,11 +15,28 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+// ----------------- leaflet reset popup --------------------
+.leaflet-popup-content-wrapper {
+  box-shadow: none  !important;
+  border-radius: 0px  !important;
+  padding: 0px !important;
+}
+
+.leaflet-popup-content {
+  margin: 0px;
+  box-shadow: none  !important;
+  padding: 0px;
+}
+
+.leaflet-popup-tip {
+  display: none !important;
+}
+
 // ----------------- typograph styleguide -------------------
 * {
   box-sizing: border-box;
   padding: 0;
-  font-family: 'Helvetica-Normal';
+  font-family: 'Helvetica';
 }
 
 .font2 {

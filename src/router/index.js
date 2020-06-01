@@ -36,9 +36,9 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: () => import(/* webpackChunkName: "profile" */ '../views/Profile.vue'),
-    meta: {
-      requiresAuth: true,
-    },
+    // meta: {
+    //   requiresAuth: true,
+    // },
   },
   {
     path: '/dashboard',
@@ -58,12 +58,17 @@ const routes = [
     // },
   },
   {
-    path: '/debates',
-    name: 'Debates',
-    component: () => import(/* webpackChunkName: "debates" */ '../views/Debates.vue'),
+    path: '/topics', // todos os tópicos (debates)
+    name: 'Topics',
+    component: () => import(/* webpackChunkName: "Topics" */ '../views/Topics.vue'),
     // meta: {
     //   requiresAuth: true,
     // },
+  },
+  {
+    path: '/topics/:topicId', // página de um tópico
+    name: 'TopicPage',
+    component: () => import(/* webpackChunkName: "topic" */ '../views/TopicPage.vue'),
   },
   {
     path: '/terms',
@@ -79,6 +84,11 @@ const routes = [
     path: '/teste',
     name: 'Teste',
     component: () => import(/* webpackChunkName: "teste" */ '../views/CompTeste.vue'),
+  },
+  {
+    path: '/buffer',
+    name: 'Buffer',
+    component: () => import(/* webpackChunkName: "teste" */ '../views/buffer.vue'),
   },
 ];
 
@@ -131,7 +141,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     // const accessToken = localStorage.getItem('access_token');
-    const accessToken = sessionStorage.getItem('access_token');
+    // const accessToken = sessionStorage.getItem('access_token');
+    const accessToken = true;
     console.log(`to ${to.name}`);
     if (to.name !== 'SignIn' && !accessToken) {
       next({

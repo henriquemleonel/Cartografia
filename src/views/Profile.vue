@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="app-page">
 
     <div class="content row no-wrap">
 
@@ -10,8 +10,8 @@
 
           <logo-card class="logo" :blackMode="true"/>
 
-          <div class="user-img">
-            <img src="../assets/statics/avatar01.jpg" style="width: 200px; height: 200px;"/>
+          <div class="img-box">
+            <img class="user-img" src="../assets/statics/avatar01.jpg" alt="Imagen não encontrada" height="200px" width="200px"/>
           </div>
 
         </div>
@@ -19,11 +19,7 @@
         <!-- informaçoes do usuário (editáveis) -->
         <div class="user-info">
 
-          <user-card
-            class="profile-card"
-            :info="getUser"
-            v-on:emitLogout="logout()"
-          />
+          <user-card class="profile-card" :info="currentUser.user" v-on:emitLogout="logout()"/>
 
         </div>
 
@@ -32,14 +28,14 @@
       <!-- pin -->
       <div class="pin">
 
-        <!-- <pin-profile/> -->
-        <pin-teste :fetch="getPinStatus" :item="getPinUser"/>
+        <pin-editor v-if="!1"/>
+        <pin-teste :fetch="myPinState" :item="myPin"/>
 
       </div>
 
       <!-- evento (inserção/edição) -->
       <div class="event">
-        <event-profile />
+        <event-editor/>
       </div>
 
       <!--  tabela de eventos -->
@@ -51,8 +47,8 @@
           :bar-style="barStyle"
         >
 
-          <div class="event-item" v-for="item in getMyEvents" :key="item.id">
-            <short-event :item="item"/>
+          <div class="event-item" v-for="item in myEvents" :key="item.id">
+            <collaped-event-view :item="item"/>
             <!-- <span> {{ item.newEvent }} </span> -->
           </div>
 
@@ -79,10 +75,25 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import UserCard from '../components/UserCard.vue';
+import PinEditor from '../components/PinEditor.vue';
+import EventEditor from '../components/EventEditor.vue';
+import CollapedEventView from '../components/CollapsedEvent.vue';
+import PinTeste from '../components/pinTeste.vue';
+
 export default {
   name: 'Profile',
+  components: {
+    UserCard,
+    PinEditor,
+    EventEditor,
+    CollapedEventView,
+    PinTeste,
+  },
   data() {
     return {
+      userImg: '../assets/statics/avatar01.jpg',
       thumbStyle: {
         right: '0px',
         borderRadius: '0px',
@@ -104,47 +115,25 @@ export default {
     signedIn() {
       return this.$store.getters.signedIn;
     },
-    // props de user-card
-    getUser() {
-      return this.$store.getters.currentUser;
-    },
-    // props de pin-profile
-    getPinUser() {
-      return this.$store.getters.myPin;
-    },
-    getPinStatus() {
-      return this.$store.getters.pinCompleted; // verifica se o usuário possui um pin
-    },
-    // show infos from store
-    myEventsSize() {
-      return this.$store.state.myEvents.length;
-    },
-    getMyEvents() {
-      const showMyEvents = this.$store.getters.myEvents;
-      return showMyEvents;
-    },
+    ...mapGetters({
+      currentUser: 'users/getCurrentUser',
+      myPin: 'users/getMyPin',
+      myPinState: 'users/getMyPinState',
+      myEvents: 'users/getMyEvents',
+    }),
   },
   methods: {
-    // logout() {
-    //   this.$store.dispatch('destroyToken')
-    //   .then(response => {
-    //       this.$router.push({ name: 'Home' })
-    //   })
-    // },
-    // changeColor() {
-    //   if(this.className = 'is-blue'){
-    //       this.className = 'is-red';
-    //   }
-    //   else
-    //     this.className = 'is-blue';
-    // }
+    logout() {
+      this.$store.dispatch('users/destroyToken')
+        .then(
+          this.$router.push({ name: 'Home' }),
+        ).catch((error) => {
+          console.log(error);
+        });
+    },
     setNewkey() {
       this.$store.dispatch('setKey');
       console.log('setNewKey');
-    },
-    logout() {
-      this.$store.dispatch('destroyToken');
-      console.log('profile : try logout');
     },
     showEditInfo() {
       this.opemEditInfo = !this.opemEditInfo;
@@ -166,7 +155,6 @@ export default {
   position: absolute;
   top: 500px;
   left: 24px;
-  // height: 200px;
   width: 400px;
   background-color: #000;
 
@@ -181,16 +169,13 @@ export default {
   }
 }
 
-.container {
+.app-page {
   display: flex;
-  // justify-content: center;
   align-items: flex-start;
   border-radius: 0px;
-  // background-color: #f5f5f5;
   background-color: white;
   padding: 24px;
   width: 100%;
-  // height: 100vh;
 
   @media screen and (min-width: 1200px) {
     align-items: center;
@@ -218,35 +203,20 @@ span {
   width: 400px;
   margin: 2px;
   overflow: hidden;
-
-// .logo {
-//   // background-color: #C95B40;
-// }
-
-// .user-img {
-//   background-color: #529E63;
-// }
-
 }
 
 .user-info {
-  // background-color: #AD3B3B;
   margin: 2px;
 }
 
 .pin {
-  // background-color: #254C26;
-  // width: 100%;
   // max-width: 350px;
   margin: 2px;
   overflow: hidden;
 }
 
 .event {
-  // height: 100%;
-  // width: 100%;
-  // background-color: #BD6A5C;
-  margin: 2px;
+    margin: 2px;
 }
 
 .events {
@@ -269,10 +239,6 @@ span {
 
 }
 
-// .pin, .event, .events {
-//   display: none;
-// }
-
 // ---------------------------------- others ---------------------------------------------
 .edit-info {
   height: 0px;
@@ -293,11 +259,6 @@ span {
   width: 100%;
   height: 100%;
   padding: 0px;
-  //background-color: $f;
-  //border: 1px solid black;
-
-  @include for-desktop-up {
-  }
 }
 
 </style>
