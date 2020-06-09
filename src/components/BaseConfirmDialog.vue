@@ -13,7 +13,7 @@
         <slot/>
         <div class="actions">
           <base-button
-            theme="borderless"
+            theme="secondary"
             @click="show = false"
           >
             {{ dismissButtonTitle }}
@@ -31,7 +31,14 @@
 </template>
 
 <script>
+import BaseModal from './BaseModal.vue';
+import BaseButton from './BaseButton.vue';
+
 export default {
+  components: {
+    BaseModal,
+    BaseButton,
+  },
   props: {
     confirmButtonTitle: {
       type: String,
@@ -64,7 +71,7 @@ export default {
 $primaryColor: #000;
 
 .modal-content {
-  border-radius: 3px;
+  border-radius: 0px;
   box-shadow: 0 1px 5px rgba(0,0,0,0.3);
   width: calc(100% - 10px);
   display: flex;

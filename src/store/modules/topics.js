@@ -16,10 +16,10 @@ export default {
         date: '2020/04/28',
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         likes: 170,
-        dislikes: 64,
-        suport: 234,
+        dislikes: 65,
         repliesId: 1,
-        numberOfReplies: 12,
+        numberOfReplies: 2,
+        views: 0,
         replies: [
           {
             id: 1,
@@ -31,7 +31,7 @@ export default {
             },
             content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
             createdAt: '2019-03-27',
-            numberOfLikes: 0,
+            numberOfLikes: 12,
           },
           {
             id: 2,
@@ -59,9 +59,9 @@ export default {
         description: 'pula fogueira',
         likes: 170,
         dislikes: 64,
-        suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        views: 0,
       },
       {
         id: 3,
@@ -75,9 +75,59 @@ export default {
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         likes: 170,
         dislikes: 64,
-        suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        views: 0,
+        replies: [
+          {
+            id: 3,
+            user: {
+              id: 2,
+              name: 'Juliana Trujillo',
+              categoryId: 8,
+              avatar: '',
+            },
+            content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
+            createdAt: '2019-03-27',
+            numberOfLikes: 12,
+          },
+          {
+            id: 4,
+            user: {
+              id: 27,
+              name: 'Henrique Leonel',
+              categoryId: 15,
+              avatar: '',
+            },
+            content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
+            createdAt: '2019-03-27',
+            numberOfLikes: 0,
+          },
+          {
+            id: 5,
+            user: {
+              id: 2,
+              name: 'Juliana Trujillo',
+              categoryId: 8,
+              avatar: '',
+            },
+            content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
+            createdAt: '2019-03-27',
+            numberOfLikes: 12,
+          },
+          {
+            id: 4,
+            user: {
+              id: 43,
+              name: 'fulano',
+              categoryId: 15,
+              avatar: '',
+            },
+            content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
+            createdAt: '2019-03-27',
+            numberOfLikes: 3,
+          },
+        ],
       },
       {
         id: 4,
@@ -91,9 +141,9 @@ export default {
         description: 'indústria tipográfica ede impressos,',
         likes: 170,
         dislikes: 64,
-        suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        views: 0,
       },
       {
         id: 5,
@@ -107,9 +157,9 @@ export default {
         description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
         likes: 170,
         dislikes: 64,
-        suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        views: 0,
       },
       {
         id: 6,
@@ -123,9 +173,9 @@ export default {
         description: 'pula fogueira ',
         likes: 170,
         dislikes: 64,
-        suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        views: 0,
       },
       {
         id: 7,
@@ -139,9 +189,9 @@ export default {
         description: 'photo graph u',
         likes: 170,
         dislikes: 64,
-        suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        views: 0,
       },
       {
         id: 8,
@@ -155,9 +205,9 @@ export default {
         description: 'photo graph u',
         likes: 170,
         dislikes: 64,
-        suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        views: 0,
       },
       {
         id: 9,
@@ -171,9 +221,9 @@ export default {
         description: 'photo graph u',
         likes: 170,
         dislikes: 64,
-        suport: 234,
         repliesId: 1,
         numberOfReplies: 12,
+        views: 0,
       },
     ],
     current: null,
@@ -222,15 +272,15 @@ export default {
     //   await apiClient.deleteTopic(topicId);
     // },
 
-    // async addReply({ state, commit }, { data }) {
+    // addReply({ state, commit }, { data }) {
     //   const reply = await apiClient.addReply(state.current.id, data);
     //   commit('ADD_REPLY_TO_CURRENT_TOPIC', { reply });
     // },
 
-    // async deleteReply({ state, commit }, { replyId }) {
-    //   await apiClient.deleteReply(state.current.id, replyId);
-    //   commit('DELETE_REPLY_FROM_CURRENT_TOPIC', { replyId });
-    // },
+    deleteReply({ commit }, { replyId }) {
+      // await apiClient.deleteReply(state.current.id, replyId);
+      commit('DELETE_REPLY_FROM_CURRENT_TOPIC', { replyId });
+    },
 
     // async updateReply({ state, commit }, { replyId, data }) {
     //   await apiClient.updateReply(state.current.id, replyId, data);
@@ -238,11 +288,19 @@ export default {
     //   return replyId;
     // },
 
-    // async likeReply({ state, commit }, { replyId }) {
-    //   await apiClient.updateReply(state.current.id, replyId, data);
-    //   commit('LIKE_REPLY', { replyId });
-    //   return replyId;
-    // },
+    likeReply({ dispatch, commit }, { replyId }) {
+      // await apiClient.updateReply(state.current.id, replyId, data);
+      dispatch('users/addLike', { replyId }, { root: true });
+      commit('LIKE_REPLY', { replyId });
+      return replyId;
+    },
+
+    unlikeReply({ dispatch, commit }, { replyId }) {
+      // await apiClient.updateReply(state.current.id, replyId, data);
+      dispatch('users/removeLike', { replyId }, { root: true });
+      commit('UNLIKE_REPLY', { replyId });
+      return replyId;
+    },
   },
 
   mutations: {
@@ -261,11 +319,12 @@ export default {
     //   ];
     // },
 
-    // DELETE_REPLY_FROM_CURRENT_TOPIC({ state }, { replyId }) {
-    //   state.current.replies = state.current.replies.filter(
-    //     (reply) => reply.id !== replyId,
-    //   );
-    // },
+    DELETE_REPLY_FROM_CURRENT_TOPIC(state, { replyId }) {
+      state.current.replies = state.current.replies.filter(
+        (reply) => reply.id !== replyId,
+      );
+      // console.log('after delete', state.current.replies);
+    },
 
     // UPDATE_REPLY({ state }, { replyId, data }) {
     //   const replyIndex = state.current.replies.map((reply) => reply.id).indexOf(replyId);
@@ -274,10 +333,15 @@ export default {
     //   }
     // },
 
-    // LIKE_REPLY({ state }, { replyId }) {
-    //   const replyIndex = state.current.replies.find((reply) => reply.id === replyId);
-    //   state.current.replies[replyIndex].numberOfReplies++;
-    // },
+    LIKE_REPLY(state, { replyId }) {
+      const replyIndex = state.current.replies.findIndex((reply) => reply.id === replyId);
+      state.current.replies[replyIndex].numberOfLikes += 1;
+    },
+
+    UNLIKE_REPLY(state, { replyId }) {
+      const replyIndex = state.current.replies.findIndex((reply) => reply.id === replyId);
+      state.current.replies[replyIndex].numberOfLikes -= 1;
+    },
   },
 
   getters: {

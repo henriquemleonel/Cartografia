@@ -22,7 +22,7 @@
     <div class="content">
 
       <q-scroll-area
-        class="scrollArea"
+        class="scroll-area"
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
         v-if="handleResize"
@@ -209,7 +209,7 @@ export default {
   margin: 8px;
 }
 
-.scrollArea {
+.scroll-area {
   height: 100%;
   width: 100%;
   padding-right: 16px;

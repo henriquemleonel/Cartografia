@@ -4,6 +4,10 @@
     <!-- header -->
     <div class="header">
       <logo class="identity" :blackMode="true"/>
+      <q-btn class="reset-btn mg-top16" flat :to="{ name: 'Topics' }">
+        <i class="fas fa-arrow-left"></i>
+        <span class="caption bolder mg-left8"> voltar aos debates </span>
+      </q-btn>
     </div>
 
     <!-- delete field -->
@@ -40,6 +44,7 @@
 
     </div>
 
+    <!-- topic footer and user actions -->
     <div class="topic-footer">
 
       <div class="topic-footer-reply">
@@ -85,16 +90,7 @@
 
     </div>
 
-    <div class="replies-section">
-      <div class="replies-content">
-        <reply
-          v-for="reply in topic.replies"
-          :key="reply.id"
-          :reply="reply"
-        />
-      </div>
-    </div>
-
+    <!-- reply-form -->
     <div class="reply-form">
 
       <reply-form
@@ -103,6 +99,24 @@
       />
 
     </div>
+
+    <!-- reply-section -->
+    <q-scroll-area
+      class="scroll-area"
+      :thumb-style="thumbStyle"
+      :bar-style="barStyle"
+    >
+      <div class="replies-content">
+
+        <reply
+          v-for="reply in topic.replies"
+          :key="reply.id"
+          :reply="reply"
+        />
+
+      </div>
+
+    </q-scroll-area>
 
   </div>
 </template>
@@ -135,6 +149,23 @@ export default {
   data() {
     return {
       showConfirmDialog: this.isLoggedIn,
+      thumbStyle: {
+        right: '0px',
+        top: '16px',
+        borderRadius: '0px',
+        backgroundColor: '#111111',
+        width: '9px',
+        heigth: '8px',
+        opacity: 0.75,
+      },
+      barStyle: {
+        right: '0px',
+        top: '16px',
+        borderRadius: '0px',
+        backgroundColor: '#eeeeee',
+        width: '9px',
+        opacity: 0.2,
+      },
     };
   },
   computed: {
@@ -196,7 +227,7 @@ export default {
 
 .header {
   width: 100%;
-  margin: 0px 0px 64px 0px;
+  margin: 0px 0px 32px 0px;
   // border: 2px solid blue;
 }
 
@@ -210,7 +241,8 @@ export default {
   flex-direction: row;
   align-items: flex-start;
   // position: relative;
-  margin-top: 45px;
+  margin-top: 40px;
+  // margin-bottom: 8px;
   padding-bottom: 8px;
   // border: 2px solid green;
 }
@@ -231,12 +263,9 @@ export default {
 .action-buttons {
   width: 50%;
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: flex-end;
   justify-items: flex-end;
-  // position: relative;
-  // right: 32px;
-  // top: 0px;
 }
 
 .user-button {
@@ -246,7 +275,13 @@ export default {
 
 .reset-button {
   height: 35px;
-  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.scroll-area {
+  height: 700px;
+  width: 100%;
+  padding-right: 16px;
 }
 
 .reset-reply-icon {

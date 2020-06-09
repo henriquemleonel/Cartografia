@@ -4,31 +4,31 @@
 
     <div class="content column">
 
-      <span class="big-title bolder"> {{ title }} </span>
+      <span class="big-title bolder"> {{ topic.title }} </span>
 
       <span class="body-2 bolder mg-top32"> {{ category.label }} </span>
       <!-- topicOwner & date -->
       <div class="row">
 
-        <span class="body-2 bold"> {{ user.name }} </span>
+        <span class="body-2 bold"> {{ topic.user.name }} </span>
 
         <span class="body-2 bold  mg-left8">| {{ formatDate }} </span>
 
       </div>
 
-      <span class="body-2 bold mg-top32"> {{ description }} </span>
+      <span class="body-2 bold mg-top32"> {{ formatDescription }} </span>
 
       <div class="row mg-top32">
         <!-- <i class="far fa-thumbs-up"></i> -->
-        <span class="caption bolder"> {{ likes }} likes </span>
+        <span class="caption bolder"> {{ topic.likes }} likes </span>
         <span class="caption bolder mg-left8"> | </span>
-        <span class="caption bolder mg-left8"> {{ dislikes }} dislikes </span>
+        <span class="caption bolder mg-left8"> {{ topic.dislikes }} dislikes </span>
       </div>
 
       <div class="row mg-top8">
-        <span class="caption bolder"> {{ suport }} apoios </span>
+        <span class="caption bolder"> {{ topic.likes + topic.dislikes }} votos </span>
         <span class="caption bolder mg-left8"> | </span>
-        <span class="caption bolder mg-left8"> {{ numberOfReplies }} comentários </span>
+        <span class="caption bolder mg-left8"> {{ topic.numberOfReplies }} comentários </span>
       </div>
 
     </div>
@@ -44,15 +44,8 @@ export default {
   data() {
     return {
       id: this.topic.id,
-      title: this.topic.title,
-      user: this.topic.user,
       date: this.topic.date,
-      description: this.topic.description,
       categoryId: this.topic.categoryId,
-      likes: this.topic.likes,
-      dislikes: this.topic.dislikes,
-      suport: this.topic.suport,
-      numberOfReplies: this.topic.numberOfReplies,
       category: {
         label: '',
         value: '0',
@@ -81,6 +74,14 @@ export default {
         day = d.getDate();
       }
       return `${day} de ${month}`;
+    },
+    formatDescription() {
+      const limit = 150;
+      const str = this.topic.description;
+      if (str.length > limit) {
+        return str.substring(0, limit).concat('...');
+      }
+      return this.topic.description;
     },
   },
   mounted() {
@@ -126,7 +127,6 @@ export default {
   }
 
   &:hover {
-    transform: scale(1.02);
     cursor: pointer;
   }
 }

@@ -8,12 +8,14 @@ export default {
     isAdmin: null,
     myPin: null,
     myEvents: null,
+    myLikes: [],
   },
 
   getters: {
     isLoggedIn(state) {
       const token = localStorage.getItem('access_token');
       return (state.currentUser !== null) && (token !== null);
+      // return (token !== null);
     },
     isAdmin(state) {
       return (state.isAdmin !== null);
@@ -22,6 +24,7 @@ export default {
     getMyPin: (state) => state.myPin,
     getMyPinState: (state) => state.myPin !== null,
     getMyEvents: (state) => state.myEvents,
+    getMyLikes: (state) => state.myLikes,
 
   },
 
@@ -67,11 +70,19 @@ export default {
           });
       });
     },
-    destroyToken(state) {
+    destroyToken({ commit }) {
       localStorage.removeItem('access_token');
-      state.commit('destroyToken');
-      state.commit('destroyCurrentUser');
+      commit('destroyToken');
+      commit('destroyCurrentUser');
       console.log('logout');
+    },
+    addLike({ commit }, { replyId }) {
+      commit('ADD_LIKE', { replyId });
+      console.log('add like user action');
+    },
+    removeLike({ commit }, { replyId }) {
+      commit('REMOVE_LIKE', { replyId });
+      console.log('remove like user action');
     },
   },
 
@@ -91,6 +102,21 @@ export default {
       state.myPin = null;
       state.isAdmin = null;
       console.log('mutation : destroy currentUser');
+    },
+
+    ADD_LIKE(state, { replyId }) {
+      state.myLikes.push(replyId);
+      console.log('array mylikes', state.myLikes);
+    },
+
+    REMOVE_LIKE(state, { replyId }) {
+      const index = state.myLikes.findIndex((item) => item === replyId);
+      console.log('array mylikes before remove', state.myLikes);
+      console.log('item to remove', state.myLikes[index]);
+      if (state.myLikes !== null && state.myLikes.length !== 0) {
+        state.myLikes.splice(index, 1);
+        console.log('array mylikes after remove', state.myLikes);
+      }
     },
   },
 };

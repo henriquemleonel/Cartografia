@@ -55,6 +55,7 @@ $primaryColor: #000;
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  min-width: 80px;
 }
 
 .base-button.disabled {
@@ -70,6 +71,17 @@ $primaryColor: #000;
 }
 
 .base-button:not(.disabled).primary:hover {
+   background: lighten($primaryColor, 7%);
+}
+
+// secondary
+.base-button:not(.disabled).secondary {
+  background: $primaryColor;
+  color: #FFF;
+  border: 1px solid white;
+}
+
+.base-button:not(.disabled).secondary:hover {
    background: lighten($primaryColor, 7%);
 }
 

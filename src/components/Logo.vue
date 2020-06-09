@@ -8,9 +8,9 @@
     </div>
 
     <div class="bottom column">
-      <span class="heading bold"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
+      <span class="heading bolder"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
       <div class="line"></div>
-      <span class="caption bold"> cultura em movimento </span>
+      <span class="caption bolder"> cultura em movimento </span>
     </div>
 
   </div>

@@ -17,7 +17,7 @@
       :disabled="loading"
       @click="reply"
     >
-      {{ loading ? 'Comentando...' : 'Comentar' }}
+      <span class="caption bolder"> {{ loading ? 'Comentando...' : 'Comentar' }} </span>
     </base-button>
 
   </div>
@@ -43,7 +43,7 @@ export default {
     content: { required },
   },
   methods: {
-    ...mapActions(['addReply']),
+    ...mapActions(['topics/addReply']),
     async reply() {
       this.$v.$touch();
       if (!this.$v.$anyError) {
@@ -66,13 +66,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../styles/variables.scss';
 
 .reply-form {
   display: flex;
   // justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  margin: 16px 0px 16px 0px;
+  margin: 8px 0px 32px 0px;
   width: 90%;
 }
 

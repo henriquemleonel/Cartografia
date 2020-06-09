@@ -1,20 +1,6 @@
 <template>
   <div class="reply-component row no-wrap">
 
-    <base-confirm-dialog
-      v-if="showConfirmDialog"
-      confirm-button-title="delete"
-      dismiss-button-title="cancel"
-      @dismiss="showConfirmDialog = false"
-      @confirm="deleteReply({ replyId: reply.id })"
-    >
-      <template #title>
-        Excluir esse comentário?
-      </template>
-      <template #default>
-        Você não pode desfazer essa ação.
-      </template>
-    </base-confirm-dialog>
 
     <div class="avatar">
       <base-avatar
@@ -38,21 +24,27 @@
           </span>
         </div>
 
-        <div
-          v-if="!editing"
-          class="owner-actions"
-        >
-          <span class="">alo</span>
-          <i
-            v-if="isLoggedIn && currentUser && canEditTopic(currentUser.user.id, reply.user.id)"
-            class="action-icon fas fa-pencil-alt"
-            @click="editReply"
-          ></i>
-          <i
-            v-if="isLoggedIn && currentUser && canEditTopic(currentUser.user.id, reply.user.id)"
-            class="action-icon fas fa-trash"
-            @click="showConfirmDialog = true"
-          ></i>
+        <div class="owner-actions">
+
+          <div class="action-content" v-if="!editing && !deleteAction">
+            <i
+              v-if="isLoggedIn && currentUser && canEditTopic()"
+              class="action-icon fas fa-pencil-alt"
+              @click="editing = true"
+            ></i>
+            <i
+              v-if="isLoggedIn && currentUser && canEditTopic()"
+              class="action-icon fas fa-trash"
+              @click="deleteAction = true, editing = false"
+            ></i>
+          </div>
+
+          <div class="row" v-if="deleteAction">
+            <span class="caption bolder text-white al-self-center"> Deseja excluir este comentário?</span>
+            <q-btn class="reset-btn mg-left8" @click="deleteAction = false" flat size="xs" color="white"> <span class="caption bolder">não</span> </q-btn>
+            <q-btn class="reset-btn mg-left8" @click="deleteReply" flat size="xs" color="white"> <span class="caption bolder">sim</span> </q-btn>
+          </div>
+
         </div>
 
       </div>
@@ -78,7 +70,7 @@
 
           <div class="action-editing">
 
-            <base-button class="cancel-button" theme="borderless" @click="editing = false">
+            <base-button class="cancel-button" theme="secondary" @click="editing = false">
               <span class="caption bolder">Cancelar</span>
             </base-button>
 
@@ -91,21 +83,22 @@
         </template>
 
       </div>
-      <!-- fim de reply -->
+      <!-- end reply -->
 
-      <!-- reply this and like -->
-      <div class="action-replying" v-if="!canEditTopic(currentUser.user.id, reply.user.id)">
+      <!-- reply-this and like -->
+      <div class="action-replying" v-if="!canEditTopic()">
 
-        <base-button class="reply-button" theme="borderless" @click="reply">
+        <base-button v-if="isLoggedIn && currentUser" class="reply-button" theme="primary" @click="reply">
           <span class="caption bolder" style="color: white;">Responder</span>
         </base-button>
-        <i
-            v-if="isLoggedIn && currentUser"
-            class="action-icon fas fa-thumbs-up"
-            @click="likeThisReply"
-          ></i>
+
+        <i v-if="isLoggedIn && currentUser" class="action-icon fas fa-thumbs-up" :class="{ 'liked': hasBeenLiked }" @click="likeReply()"/>
+        <i v-if="!isLoggedIn" class="action-icon no-pointer fas fa-thumbs-up"/>
+
+        <span class="caption bolder no-pointer text-white mg-left8">{{ reply.numberOfLikes }}</span>
+
       </div>
-      <!-- fim de reply action -->
+      <!-- end reply action -->
 
     </div>
 
@@ -114,7 +107,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import BaseConfirmDialog from './BaseConfirmDialog.vue';
+// import BaseConfirmDialog from './BaseConfirmDialog.vue';
 import BaseAvatar from './BaseAvatar.vue';
 import BaseButton from './BaseButton.vue';
 
@@ -123,7 +116,7 @@ export default {
   components: {
     BaseAvatar,
     BaseButton,
-    BaseConfirmDialog,
+    // BaseConfirmDialog,
   },
   props: {
     reply: {
@@ -137,12 +130,15 @@ export default {
       content: '',
       editing: false,
       loading: false,
+      deleteAction: false,
+      liked: false,
     };
   },
   computed: {
     ...mapGetters({
       isLoggedIn: 'users/isLoggedIn',
       currentUser: 'users/getCurrentUser',
+      myLikes: 'users/getMyLikes',
     }),
     formatDate() {
       const d = new Date(this.reply.createdAt);
@@ -157,15 +153,37 @@ export default {
       }
       return `${day} de ${month} de ${year}`;
     },
+    hasBeenLiked() {
+      if (this.myLikes.includes(this.reply.id)) {
+        console.log('hasLiked');
+        return true;
+      }
+      console.log('hasNoLiked');
+      return false;
+    },
   },
+  // mounted() {
+  //   // this.hasBeenLiked();
+  // },
+  // updated() {
+  //   this.hasBeenLiked();
+  // },
   methods: {
     ...mapActions([
       'deleteReply',
       'updateReply',
     ]),
     editReply() {
-      this.content = this.reply.content;
-      this.editing = true;
+    },
+    deleteReply() {
+      console.log('delete this', this.reply.id);
+      this.$store.dispatch('topics/deleteReply', {
+        replyId: this.reply.id,
+      }).then(() => {
+        console.log('delete Ok');
+      }).catch((error) => {
+        console.log('delete error', error);
+      });
     },
     async saveReply() {
       this.loading = true;
@@ -180,17 +198,29 @@ export default {
         this.loading = false;
       }
     },
-    async likeThisReply() {
-      try {
-        await this.likeReply({
+    likeReply() {
+      if (!this.myLikes.includes(this.reply.id)) {
+        this.liked = true;
+        this.$store.dispatch('topics/likeReply', {
           replyId: this.reply.id,
+        }).then(() => {
+          console.log('like this');
+        }).catch((error) => {
+          console.log('error like', error);
         });
-      } catch (error) {
-        console.log(error);
+      } else if (this.myLikes.includes(this.reply.id)) {
+        this.liked = false;
+        this.$store.dispatch('topics/unlikeReply', {
+          replyId: this.reply.id,
+        }).then(() => {
+          console.log('unlike this');
+        }).catch((error) => {
+          console.log('error like', error);
+        });
       }
     },
-    canEditTopic(userId, ownerId) {
-      if (userId === ownerId) {
+    canEditTopic() {
+      if (this.currentUser !== null && this.currentUser.user.id === this.reply.user.id) {
         return true;
       }
       return false;
@@ -248,6 +278,14 @@ $primaryColor: #000;
   cursor: pointer;
 }
 
+.no-pointer {
+  cursor: default;
+}
+
+.liked {
+  color: #C95B40;
+}
+
 .reply-container {
   padding: 8px 16px 16px 16px;
   margin-left: 8px;
@@ -291,7 +329,6 @@ $primaryColor: #000;
 }
 
 .reply-button {
-  color: white;
 
  &:hover {
     cursor: pointer;
