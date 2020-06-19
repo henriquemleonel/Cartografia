@@ -79,7 +79,7 @@ const store = new Store({
         autoId += chars.charAt(Math.floor(Math.random() * chars.length))
       }
       let key = autoId
-      console.log('KEY DO NOVO EVENTO:', key)
+      console.log('rootState/KEY', key)
       context.commit('setKey', key);
     },    
     addPinCommit(context, payload) {

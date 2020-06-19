@@ -1,6 +1,8 @@
 <template>
   <div class="reply-form">
 
+    <span class="body-2 bolder">Deixe seu comentário</span>
+
     <q-input
       v-model="content"
       ref="input"
@@ -24,7 +26,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+// import { mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 
 import BaseButton from './BaseButton.vue';
@@ -43,19 +45,20 @@ export default {
     content: { required },
   },
   methods: {
-    ...mapActions(['topics/addReply']),
-    async reply() {
+    reply() {
       this.$v.$touch();
       if (!this.$v.$anyError) {
         this.loading = true;
-        try {
-          await this.addReply({ data: { content: this.content } });
-          this.content = '';
-          this.$v.$reset();
-          this.loading = false;
-        } catch (err) {
-          this.loading = false;
-        }
+        this.$store.dispatch('topics/addReply', { data: this.content })
+          .then(() => {
+            this.content = '';
+            this.$v.$reset();
+            this.loading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.loading = false;
+          });
       }
     },
     focus() {
@@ -73,12 +76,13 @@ export default {
   // justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  margin: 8px 0px 32px 0px;
-  width: 90%;
+  margin: 32px 0px 32px 0px;
+  width: 100%;
 }
 
 .text-area {
-  width: 100%;
+  margin-top: 8px;
+  width: calc(100% - 16px);
 }
 
 .reply-button {

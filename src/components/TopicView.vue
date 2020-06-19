@@ -90,16 +90,6 @@
 
     </div>
 
-    <!-- reply-form -->
-    <div class="reply-form">
-
-      <reply-form
-        v-if="isLoggedIn"
-        ref="replyForm"
-      />
-
-    </div>
-
     <!-- reply-section -->
     <q-scroll-area
       class="scroll-area"
@@ -117,6 +107,16 @@
       </div>
 
     </q-scroll-area>
+
+    <!-- reply-form -->
+    <div class="reply-form">
+
+      <reply-form
+        v-if="isLoggedIn"
+        ref="replyForm"
+      />
+
+    </div>
 
   </div>
 </template>
@@ -218,7 +218,7 @@ export default {
 @import '../styles/mixins.scss';
 
 .topic-view {
-  background: #f5f5f5;
+  background: #fff;
   border-radius: 3px;
   padding: 32px;
   // border: 2px solid red;
@@ -240,16 +240,14 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  // position: relative;
-  margin-top: 40px;
-  // margin-bottom: 8px;
-  padding-bottom: 8px;
+  width: calc(100% - 32px);
+  margin-top: 32px;
+  padding: 8px;
   // border: 2px solid green;
 }
 
 .topic-footer-reply {
   width: 50%;
-  // position: relative;
   display: flex;
   justify-items: flex-end;
   // border: 2px solid red;

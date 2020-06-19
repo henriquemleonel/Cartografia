@@ -327,7 +327,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      options: 'loadCategories',
+      options: 'categories/loadCategories',
     }),
     formIsValid() {
       if (this.$v.$anyError || this.selected === null || this.terms === false ) {

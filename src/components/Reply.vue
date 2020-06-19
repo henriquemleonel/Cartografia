@@ -19,7 +19,7 @@
           <span class="author-name body-2 bolder">
             {{ reply.user.name }}
           </span>
-          <span class="date caption bolder">
+          <span class="date caption bold">
             {{ formatDate }}
           </span>
         </div>
@@ -29,23 +29,38 @@
           <div class="action-content" v-if="!editing && !deleteAction">
             <i
               v-if="isLoggedIn && currentUser && canEditTopic()"
-              class="action-icon fas fa-pencil-alt"
+              class="action-icon far fa-edit"
               @click="editing = true"
             ></i>
             <i
               v-if="isLoggedIn && currentUser && canEditTopic()"
-              class="action-icon fas fa-trash"
+              class="action-icon far fa-trash-alt"
               @click="deleteAction = true, editing = false"
             ></i>
           </div>
 
           <div class="row" v-if="deleteAction">
-            <span class="caption bolder text-white al-self-center"> Deseja excluir este comentário?</span>
-            <q-btn class="reset-btn mg-left8" @click="deleteAction = false" flat size="xs" color="white"> <span class="caption bolder">não</span> </q-btn>
-            <q-btn class="reset-btn mg-left8" @click="deleteReply" flat size="xs" color="white"> <span class="caption bolder">sim</span> </q-btn>
+            <span class="caption bolder text-black al-self-center"> Deseja excluir este comentário?</span>
+            <q-btn class="reset-btn mg-left8" @click="deleteAction = false" flat size="xs" color="white"> <span class="caption bold text-black">não</span> </q-btn>
+            <q-btn class="reset-btn mg-left8" @click="deleteReply" flat size="xs" color="white"> <span class="caption bold text-black">sim</span> </q-btn>
           </div>
 
         </div>
+
+        <!-- reply-this and like -->
+        <div class="action-replying" v-if="!canEditTopic()">
+
+          <base-button v-if="isLoggedIn && currentUser" class="reply-button" theme="flat" @click="reply">
+            <span class="caption bolder" style="color: black;">Responder</span>
+          </base-button>
+
+          <i v-if="isLoggedIn && currentUser" class="action-icon far fa-thumbs-up" :class="{ 'liked': hasBeenLiked }" @click="likeReply()"/>
+          <i v-if="!isLoggedIn" class="action-icon no-pointer far fa-thumbs-up"/>
+
+          <span class="caption bolder no-pointer text-black mg-left8">{{ reply.numberOfLikes }}</span>
+
+        </div>
+        <!-- end reply action -->
 
       </div>
 
@@ -53,7 +68,7 @@
       <div class="reply-content body-3">
 
         <template v-if="!editing">
-          {{ reply.content }}
+          <span class="content-text">{{ reply.content }}</span>
         </template>
 
         <!-- edit -->
@@ -84,21 +99,6 @@
 
       </div>
       <!-- end reply -->
-
-      <!-- reply-this and like -->
-      <div class="action-replying" v-if="!canEditTopic()">
-
-        <base-button v-if="isLoggedIn && currentUser" class="reply-button" theme="primary" @click="reply">
-          <span class="caption bolder" style="color: white;">Responder</span>
-        </base-button>
-
-        <i v-if="isLoggedIn && currentUser" class="action-icon fas fa-thumbs-up" :class="{ 'liked': hasBeenLiked }" @click="likeReply()"/>
-        <i v-if="!isLoggedIn" class="action-icon no-pointer fas fa-thumbs-up"/>
-
-        <span class="caption bolder no-pointer text-white mg-left8">{{ reply.numberOfLikes }}</span>
-
-      </div>
-      <!-- end reply action -->
 
     </div>
 
@@ -234,6 +234,8 @@ export default {
 @import '../styles/mixins.scss';
 
 $primaryColor: #000;
+$secondaryColor: #efeef0;
+$textBlack: #000;
 
 .reply-component {
   margin: 8px 0px 32px 0px;
@@ -243,29 +245,33 @@ $primaryColor: #000;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  max-height: 50px;
   position: relative;
+  background-color: $secondaryColor;
+  padding: 4px 8px 4px 8px;
+  border: 1px solid #D1D5DA;
 }
 
 .author-right {
   width: 40%;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  max-height: 24px;
 }
 
 .author-name {
-  color: #fff;
+  color: $textBlack;
+  margin-right: 8px;
 }
 
 .date {
-  color: #fff;
+  color: $textBlack;
   margin-top: 3px;
 }
 
 .owner-actions {
   position: absolute;
-  right: 0px !important;
+  right: 16px !important;
   top: 8px;
   display: flex;
   align-items: center;
@@ -274,7 +280,7 @@ $primaryColor: #000;
 
 .action-icon {
   margin-left: 16px;
-  color: #fff;
+  color: $primaryColor;
   cursor: pointer;
 }
 
@@ -287,16 +293,20 @@ $primaryColor: #000;
 }
 
 .reply-container {
-  padding: 8px 16px 16px 16px;
+  padding: 0px 16px 16px 8px;
   margin-left: 8px;
-  background-color: #000;
+  background-color: #fff;
   width: 100%;
 }
 
 .reply-content {
-  margin: 16px 0px 8px 0px;
+  padding: 8px 0px 8px 16px;
   line-height: 1.7;
-  color: #fff;
+  // color: #fff;
+}
+
+.content-text {
+  color: $textBlack;
 }
 
 .action-editing {
@@ -325,7 +335,10 @@ $primaryColor: #000;
 }
 
 .action-replying {
-  align-self: flex-end;
+  justify-self: flex-end;
+  position: absolute;
+  right: 16px !important;
+  top: 4px;
 }
 
 .reply-button {

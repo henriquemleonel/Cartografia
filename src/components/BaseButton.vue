@@ -64,6 +64,13 @@ $primaryColor: #000;
   cursor: default;
 }
 
+.base-button:not(.disabled).flat {
+  background: transparent;
+  color: #FFF;
+  height: 25px;
+  margin-top: -8px;
+}
+
 // Primary
 .base-button:not(.disabled).primary {
   background: $primaryColor;

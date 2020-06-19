@@ -227,6 +227,7 @@ export default {
       },
     ],
     current: null,
+    Key: null,
   },
 
   actions: {
@@ -277,6 +278,28 @@ export default {
     //   commit('ADD_REPLY_TO_CURRENT_TOPIC', { reply });
     // },
 
+    addReply({
+      state,
+      commit,
+      dispatch,
+      rootGetters,
+    }, { data }) {
+      dispatch('setKey');
+      const replyId = state.Key;
+      const userRef = rootGetters['users/getUserRefToReply'];
+      const today = new Date();
+      const date = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
+      const reply = {
+        id: replyId,
+        user: userRef,
+        content: data,
+        createdAt: date,
+        numberOfLikes: 0,
+      };
+      console.log('reply', reply);
+      commit('ADD_REPLY_TO_CURRENT_TOPIC', { reply });
+    },
+
     deleteReply({ commit }, { replyId }) {
       // await apiClient.deleteReply(state.current.id, replyId);
       commit('DELETE_REPLY_FROM_CURRENT_TOPIC', { replyId });
@@ -301,6 +324,17 @@ export default {
       commit('UNLIKE_REPLY', { replyId });
       return replyId;
     },
+
+    setKey({ commit }) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let autoId = '';
+      for (let i = 0; i < 20; i += 1) {
+        autoId += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      const key = autoId;
+      console.log('generated KEY', key);
+      commit('SET_KEY', { newKey: key });
+    },
   },
 
   mutations: {
@@ -312,12 +346,12 @@ export default {
       state.current = topic;
     },
 
-    // ADD_REPLY_TO_CURRENT_TOPIC({ state }, { reply }) {
-    //   state.current.replies = [
-    //     ...state.current.replies,
-    //     reply,
-    //   ];
-    // },
+    ADD_REPLY_TO_CURRENT_TOPIC(state, { reply }) {
+      state.current.replies = [
+        ...state.current.replies,
+        reply,
+      ];
+    },
 
     DELETE_REPLY_FROM_CURRENT_TOPIC(state, { replyId }) {
       state.current.replies = state.current.replies.filter(
@@ -341,6 +375,11 @@ export default {
     UNLIKE_REPLY(state, { replyId }) {
       const replyIndex = state.current.replies.findIndex((reply) => reply.id === replyId);
       state.current.replies[replyIndex].numberOfLikes -= 1;
+    },
+
+    SET_KEY(state, { newKey }) {
+      state.Key = newKey;
+      console.log('topics/setKey', newKey);
     },
   },
 

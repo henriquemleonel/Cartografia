@@ -25,6 +25,16 @@ export default {
     getMyPinState: (state) => state.myPin !== null,
     getMyEvents: (state) => state.myEvents,
     getMyLikes: (state) => state.myLikes,
+    getUserRefToReply(state) {
+      const userRef = {
+        id: state.currentUser.user.id,
+        name: state.currentUser.user.firstName,
+        categoryId: state.currentUser.user.categoryId,
+        avatar: '',
+      };
+      // console.log('userRef reply', userRef);
+      return userRef;
+    },
 
   },
 
@@ -72,8 +82,7 @@ export default {
     },
     destroyToken({ commit }) {
       localStorage.removeItem('access_token');
-      commit('destroyToken');
-      commit('destroyCurrentUser');
+      commit('DESTROY_CURRENT_USER');
       console.log('logout');
     },
     addLike({ commit }, { replyId }) {
