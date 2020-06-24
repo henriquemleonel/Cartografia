@@ -29,6 +29,7 @@ export default {
               categoryId: 8,
               avatar: '',
             },
+            replyTag: null,
             content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
             createdAt: '2019-03-27',
             numberOfLikes: 12,
@@ -41,6 +42,7 @@ export default {
               categoryId: 15,
               avatar: '',
             },
+            replyTag: null,
             content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
             createdAt: '2019-03-27',
             numberOfLikes: 0,
@@ -87,6 +89,7 @@ export default {
               categoryId: 8,
               avatar: '',
             },
+            replyTag: null,
             content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
             createdAt: '2019-03-27',
             numberOfLikes: 12,
@@ -99,6 +102,7 @@ export default {
               categoryId: 15,
               avatar: '',
             },
+            replyTag: null,
             content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
             createdAt: '2019-03-27',
             numberOfLikes: 0,
@@ -111,18 +115,20 @@ export default {
               categoryId: 8,
               avatar: '',
             },
+            replyTag: null,
             content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
             createdAt: '2019-03-27',
             numberOfLikes: 12,
           },
           {
-            id: 4,
+            id: 8,
             user: {
               id: 43,
               name: 'fulano',
               categoryId: 15,
               avatar: '',
             },
+            replyTag: 5,
             content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
             createdAt: '2019-03-27',
             numberOfLikes: 3,
@@ -292,7 +298,8 @@ export default {
       const reply = {
         id: replyId,
         user: userRef,
-        content: data,
+        replyTag: data.replyTag,
+        content: data.content,
         createdAt: date,
         numberOfLikes: 0,
       };
@@ -323,6 +330,12 @@ export default {
       dispatch('users/removeLike', { replyId }, { root: true });
       commit('UNLIKE_REPLY', { replyId });
       return replyId;
+    },
+
+    getReplyTag({ state }, { replyTagId }) {
+      const data = state.current.replies.find((el) => el.id === replyTagId);
+      console.log('topics/replyTag', data);
+      return data;
     },
 
     setKey({ commit }) {

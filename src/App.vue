@@ -32,6 +32,12 @@
   display: none !important;
 }
 
+// --------------- quasar reset class -----------------------
+.q-item {
+  min-height: 32px !important;
+  padding: 4px;
+}
+
 // ----------------- typograph styleguide -------------------
 * {
   box-sizing: border-box;
@@ -115,6 +121,11 @@ display: flex;
 flex-direction: row;
 }
 
+.row-reverse {
+display: flex;
+flex-direction: row-reverse;
+}
+
 .jus-items-end {
   justify-content: flex-end;
 }
@@ -174,6 +185,10 @@ flex-direction: row;
 
 .mg-top-n16 {
   margin-top: -16px;
+}
+
+.mg-top24 {
+  margin-top: 24px;
 }
 
 .mg-top32 {

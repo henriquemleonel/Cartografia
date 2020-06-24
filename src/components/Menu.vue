@@ -6,9 +6,9 @@
       <!-- item Sobre -->
       <q-expansion-item class="item" v-if="!expand" group="somegroup" expand-icon-class="text-black">
 
-        <template v-slot:header>
+        <template v-slot:header class="item-header">
           <q-item-section>
-            <span class="menu-text body-large2">Sobre</span>
+            <span class="menu-text body-3">Sobre</span>
           </q-item-section>
         </template>
 
@@ -59,9 +59,9 @@
       <!-- item Agenda -->
       <q-expansion-item class="item" v-if="!expand" group="somegroup" expand-icon-class="text-black">
 
-        <template v-slot:header>
+        <template v-slot:header class="item-header">
           <q-item-section>
-            <span class="menu-text subheading-2">Agenda</span>
+            <span class="menu-text body-3">Agenda</span>
           </q-item-section>
         </template>
 
@@ -87,9 +87,9 @@
       <!-- item Diálogo -->
       <q-expansion-item class="item" v-if="!expand" group="somegroup" expand-icon-class="text-black">
 
-        <template v-slot:header>
+        <template v-slot:header class="item-header">
           <q-item-section>
-            <span class="menu-text subheading-2">Diálogo</span>
+            <span class="menu-text body-3">Diálogo</span>
           </q-item-section>
         </template>
 
@@ -122,7 +122,7 @@
         </q-card>
 
         <div class="my-item-header" @click="expandItem()">
-          <span class="menu-text subheading-2">Filtro</span>
+          <span class="menu-text body-3">Filtro</span>
         </div>
 
       </div>
@@ -165,7 +165,7 @@ export default {
 @import '../styles/mixins.scss';
 @import '../styles/typo.scss';
 
-$item-height : 48px;
+$itemHeight : 40px;
 
 * {
   font-family: 'Helvetica';
@@ -174,6 +174,7 @@ $item-height : 48px;
 
 .menu-component {
   width: 100%;
+  max-width: 180px;
   margin-top: 8px;
   margin-bottom: 8px;
 }
@@ -194,6 +195,11 @@ $item-height : 48px;
   }
 }
 
+.q-item {
+  height: $itemHeight;
+  padding: 4px;
+}
+
 .card-section {
   padding: 8px 0px 4px 0px;
 }
@@ -206,7 +212,7 @@ $item-height : 48px;
 
   .my-item-header {
     background-color: black;
-    height: $item-height;
+    height: $itemHeight;
     padding: 8px 16px 8px 16px;
     display: flex;
     z-index: 1;
@@ -301,7 +307,7 @@ $item-height : 48px;
 
 .separator {
   background-color: transparent;
-  height: 5px;
+  height: 4px;
 }
 
 </style>

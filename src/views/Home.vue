@@ -405,7 +405,7 @@ export default {
 .btn-custom {
   box-shadow: none;
   height: 40px;
-  min-width: 100px;
+  min-width: 80px;
   border-radius: 0px;
   background-color: black;
   transition: filter 0.2s;

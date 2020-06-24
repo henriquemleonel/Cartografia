@@ -16,7 +16,7 @@
       <div class="reply-header">
 
         <div class="author-right">
-          <span class="author-name body-2 bolder">
+          <span class="author-name body-3 bolder">
             {{ reply.user.name }}
           </span>
           <span class="date caption bold">
@@ -50,12 +50,12 @@
         <!-- reply-this and like -->
         <div class="action-replying" v-if="!canEditTopic()">
 
-          <base-button v-if="isLoggedIn && currentUser" class="reply-button" theme="flat" @click="reply">
+          <base-button v-if="isLoggedIn && currentUser" class="reply-button" theme="flat" @click="replyThis()">
             <span class="caption bolder" style="color: black;">Responder</span>
           </base-button>
 
-          <i v-if="isLoggedIn && currentUser" class="action-icon far fa-thumbs-up" :class="{ 'liked': hasBeenLiked }" @click="likeReply()"/>
-          <i v-if="!isLoggedIn" class="action-icon no-pointer far fa-thumbs-up"/>
+          <i v-if="isLoggedIn && currentUser" class="action-icon far fa-heart" :class="{ 'liked': hasBeenLiked }" @click="likeReply()"/>
+          <i v-if="!isLoggedIn" class="action-icon no-pointer far fa-heart"/>
 
           <span class="caption bolder no-pointer text-black mg-left8">{{ reply.numberOfLikes }}</span>
 
@@ -68,6 +68,9 @@
       <div class="reply-content body-3">
 
         <template v-if="!editing">
+
+          <reply-tag v-if="hasReplyTag" :replyTag="this.replyTag"/>
+
           <span class="content-text">{{ reply.content }}</span>
         </template>
 
@@ -75,9 +78,8 @@
         <template v-else>
 
           <q-input
-            v-model="content"
+            v-model="reply.content"
             :disabled="loading"
-            dark
             filled
             square
             autogrow
@@ -89,7 +91,7 @@
               <span class="caption bolder">Cancelar</span>
             </base-button>
 
-            <base-button class="save-button" :disabled="loading" @click="saveReply">
+            <base-button class="save-button" theme="primary" :disabled="loading" @click="saveReply">
               <span class="caption bolder"> {{ loading ? 'Salvando...' : 'Salvar' }} </span>
             </base-button>
 
@@ -110,12 +112,14 @@ import { mapActions, mapGetters } from 'vuex';
 // import BaseConfirmDialog from './BaseConfirmDialog.vue';
 import BaseAvatar from './BaseAvatar.vue';
 import BaseButton from './BaseButton.vue';
+import ReplyTag from './ReplyTag.vue';
 
 
 export default {
   components: {
     BaseAvatar,
     BaseButton,
+    ReplyTag,
     // BaseConfirmDialog,
   },
   props: {
@@ -132,6 +136,7 @@ export default {
       loading: false,
       deleteAction: false,
       liked: false,
+      replyTag: null,
     };
   },
   computed: {
@@ -161,10 +166,13 @@ export default {
       console.log('hasNoLiked');
       return false;
     },
+    hasReplyTag() {
+      return this.reply.replyTag != null;
+    },
   },
-  // mounted() {
-  //   // this.hasBeenLiked();
-  // },
+  mounted() {
+    this.getThisTag();
+  },
   // updated() {
   //   this.hasBeenLiked();
   // },
@@ -225,6 +233,19 @@ export default {
       }
       return false;
     },
+    getThisTag() {
+      this.$store.dispatch('topics/getReplyTag', {
+        replyTagId: this.reply.replyTag,
+      }).then((response) => {
+        this.replyTag = response;
+        // console.log('tag response', response);
+      }).catch((error) => {
+        console.log('error getTag', error);
+      });
+    },
+    replyThis() {
+      this.$emit('callReply', this.reply.id);
+    },
   },
 };
 </script>
@@ -234,7 +255,6 @@ export default {
 @import '../styles/mixins.scss';
 
 $primaryColor: #000;
-$secondaryColor: #efeef0;
 $textBlack: #000;
 
 .reply-component {
@@ -246,13 +266,13 @@ $textBlack: #000;
   flex-direction: row;
   flex-wrap: nowrap;
   position: relative;
-  background-color: $secondaryColor;
+  background-color: $gray1;
   padding: 4px 8px 4px 8px;
-  border: 1px solid #D1D5DA;
+  border: 1px solid $borderGray;
 }
 
 .author-right {
-  width: 40%;
+  // width: 40%;
   overflow: hidden;
   display: flex;
   flex-direction: row;
@@ -300,24 +320,27 @@ $textBlack: #000;
 }
 
 .reply-content {
-  padding: 8px 0px 8px 16px;
+  padding: 8px 8px 8px 8px;
   line-height: 1.7;
+  border-top: 0px;
+  border: 1px solid #D1D5DA;
   // color: #fff;
 }
 
 .content-text {
   color: $textBlack;
+  margin-left: 4px;
 }
 
 .action-editing {
-  padding: 8px;
-  margin-top: 8px;
+  padding: 8px 8px 0px 0px;
+  margin-top: 0px;
 }
 
 .save-button {
   margin-right: 8px;
   background-color: #222;
-  padding: 8px;
+  padding: 4px;
 
   &:hover {
     cursor: pointer;
@@ -326,8 +349,7 @@ $textBlack: #000;
 
 .cancel-button {
   margin-right: 8px;
-  background-color: #222;
-  padding: 8px;
+  padding: 2px;
 
   &:hover {
     cursor: pointer;

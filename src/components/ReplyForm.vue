@@ -3,24 +3,44 @@
 
     <span class="body-2 bolder">Deixe seu comentário</span>
 
-    <q-input
-      v-model="content"
-      ref="input"
-      class="text-area"
-      placeholder="Escreva aqui..."
-      :errors="$v.content"
-      :disabled="loading"
-      filled
-      square
-    />
+    <div class="reply-content">
 
-    <base-button
-      class="reply-button"
-      :disabled="loading"
-      @click="reply"
-    >
-      <span class="caption bolder"> {{ loading ? 'Comentando...' : 'Comentar' }} </span>
-    </base-button>
+      <reply-tag v-if="replyToTag != null" :replyTag="replyToTag"/>
+
+      <q-input
+        v-model="content"
+        ref="input"
+        class="text-area"
+        placeholder="Escreva aqui..."
+        :errors="$v.content"
+        :disabled="loading"
+        square
+        dense
+      />
+
+      <div class="row no-wrap mg-top8">
+
+        <base-button
+          class="reply-button cancel-button"
+          :disabled="loading"
+          @click="cancel"
+          theme="secondary"
+        >
+          <span class="caption bolder"> {{ loading ? 'Cancelando...' : 'Cancelar' }} </span>
+        </base-button>
+
+        <base-button
+          class="reply-button"
+          :disabled="loading"
+          @click="reply"
+          :theme="this.content != '' ? 'primary' : 'disabled'"
+        >
+          <span class="caption bolder"> {{ loading ? 'Comentando...' : 'Comentar' }} </span>
+        </base-button>
+
+      </div>
+
+    </div>
 
   </div>
 </template>
@@ -30,16 +50,24 @@
 import { required } from 'vuelidate/lib/validators';
 
 import BaseButton from './BaseButton.vue';
+import ReplyTag from './ReplyTag.vue';
 
 export default {
   components: {
     BaseButton,
+    ReplyTag,
   },
   data() {
     return {
       content: '',
       loading: false,
     };
+  },
+  props: {
+    replyToTag: {
+      type: Object,
+      default: null,
+    },
   },
   validations: {
     content: { required },
@@ -49,17 +77,24 @@ export default {
       this.$v.$touch();
       if (!this.$v.$anyError) {
         this.loading = true;
-        this.$store.dispatch('topics/addReply', { data: this.content })
+        const newReply = { content: this.content, replyTag: this.replyToTag.id };
+        this.$store.dispatch('topics/addReply', { data: newReply })
           .then(() => {
             this.content = '';
+            this.replyToTag = null;
             this.$v.$reset();
             this.loading = false;
           })
           .catch((error) => {
             console.log(error);
             this.loading = false;
+            this.replyToTag = null;
           });
       }
+    },
+    cancel() {
+      this.replyToTag = null;
+      this.content = '';
     },
     focus() {
       this.$refs.input.focus();
@@ -80,14 +115,30 @@ export default {
   width: 100%;
 }
 
+.reply-content {
+  border: 1px solid $borderGray;
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+}
+
 .text-area {
   margin-top: 8px;
-  width: calc(100% - 16px);
+  width: 100%;
 }
 
 .reply-button {
   align-self: flex-start;
   margin-top: 10px;
+}
+
+.cancel-button {
+  margin-right: 8px;
+  padding: 6px;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 </style>

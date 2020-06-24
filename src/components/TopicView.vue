@@ -4,6 +4,8 @@
     <!-- header -->
     <div class="header">
       <logo class="identity" :blackMode="true"/>
+      <multicolor-line class="line mg-top32"/>
+
       <q-btn class="reset-btn mg-top16" flat :to="{ name: 'Topics' }">
         <i class="fas fa-arrow-left"></i>
         <span class="caption bolder mg-left8"> voltar aos debates </span>
@@ -32,25 +34,27 @@
 
       <span class="big-title bolder"> {{ topic.title }} </span>
 
-      <div class="author row mg-top16">
+      <div class="author row">
 
-        <span class="body-3 bolder text-uppercase"> {{ topic.user.name }} </span>
-        <span class="body-3 mg-left8"> | </span>
-        <span class=" body-3 bolder mg-left8"> {{ formatDate }} </span>
+        <span class="body-3 bolder text-gray"> {{ topic.user.name }} </span>
+        <span class="body-3 text-gray mg-left8"> - </span>
+        <span class="body-3 text-gray mg-left8"> {{ formatDate }} </span>
 
       </div>
 
-      <p class="body-2 bold mg-top32"> {{ topic.description }} </p>
+      <p class="body-2 bold mg-top24"> {{ topic.description }} </p>
 
     </div>
+
+    <!-- <q-separator/> -->
 
     <!-- topic footer and user actions -->
     <div class="topic-footer">
 
       <div class="topic-footer-reply">
 
-        <span class="topic-footer-title headline bolder">Comentários</span>
-        <span class="caption bolder mg-left8">( {{ topic.replies.length !== 0 ? topic.replies.length : 'Seja o primero a comentar.' }} )</span>
+        <span class="topic-footer-title text-gray headline-2 bolder">Comentários</span>
+        <span class="caption text-gray bolder mg-left8">( {{ topic.replies.length !== 0 ? topic.replies.length : 'Seja o primero a comentar.' }} )</span>
 
       </div>
 
@@ -90,6 +94,8 @@
 
     </div>
 
+    <q-separator/>
+
     <!-- reply-section -->
     <q-scroll-area
       class="scroll-area"
@@ -102,6 +108,7 @@
           v-for="reply in topic.replies"
           :key="reply.id"
           :reply="reply"
+          v-on:callReply="replyThis($event)"
         />
 
       </div>
@@ -112,6 +119,7 @@
     <div class="reply-form">
 
       <reply-form
+        :replyToTag="replyToTag != null ? replyToTag : null"
         v-if="isLoggedIn"
         ref="replyForm"
       />
@@ -149,6 +157,7 @@ export default {
   data() {
     return {
       showConfirmDialog: this.isLoggedIn,
+      replyToTag: null,
       thumbStyle: {
         right: '0px',
         top: '16px',
@@ -209,6 +218,17 @@ export default {
       }
       return false;
     },
+    replyThis(replyIdToTag) {
+      this.jumpToReplyForm();
+      this.$store.dispatch('topics/getReplyTag', {
+        replyTagId: replyIdToTag,
+      }).then((response) => {
+        this.replyToTag = response;
+        console.log('topicView/replyThis', response);
+      }).catch((error) => {
+        console.log('error replyToTag', error);
+      });
+    },
   },
 };
 </script>
@@ -217,12 +237,13 @@ export default {
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
+
 .topic-view {
   background: #fff;
   border-radius: 3px;
-  padding: 32px;
+  padding: 0px 32px;
   // border: 2px solid red;
-  max-width: 850px;
+  max-width: 800px;
 }
 
 .header {
@@ -232,7 +253,7 @@ export default {
 }
 
 .topic-content {
-  margin: 32px 0px 16px 0px;
+  margin: 32px 0px 24px 0px;
   // border: 2px solid pink;
 }
 
@@ -241,7 +262,7 @@ export default {
   flex-direction: row;
   align-items: flex-start;
   width: calc(100% - 32px);
-  margin-top: 32px;
+  margin-top: 0px;
   padding: 8px;
   // border: 2px solid green;
 }
@@ -256,6 +277,7 @@ export default {
 .topic-footer-title {
   align-self: flex-end;
   justify-self: flex-end;
+  margin-left: -8px;
 }
 
 .action-buttons {
@@ -280,6 +302,7 @@ export default {
   height: 700px;
   width: 100%;
   padding-right: 16px;
+  margin-top: 8px;
 }
 
 .reset-reply-icon {

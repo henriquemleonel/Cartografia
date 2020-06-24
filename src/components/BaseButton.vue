@@ -44,10 +44,11 @@ export default {
 
 <style lang="scss" scoped>
 $primaryColor: #000;
+$secondaryColor: #D0D0D0;
 
 .base-button {
   border: 0;
-  padding: 10px 15px;
+  padding: 8px 12px;
   border-radius: 0px;
   outline: none;
   cursor: pointer;
@@ -67,7 +68,7 @@ $primaryColor: #000;
 .base-button:not(.disabled).flat {
   background: transparent;
   color: #FFF;
-  height: 25px;
+  height: 24px;
   margin-top: -8px;
 }
 
@@ -75,6 +76,7 @@ $primaryColor: #000;
 .base-button:not(.disabled).primary {
   background: $primaryColor;
   color: #FFF;
+  text-transform: lowercase;
 }
 
 .base-button:not(.disabled).primary:hover {
@@ -83,13 +85,14 @@ $primaryColor: #000;
 
 // secondary
 .base-button:not(.disabled).secondary {
-  background: $primaryColor;
-  color: #FFF;
-  border: 1px solid white;
+  text-transform: lowercase;
+  background: transparent;
+  color: #000;
+  border: 2px solid black;
 }
 
 .base-button:not(.disabled).secondary:hover {
-   background: lighten($primaryColor, 7%);
+  background: lighten($secondaryColor, 2%);
 }
 
 // Borderless

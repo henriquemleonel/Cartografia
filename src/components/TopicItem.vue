@@ -2,23 +2,23 @@
   <!-- item to be selected in topics-page -->
   <div class="topic-item" @click="emitThisTopic()" :style="{ 'background-color': category.color }">
 
-    <div class="content column">
+    <div class="card column">
 
       <span class="big-title bolder"> {{ topic.title }} </span>
 
-      <span class="body-2 bolder mg-top32"> {{ category.label }} </span>
+      <span class="caption bold mg-top8"> {{ category.label }} </span>
       <!-- topicOwner & date -->
-      <div class="row">
+      <div class="row mg-top16">
 
-        <span class="body-2 bold"> {{ topic.user.name }} </span>
+        <span class="body-3 bolder"> {{ topic.user.name }} </span>
 
-        <span class="body-2 bold  mg-left8">| {{ formatDate }} </span>
+        <span class="body-3 bold mg-left8">- {{ formatDate }} </span>
 
       </div>
 
-      <span class="body-2 bold mg-top32"> {{ formatDescription }} </span>
+      <span class="caption bold mg-top16"> {{ formatDescription }} </span>
 
-      <div class="row mg-top32">
+      <div class="row mg-top16">
         <!-- <i class="far fa-thumbs-up"></i> -->
         <span class="caption bolder"> {{ topic.likes }} likes </span>
         <span class="caption bolder mg-left8"> | </span>
@@ -118,7 +118,7 @@ export default {
 .topic-item {
   overflow: hidden;
   width: 350px;
-  margin: 8px 4px 0px 0px;
+  margin: 0px 4px 8px 0px;
   transition: 0.2s ease-in;
 
   @include for-phone-only {
@@ -131,8 +131,8 @@ export default {
   }
 }
 
-.content {
-  padding: 32px;
+.card {
+  padding: 24px 32px;
 }
 
 .line-h16 {

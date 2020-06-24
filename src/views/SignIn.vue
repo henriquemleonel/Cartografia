@@ -9,7 +9,7 @@
 
       <div class="card column">
 
-        <span class="title title-2 bolder"> Olá novamente </span>
+        <span class="title title-3 bolder"> Olá novamente </span>
         <router-link class="link" to="/signUp">
           <span class="body-3">Novo Usuário? Cadastre-se</span>
         </router-link>
@@ -261,7 +261,7 @@ export default {
 }
 
 .input-field {
-  width: 100%;
+  width: 350px;
   margin-top: 16px;
 
   @include for-phone-only {
