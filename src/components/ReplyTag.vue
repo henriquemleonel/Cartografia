@@ -3,7 +3,12 @@
     <div class="left-line"/>
 
     <div class="reply-content column">
-      <span class="caption bolder">{{ replyTag.user.name }} - {{ formatDate }} </span>
+
+      <div class="row">
+        <span class="caption bolder">{{ replyTag.user.name }} </span>
+        <span class="caption bold mg-left8"> {{ formatDate }} </span>
+      </div>
+
       <span class="caption bold"> {{ replyTag.content }} </span>
     </div>
 

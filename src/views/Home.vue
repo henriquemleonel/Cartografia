@@ -37,7 +37,7 @@
             <span class="body-2">Agenda</span>
           </router-link>
 
-          <router-link class="link mg-top32" to="/debates">
+          <router-link class="link mg-top32" to="/topics">
             <span class="body-2">Debates</span>
           </router-link>
 

@@ -40,17 +40,24 @@
           </div>
 
           <div class="row" v-if="deleteAction">
-            <span class="caption bolder text-black al-self-center"> Deseja excluir este comentário?</span>
-            <q-btn class="reset-btn mg-left8" @click="deleteAction = false" flat size="xs" color="white"> <span class="caption bold text-black">não</span> </q-btn>
-            <q-btn class="reset-btn mg-left8" @click="deleteReply" flat size="xs" color="white"> <span class="caption bold text-black">sim</span> </q-btn>
+            <span class="caption bold text-black al-self-center"> Deseja excluir este comentário?</span>
+
+            <base-button class="mg-left8" @click="deleteAction = false" theme="transparent">
+              <span class="caption bolder text-black">não</span>
+            </base-button>
+
+            <base-button class="mg-left8" @click="deleteReply" theme="transparent">
+              <span class="caption bolder text-black">sim</span>
+            </base-button>
+
           </div>
 
         </div>
 
         <!-- reply-this and like -->
-        <div class="action-replying" v-if="!canEditTopic()">
+        <div class="action-replying row" v-if="!canEditTopic()">
 
-          <base-button v-if="isLoggedIn && currentUser" class="reply-button" theme="flat" @click="replyThis()">
+          <base-button v-if="isLoggedIn && currentUser" class="reply-button" theme="transparent" @click="replyThis()">
             <span class="caption bolder" style="color: black;">Responder</span>
           </base-button>
 
@@ -78,11 +85,13 @@
         <template v-else>
 
           <q-input
+            class="mg-top8"
             v-model="reply.content"
             :disabled="loading"
             filled
             square
             autogrow
+            dense
           />
 
           <div class="action-editing">
@@ -91,7 +100,7 @@
               <span class="caption bolder">Cancelar</span>
             </base-button>
 
-            <base-button class="save-button" theme="primary" :disabled="loading" @click="saveReply">
+            <base-button class="save-button" theme="primary" :disabled="loading" @click="editReply">
               <span class="caption bolder"> {{ loading ? 'Salvando...' : 'Salvar' }} </span>
             </base-button>
 
@@ -108,7 +117,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 // import BaseConfirmDialog from './BaseConfirmDialog.vue';
 import BaseAvatar from './BaseAvatar.vue';
 import BaseButton from './BaseButton.vue';
@@ -159,52 +168,40 @@ export default {
       return `${day} de ${month} de ${year}`;
     },
     hasBeenLiked() {
-      if (this.myLikes.includes(this.reply.id)) {
-        console.log('hasLiked');
-        return true;
-      }
-      console.log('hasNoLiked');
-      return false;
+      return this.myLikes.includes(this.reply.id);
     },
     hasReplyTag() {
       return this.reply.replyTag != null;
     },
   },
-  mounted() {
+  created() {
     this.getThisTag();
   },
-  // updated() {
-  //   this.hasBeenLiked();
-  // },
   methods: {
-    ...mapActions([
-      'deleteReply',
-      'updateReply',
-    ]),
-    editReply() {
-    },
     deleteReply() {
-      console.log('delete this', this.reply.id);
+      console.log('reply/deleteReply', this.reply.id);
       this.$store.dispatch('topics/deleteReply', {
         replyId: this.reply.id,
-      }).then(() => {
-        console.log('delete Ok');
+      }).then((response) => {
+        console.log(response);
       }).catch((error) => {
-        console.log('delete error', error);
+        console.log('reply/deleteReply ERROR', error);
       });
     },
-    async saveReply() {
+    editReply() {
       this.loading = true;
-      try {
-        await this.updateReply({
-          replyId: this.reply.id,
-          data: { content: this.content },
-        });
+      console.log('reply/updateReply', this.reply.id);
+      this.$store.dispatch('topics/updateReply', {
+        replyId: this.reply.id,
+        data: { content: this.content },
+      }).then((response) => {
         this.editing = false;
         this.loading = false;
-      } catch (err) {
+        console.log(response.message);
+      }).catch((error) => {
         this.loading = false;
-      }
+        console.log('reply/updateReply ERROR', error);
+      });
     },
     likeReply() {
       if (!this.myLikes.includes(this.reply.id)) {
@@ -212,18 +209,18 @@ export default {
         this.$store.dispatch('topics/likeReply', {
           replyId: this.reply.id,
         }).then(() => {
-          console.log('like this');
+          // console.log('reply/likeReply');
         }).catch((error) => {
-          console.log('error like', error);
+          console.log('reply/likeReply ERROR', error);
         });
       } else if (this.myLikes.includes(this.reply.id)) {
         this.liked = false;
         this.$store.dispatch('topics/unlikeReply', {
           replyId: this.reply.id,
         }).then(() => {
-          console.log('unlike this');
+          // console.log('reply/unlikeReply');
         }).catch((error) => {
-          console.log('error like', error);
+          console.log('reply/unlikeReply ERROR', error);
         });
       }
     },
@@ -245,6 +242,7 @@ export default {
     },
     replyThis() {
       this.$emit('callReply', this.reply.id);
+      console.log('id reset', this.reply.id);
     },
   },
 };
@@ -258,17 +256,19 @@ $primaryColor: #000;
 $textBlack: #000;
 
 .reply-component {
-  margin: 8px 0px 32px 0px;
+  margin: 8px 0px 24px 0px;
 }
 
 .reply-header {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  align-items: center;
   position: relative;
   background-color: $gray1;
   padding: 4px 8px 4px 8px;
-  border: 1px solid $borderGray;
+  max-height: 32px;
+  width: 100%;
 }
 
 .author-right {
@@ -282,17 +282,18 @@ $textBlack: #000;
 .author-name {
   color: $textBlack;
   margin-right: 8px;
+  margin-top: 0px;
 }
 
 .date {
   color: $textBlack;
-  margin-top: 3px;
+  text-align: end !important;
+  line-height: 20px;
 }
 
 .owner-actions {
   position: absolute;
-  right: 16px !important;
-  top: 8px;
+  right: 8px !important;
   display: flex;
   align-items: center;
   justify-self: flex-end;
@@ -313,18 +314,17 @@ $textBlack: #000;
 }
 
 .reply-container {
-  padding: 0px 16px 16px 8px;
   margin-left: 8px;
   background-color: #fff;
   width: 100%;
+  border: 1px solid $borderGray;
+  border-radius: 0px;
 }
 
 .reply-content {
   padding: 8px 8px 8px 8px;
   line-height: 1.7;
   border-top: 0px;
-  border: 1px solid #D1D5DA;
-  // color: #fff;
 }
 
 .content-text {
@@ -333,14 +333,13 @@ $textBlack: #000;
 }
 
 .action-editing {
-  padding: 8px 8px 0px 0px;
-  margin-top: 0px;
+  padding: 8px 8px 8px 0px;
 }
 
 .save-button {
   margin-right: 8px;
   background-color: #222;
-  padding: 4px;
+  padding: 4px 12px;
 
   &:hover {
     cursor: pointer;
@@ -349,7 +348,7 @@ $textBlack: #000;
 
 .cancel-button {
   margin-right: 8px;
-  padding: 2px;
+  padding: 2px 12px;
 
   &:hover {
     cursor: pointer;
@@ -357,10 +356,11 @@ $textBlack: #000;
 }
 
 .action-replying {
-  justify-self: flex-end;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: hidden;
   position: absolute;
-  right: 16px !important;
-  top: 4px;
+  right: 8px !important;
 }
 
 .reply-button {

@@ -1,53 +1,25 @@
 // import Vue from 'vue';
-// import api from '../../config/index.js';
+import api from '../../apiClient';
 
 export default {
   namespaced: true,
+
   state: {
     list: [
       {
         id: 1,
-        title: 'Dance_Fest',
+        title: 'Dance Fest',
         categoryId: 1,
         user: {
-          name: 'jão',
+          name: 'jão', // implement user name
           id: 12,
         },
-        date: '2020/04/28',
-        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
-        likes: 170,
-        dislikes: 65,
-        repliesId: 1,
-        numberOfReplies: 2,
+        createdAt: '2020/04/28', // implements full date, with time too
+        content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
+        positiveSupports: 170,
+        negativeSupports: 65,
+        numberOfReplyes: 2,
         views: 0,
-        replies: [
-          {
-            id: 1,
-            user: {
-              id: 2,
-              name: 'Juliana Trujillo',
-              categoryId: 8,
-              avatar: '',
-            },
-            replyTag: null,
-            content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
-            createdAt: '2019-03-27',
-            numberOfLikes: 12,
-          },
-          {
-            id: 2,
-            user: {
-              id: 27,
-              name: 'Henrique Leonel',
-              categoryId: 15,
-              avatar: '',
-            },
-            replyTag: null,
-            content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
-            createdAt: '2019-03-27',
-            numberOfLikes: 0,
-          },
-        ],
       },
       {
         id: 2,
@@ -57,12 +29,11 @@ export default {
           name: 'maria',
           id: 19,
         },
-        date: '2020/05/04',
-        description: 'pula fogueira',
-        likes: 170,
-        dislikes: 64,
-        repliesId: 1,
-        numberOfReplies: 12,
+        createdAt: '2020/05/04',
+        content: 'pula fogueira',
+        positiveSupports: 170,
+        negativeSupports: 64,
+        numberOfReplyes: 12,
         views: 0,
       },
       {
@@ -73,67 +44,12 @@ export default {
           name: 'anna',
           id: 28,
         },
-        date: '2020/05/07',
-        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
-        likes: 170,
-        dislikes: 64,
-        repliesId: 1,
-        numberOfReplies: 12,
+        createdAt: '2020/05/07',
+        content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
+        positiveSupports: 170,
+        negativeSupports: 64,
+        numberOfReplyes: 12,
         views: 0,
-        replies: [
-          {
-            id: 3,
-            user: {
-              id: 2,
-              name: 'Juliana Trujillo',
-              categoryId: 8,
-              avatar: '',
-            },
-            replyTag: null,
-            content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
-            createdAt: '2019-03-27',
-            numberOfLikes: 12,
-          },
-          {
-            id: 4,
-            user: {
-              id: 27,
-              name: 'Henrique Leonel',
-              categoryId: 15,
-              avatar: '',
-            },
-            replyTag: null,
-            content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
-            createdAt: '2019-03-27',
-            numberOfLikes: 0,
-          },
-          {
-            id: 5,
-            user: {
-              id: 2,
-              name: 'Juliana Trujillo',
-              categoryId: 8,
-              avatar: '',
-            },
-            replyTag: null,
-            content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
-            createdAt: '2019-03-27',
-            numberOfLikes: 12,
-          },
-          {
-            id: 8,
-            user: {
-              id: 43,
-              name: 'fulano',
-              categoryId: 15,
-              avatar: '',
-            },
-            replyTag: 5,
-            content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
-            createdAt: '2019-03-27',
-            numberOfLikes: 3,
-          },
-        ],
       },
       {
         id: 4,
@@ -143,12 +59,11 @@ export default {
           name: 'benta',
           id: 32,
         },
-        date: '2020/05/13',
-        description: 'indústria tipográfica ede impressos,',
-        likes: 170,
-        dislikes: 64,
-        repliesId: 1,
-        numberOfReplies: 12,
+        createdAt: '2020/05/13',
+        content: 'indústria tipográfica ede impressos,',
+        positiveSupports: 170,
+        negativeSupports: 64,
+        numberOfReplyes: 12,
         views: 0,
       },
       {
@@ -159,12 +74,11 @@ export default {
           name: 'martiello',
           id: 67,
         },
-        date: '2020/05/22',
-        description: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
-        likes: 170,
-        dislikes: 64,
-        repliesId: 1,
-        numberOfReplies: 12,
+        createdAt: '2020/05/22',
+        content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
+        positiveSupports: 170,
+        negativeSupports: 64,
+        numberOfReplyes: 12,
         views: 0,
       },
       {
@@ -175,12 +89,11 @@ export default {
           name: 'claudio',
           id: 189,
         },
-        date: '20202/05/28',
-        description: 'pula fogueira ',
-        likes: 170,
-        dislikes: 64,
-        repliesId: 1,
-        numberOfReplies: 12,
+        createdAt: '20202/05/28',
+        content: 'pula fogueira ',
+        positiveSupports: 170,
+        negativeSupports: 64,
+        numberOfReplyes: 12,
         views: 0,
       },
       {
@@ -191,12 +104,11 @@ export default {
           name: 'mellisa',
           id: 78,
         },
-        date: '2020/06/01',
-        description: 'photo graph u',
-        likes: 170,
-        dislikes: 64,
-        repliesId: 1,
-        numberOfReplies: 12,
+        createdAt: '2020/06/01',
+        content: 'photo graph u',
+        positiveSupports: 170,
+        negativeSupports: 64,
+        numberOfReplyes: 12,
         views: 0,
       },
       {
@@ -207,12 +119,11 @@ export default {
           name: 'enzo',
           id: 45,
         },
-        date: '2020/06/05',
-        description: 'photo graph u',
-        likes: 170,
-        dislikes: 64,
-        repliesId: 1,
-        numberOfReplies: 12,
+        createdAt: '2020/06/05',
+        content: 'photo graph u',
+        positiveSupports: 170,
+        negativeSupports: 64,
+        numberOfReplyes: 12,
         views: 0,
       },
       {
@@ -223,121 +134,366 @@ export default {
           name: 'marcio',
           id: 7,
         },
-        date: '2020/07/05',
-        description: 'photo graph u',
-        likes: 170,
-        dislikes: 64,
-        repliesId: 1,
-        numberOfReplies: 12,
+        createdAt: '2020/07/05',
+        content: 'photo graph u',
+        positiveSupports: 170,
+        negativeSupports: 64,
+        numberOfReplyes: 12,
         views: 0,
       },
     ],
-    current: null,
-    Key: null,
+    replyes: [
+      {
+        id: 1,
+        topicId: 1,
+        user: {
+          id: 2,
+          name: 'Juliana Trujillo',
+          categoryId: 8,
+          avatar: '',
+        },
+        replyTag: null,
+        content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
+        createdAt: '2019-03-27',
+        numberOfLikes: 12,
+      },
+      {
+        id: 2,
+        topicId: 1,
+        user: {
+          id: 27,
+          name: 'Henrique Leonel',
+          categoryId: 15,
+          avatar: '',
+        },
+        replyTag: null,
+        content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
+        createdAt: '2019-03-27',
+        numberOfLikes: 0,
+      },
+      {
+        id: 3,
+        topicId: 3,
+        user: {
+          id: 2,
+          name: 'Juliana Trujillo',
+          categoryId: 8,
+          avatar: '',
+        },
+        replyTag: null,
+        content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
+        createdAt: '2019-03-27',
+        numberOfLikes: 12,
+      },
+      {
+        id: 4,
+        topicId: 3,
+        user: {
+          id: 27,
+          name: 'Henrique Leonel',
+          categoryId: 15,
+          avatar: '',
+        },
+        replyTag: null,
+        content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
+        createdAt: '2019-03-27',
+        numberOfLikes: 0,
+      },
+      {
+        id: 5,
+        topicId: 3,
+        user: {
+          id: 2,
+          name: 'Juliana Trujillo',
+          categoryId: 8,
+          avatar: '',
+        },
+        replyTag: null,
+        content: 'Expedita aliquid at suscipit molestias eos dicta, sed iste quidem blanditiis quod.',
+        createdAt: '2019-03-27',
+        numberOfLikes: 12,
+      },
+      {
+        id: 6,
+        topicId: 3,
+        user: {
+          id: 43,
+          name: 'fulano',
+          categoryId: 15,
+          avatar: '',
+        },
+        replyTag: 5,
+        content: 'Aperiam minima autem aliquam alias consequuntur quas magnam?',
+        createdAt: '2019-03-27',
+        numberOfLikes: 3,
+      },
+    ],
+    key: null,
+    currentTopic: null,
+    currentTopicReplies: null,
+  },
+
+  getters: {
+    loadTopics: (state) => state.list,
+    getCurrentTopic: (state) => state.currentTopic,
+    getCurrentTopicReplyes: (state) => state.currentTopicReplies,
   },
 
   actions: {
-    loadTopics(state, { commit }) {
-      commit('SET_TOPICS_LIST', state.list);
+
+    // TO BE DELETED
+    // this action is applied only in the local implementation.
+    localLoadCurrentTopic({ state, commit }, { topicId }) {
+      let data = {};
+      data = state.list.find((el) => el.id === topicId);
+      commit('SET_CURRENT_TOPIC', data); // update local storage
     },
 
-    // loadCurrentTopic(state, { commit }, { id }) {
-    //   const { topic } = state.list.map((e) => e.id).indexOf(id);
-    //   console.log('current', topic);
-    //   commit('SET_CURRENT_TOPIC', { topic });
-    // },
-
-    // async loadTopics({ commit }, { filters }) {
-    //   // const topics = await apiClient.getTopics(filters)
-    //   commit('SET_TOPICS_LIST', { topics });
-    // },
-
-    // loadCurrentTopic({ commit }, { topicId }) {
-    //   // get topic data from api
-    //   commit('SET_CURRENT_TOPIC', { topic }) // seta o topico recebido como o atual
-    // },
-
-    loadCurrentTopic({ state, commit }, { topicId }) {
-      console.log('store/topics: topicId', topicId);
-      // const { topic } = state.list.find((item) => item.id === topicId.toString());
-      const topic = state.list.find((el) => el.id === topicId);
-      console.log('current', topic);
-      commit('SET_CURRENT_TOPIC', { topic }); // seta o topico recebido como o atual
+    // TO BE DELETED
+    localLoadCurrentTopicReplyes({ state, commit }, { topicId }) {
+      const data = state.replyes.filter(
+        (reply) => reply.topicId !== topicId,
+      );
+      commit('SET_CURRENT_TOPIC_REPLYES', data);
     },
 
-    // async createTopic({ commit }, { data }) {
-    //   const topicId = (await apiClient.createTopic(data)).id;
-    //   return topicId;
-    // },
+    // TO BE IMPLEMENTED
+    loadCurrentTopics({ commit }, { filters }) {
+      // this action is performed every time the user reaches the last topic on the topics page.
+      // api get 12 topics elements as object array, in ascending order by date, based on current filter. *** this appears like unsplash loading.
+      let currentTopics = [];
+      if (filters === 'noFilters') {
+        currentTopics = api.get('NoFilters');
+      } else if (filters === 'moreActives') {
+        currentTopics = api.get('moreActive');
+      } else if (filters === 'mostReplyededs') {
+        currentTopics = api.get('mostReplyeds');
+      } else if (filters === 'mostRecents') {
+        currentTopics = api.get('mostRecents');
+      }
+      commit('SET_TOPICS_LIST', { currentTopics });
+    },
 
+    // TO BE REWIWED
+    loadCurrentTopic({ commit }, { topicId }) {
+      // api get, this topic to be set as currentTopic. and get replies array of this topic.
+      Promise((resolve, reject) => {
+        api.get('/getCurrentTopic', {
+          topicId,
+        })
+          .then((response) => {
+            console.log('topics/loadCurrentTopic - response', response.data);
+            commit('SET_CURRENT_TOPIC', response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            reject(error);
+          });
+      });
+      console.log('topics/loadCurrentTopic LOG');
+    },
+
+    // TO BE REWIWED
+    loadCurrentTopicReplyes({ commit }, { topicId }) {
+      Promise((resolve, reject) => {
+        api.get('/getCurrentTopicReplyes', {
+          topicId,
+        })
+          .then((response) => {
+            console.log('topics/loadCurrentTopicReplyes - response', response.data);
+            commit('SET_CURRENT_TOPIC_REPLYES', response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            reject(error);
+          });
+      });
+    },
+
+    // OK
+    createNewTopic({
+      state,
+      commit,
+      dispatch,
+      rootGetters,
+    }, { data }) {
+      // generate new key to being used as id, on this new topic.
+      dispatch('setKey'); // TO BE DELETED
+      const topicId = state.key; // TO BE DELETED
+      // get data from current user, to reference this topic. contains { id, name, categoryId, avatarUrl}
+      const userRef = rootGetters['users/getUserReference'];
+      // get current date and time
+      const today = new Date();
+      const date = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
+      // mount reply object
+      const newTopic = {
+        id: topicId, // TO BE DELETED
+        title: data.title,
+        categoryId: data.categoryId,
+        user: userRef,
+        createdAt: date,
+        content: data.content,
+        positiveSupports: 0,
+        negativeSupports: 0,
+        numberOfReplyes: 0,
+        views: 0,
+      };
+      console.log('topics/createNewTopic', newTopic);
+      commit('ADD_NEW_TOPIC', { newTopic }); // TO BE DELETED
+      // post to api topic object, to be added on serve and storage response.
+      // Promise((resolve, reject) => {
+      //   api.post('/createNewTopic', {
+      //     newTopic,
+      //   })
+      //     .then((response) => {
+      //       console.log('topics/createNewTopic - response', response.data);
+      //       commit('ADD_NEW_TOPIC', response.data);
+      //       resolve(response);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error.message);
+      //       reject(error);
+      //     });
+      // });
+    },
+
+    // TO BE IMPLEMENTED
     // async updateTopic({ commit }, { topicId, data }) {
     //   await apiClient.updateTopic(topicId, data);
     //   return topicId;
     // },
 
+    // TO BE IMPLEMENTED
     // async deleteTopic({ commit }, { topicId }) {
     //   await apiClient.deleteTopic(topicId);
     // },
 
-    // addReply({ state, commit }, { data }) {
-    //   const reply = await apiClient.addReply(state.current.id, data);
-    //   commit('ADD_REPLY_TO_CURRENT_TOPIC', { reply });
-    // },
+    // OK
+    supportThisTopic({ state, commit }, { data }) {
+      // call this action from usersModule, after conditions are processed.
+      // post to api, this current topic id, to be supported (approved/true || notApproved/false).
+      const newSupport = { topicId: state.currentTopic.id, support: data };
+      // Promise((resolve, reject) => {
+      //   api.post('/supportThisTopic', {
+      //     newSupport,
+      //   })
+      //     .then((response) => {
+      //       console.log('topics/supportThis');
+      //       commit('ADD_SUPPORT', data);
+      //       resolve(response);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error.message);
+      //       reject(error);
+      //     });
+      // });
+      console.log('topics/supportThisTopic', newSupport);
+      commit('ADD_SUPPORT', { data });
+    },
 
+    // OK
     addReply({
       state,
       commit,
       dispatch,
       rootGetters,
     }, { data }) {
-      dispatch('setKey');
-      const replyId = state.Key;
-      const userRef = rootGetters['users/getUserRefToReply'];
+      // generate new key to being used as id, on this new reply. LOCAL IMPLEMENTATION ONLY
+      dispatch('setKey'); // TO BE DELETED
+      const replyId = state.key; // TO BE DELETED
+      // get data from current user, to reference this reply.
+      const userRef = rootGetters['users/getUserReference'];
+      // get current date and time
       const today = new Date();
       const date = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
-      const reply = {
-        id: replyId,
+      // mount reply object
+      const newReply = {
+        id: replyId, // TO BE DELETED
+        topicId: state.currentTopic.id,
         user: userRef,
         replyTag: data.replyTag,
         content: data.content,
         createdAt: date,
         numberOfLikes: 0,
       };
-      console.log('reply', reply);
-      commit('ADD_REPLY_TO_CURRENT_TOPIC', { reply });
+      console.log('topics/addReply', newReply);
+      // post to api - newReply object to be added, and this topic id as reference.
+      // Promise((resolve, reject) => {
+      //   api.get('/addNewReply', {
+      //     newReply,
+      //   })
+      //     .then((response) => {
+      //       console.log('topics/loadCurrentTopicReplyes - response', response.data);
+      //       commit('ADD_REPLY_TO_CURRENT_TOPIC', response.data);
+      //       resolve(response);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error.message);
+      //       reject(error);
+      //     });
+      // });
+      commit('ADD_REPLY_TO_CURRENT_TOPIC', newReply); // TO BE DELETED
     },
 
+    // TO BE REWIEWED
     deleteReply({ commit }, { replyId }) {
-      // await apiClient.deleteReply(state.current.id, replyId);
-      commit('DELETE_REPLY_FROM_CURRENT_TOPIC', { replyId });
+      // post to api, this reply id to be deleted.
+      // Promise((resolve, reject) => {
+      //   api.post('/deleteReply', {
+      //     replyId,
+      //   })
+      //     .then((response) => {
+      //       console.log('topics/deleteReply - response', response);
+      //       commit('DELETE_REPLY', { replyId });
+      //       resolve(response);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error.message);
+      //       reject(error);
+      //     });
+      // });
+      console.log('topics/deleteReply', replyId);
+      commit('DELETE_REPLY', { replyId });
     },
 
-    // async updateReply({ state, commit }, { replyId, data }) {
-    //   await apiClient.updateReply(state.current.id, replyId, data);
-    //   commit('UPDATE_REPLY', { replyId, data });
-    //   return replyId;
-    // },
+    // TO BE REWIEWED
+    updateReply({ commit }, { replyId, data }) {
+      // post to api, this reply id and newData to be updated.
+      // api post action HERE ------ (replyId, data);
+      // then
+      commit('UPDATE_REPLY', { replyId, data }); // update local storage.
+      return replyId;
+    },
 
+    // TO BE REWIEWED
     likeReply({ dispatch, commit }, { replyId }) {
-      // await apiClient.updateReply(state.current.id, replyId, data);
-      dispatch('users/addLike', { replyId }, { root: true });
+      // post to api, a reply element on this topic, to be liked.
+      // then
+      dispatch('users/addLike', { replyId }, { root: true }); // add from local user register like to this reply
       commit('LIKE_REPLY', { replyId });
       return replyId;
     },
 
+    // TO BE REWIEWED
     unlikeReply({ dispatch, commit }, { replyId }) {
-      // await apiClient.updateReply(state.current.id, replyId, data);
-      dispatch('users/removeLike', { replyId }, { root: true });
+      // post to api, reply element on this topic, to be unliked.
+      // then
+      dispatch('users/removeLike', { replyId }, { root: true }); // remove from local user register like to this reply
       commit('UNLIKE_REPLY', { replyId });
       return replyId;
     },
 
+    // TO BE REWIEWED
     getReplyTag({ state }, { replyTagId }) {
-      const data = state.current.replies.find((el) => el.id === replyTagId);
-      console.log('topics/replyTag', data);
+      // find reply element to being tagged
+      const data = state.currentTopicReplies.find((el) => el.id === replyTagId);
+      console.log('topics/getReplyTag', data);
       return data;
     },
 
+    // OK
     setKey({ commit }) {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let autoId = '';
@@ -351,53 +507,89 @@ export default {
   },
 
   mutations: {
-    SET_TOPICS_LIST(state, { topics }) {
-      state.list = topics;
+    // OK
+    SET_TOPICS_LIST(state, { data }) {
+      state.list = data;
     },
 
-    SET_CURRENT_TOPIC(state, { topic }) {
-      state.current = topic;
+    // OK
+    SET_CURRENT_TOPIC(state, data) {
+      state.currentTopic = data;
     },
 
-    ADD_REPLY_TO_CURRENT_TOPIC(state, { reply }) {
-      state.current.replies = [
-        ...state.current.replies,
-        reply,
+    // OK
+    SET_CURRENT_TOPIC_REPLYES(state, data) {
+      state.currentTopicReplies = data;
+    },
+
+    // TO BE REWIEWED
+    ADD_NEW_TOPIC(state, { data }) {
+      state.list.push(data);
+    },
+
+    // TO BE REWIEWED
+    ADD_SUPPORT(state, { support }) {
+      if (support === true) {
+        // approved
+        state.currentTopic.positiveSupports += 1;
+      } else {
+        // not approved
+        state.currentTopic.negativeSupports += 1;
+      }
+    },
+
+    // OK
+    POSITIVE_SUPPORT_DECREMENT(state) {
+      state.currentTopic.positiveSupports -= 1;
+    },
+
+    // OK
+    NEGATIVE_SUPPORT_DECREMENT(state) {
+      state.currentTopic.negativeSupports -= 1;
+    },
+
+    // OK
+    ADD_REPLY_TO_CURRENT_TOPIC(state, data) {
+      console.log('ADD_REPLY_TO_CURRENT_TOPIC', data);
+      state.currentTopicReplies = [
+        ...state.currentTopicReplies,
+        data,
       ];
     },
 
-    DELETE_REPLY_FROM_CURRENT_TOPIC(state, { replyId }) {
-      state.current.replies = state.current.replies.filter(
+    // TO BE REWIEWED - PERSIST AFTER DELETE
+    DELETE_REPLY(state, { replyId }) {
+      console.log('topics/DELETE_REPLY', replyId);
+      state.currentTopicReplies = state.currentTopicReplies.filter(
         (reply) => reply.id !== replyId,
       );
-      // console.log('after delete', state.current.replies);
     },
 
+    // TO BE IMPLEMENTED
     // UPDATE_REPLY({ state }, { replyId, data }) {
-    //   const replyIndex = state.current.replies.map((reply) => reply.id).indexOf(replyId);
+    //   const replyIndex = state.currentTopicReplies.map((reply) => reply.id).indexOf(replyId);
     //   if (replyIndex !== -1) {
-    //     Vue.set(state.current.replies, replyIndex, { ...state.current.replies[replyIndex], ...data });
+    //     Vue.set(state.currentTopicReplies, replyIndex, { ...state.currentTopicReplies[replyIndex], ...data });
     //   }
     // },
 
+    // OK
     LIKE_REPLY(state, { replyId }) {
-      const replyIndex = state.current.replies.findIndex((reply) => reply.id === replyId);
-      state.current.replies[replyIndex].numberOfLikes += 1;
+      const replyIndex = state.currentTopicReplies.findIndex((reply) => reply.id === replyId);
+      state.currentTopicReplies[replyIndex].numberOfLikes += 1;
     },
 
+    // OK
     UNLIKE_REPLY(state, { replyId }) {
-      const replyIndex = state.current.replies.findIndex((reply) => reply.id === replyId);
-      state.current.replies[replyIndex].numberOfLikes -= 1;
+      const replyIndex = state.currentTopicReplies.findIndex((reply) => reply.id === replyId);
+      state.currentTopicReplies[replyIndex].numberOfLikes -= 1;
     },
 
+    // OK
     SET_KEY(state, { newKey }) {
-      state.Key = newKey;
+      state.key = newKey;
       console.log('topics/setKey', newKey);
     },
   },
 
-  getters: {
-    loadTopics: (state) => state.list,
-    getCurrentTopic: (state) => state.current,
-  },
 };

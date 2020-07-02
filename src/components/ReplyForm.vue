@@ -2,6 +2,7 @@
   <div class="reply-form">
 
     <span class="body-2 bolder">Deixe seu comentário</span>
+    <!-- <q-separator/> -->
 
     <div class="reply-content">
 
@@ -22,16 +23,14 @@
 
         <base-button
           class="reply-button cancel-button"
-          :disabled="loading"
           @click="cancel"
-          theme="secondary"
+          :theme="this.content === '' ? 'secondary' : 'disabled'"
         >
-          <span class="caption bolder"> {{ loading ? 'Cancelando...' : 'Cancelar' }} </span>
+          <span class="caption bolder"> Cancelar </span>
         </base-button>
 
         <base-button
           class="reply-button"
-          :disabled="loading"
           @click="reply"
           :theme="this.content != '' ? 'primary' : 'disabled'"
         >
@@ -77,7 +76,11 @@ export default {
       this.$v.$touch();
       if (!this.$v.$anyError) {
         this.loading = true;
-        const newReply = { content: this.content, replyTag: this.replyToTag.id };
+        let tagId = null;
+        if (this.replyToTag != null) {
+          tagId = this.replyToTag.id;
+        }
+        const newReply = { content: this.content, replyTag: tagId };
         this.$store.dispatch('topics/addReply', { data: newReply })
           .then(() => {
             this.content = '';
@@ -111,7 +114,7 @@ export default {
   // justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  margin: 32px 0px 32px 0px;
+  margin: 16px 0px 32px 0px;
   width: 100%;
 }
 
@@ -119,17 +122,17 @@ export default {
   border: 1px solid $borderGray;
   width: 100%;
   padding: 8px;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .text-area {
-  margin-top: 8px;
+  margin-top: 0px;
   width: 100%;
 }
 
 .reply-button {
   align-self: flex-start;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .cancel-button {

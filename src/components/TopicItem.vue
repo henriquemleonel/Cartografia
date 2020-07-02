@@ -43,9 +43,6 @@ export default {
   name: 'topicItem',
   data() {
     return {
-      id: this.topic.id,
-      date: this.topic.date,
-      categoryId: this.topic.categoryId,
       category: {
         label: '',
         value: '0',
@@ -64,7 +61,7 @@ export default {
       options: 'categories/loadCategories',
     }),
     formatDate() {
-      const d = new Date(this.date);
+      const d = new Date(this.topic.createdAt);
       const monthNames = ['Jan', 'Fev', 'Mar', 'Abril', 'Maio', 'Junho', 'Julho', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
       const month = monthNames[d.getMonth()];
       let day;
@@ -77,7 +74,7 @@ export default {
     },
     formatDescription() {
       const limit = 150;
-      const str = this.topic.description;
+      const str = this.topic.content;
       if (str.length > limit) {
         return str.substring(0, limit).concat('...');
       }
@@ -89,17 +86,19 @@ export default {
   },
   methods: {
     ...mapActions('topics', [
-      'loadCurrentTopic',
+      'localLoadCurrentTopic',
+      'localLoadCurrentTopicReplyes',
     ]),
     setCategory() {
       const vm = this;
-      const el = this.options.find((item) => item.value === vm.categoryId.toString());
+      const el = this.options.find((item) => item.value === vm.topic.categoryId.toString());
       this.category = el;
     },
-    emitThisTopic() {
-      console.log('topic_clicked', this.id);
-      this.loadCurrentTopic({ topicId: this.id });
-      this.$router.push({ name: 'TopicPage', params: { topicId: this.id } });
+    async emitThisTopic() {
+      console.log('topicItem/emitThisTopic', this.topic.id);
+      await this.localLoadCurrentTopic({ topicId: this.topic.id });
+      await this.localLoadCurrentTopicReplyes({ topicId: this.topic.id });
+      this.$router.push({ name: 'TopicPage', params: { topicId: this.topic.id } });
     },
   },
 };

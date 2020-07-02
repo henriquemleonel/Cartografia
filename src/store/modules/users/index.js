@@ -8,7 +8,8 @@ export default {
     isAdmin: null,
     myPin: null,
     myEvents: null,
-    myLikes: [],
+    repliesLiked: [],
+    topicsVoted: [],
   },
 
   getters: {
@@ -24,25 +25,25 @@ export default {
     getMyPin: (state) => state.myPin,
     getMyPinState: (state) => state.myPin !== null,
     getMyEvents: (state) => state.myEvents,
-    getMyLikes: (state) => state.myLikes,
-    getUserRefToReply(state) {
+    getMyLikes: (state) => state.repliesLiked,
+    getMyVotes: (state) => state.topicsVoted,
+    getUserReference(state) {
       const userRef = {
         id: state.currentUser.user.id,
         name: state.currentUser.user.firstName,
         categoryId: state.currentUser.user.categoryId,
         avatar: '',
       };
-      // console.log('userRef reply', userRef);
       return userRef;
     },
 
   },
 
   actions: {
-    register({ data }) {
-      return new Promise((resolve, reject) => {
-        console.log('promise/signup');
-        api.post('/signup', { data },
+    signUp({ credentials }) {
+      console.log('users/register (data)', credentials);
+      Promise((resolve, reject) => {
+        api.post('/signup', { credentials },
           {
             headers: {
               'Content-Type': 'application/json',
@@ -60,6 +61,7 @@ export default {
           });
       });
     },
+
     retrieveToken({ commit }, { credentials }) {
       return new Promise((resolve, reject) => {
         api.post('/signin', {
@@ -80,18 +82,31 @@ export default {
           });
       });
     },
+
     destroyToken({ commit }) {
       localStorage.removeItem('access_token');
       commit('DESTROY_CURRENT_USER');
       console.log('logout');
     },
+
     addLike({ commit }, { replyId }) {
       commit('ADD_LIKE', { replyId });
-      console.log('add like user action');
+      console.log('users/addLike');
     },
+
     removeLike({ commit }, { replyId }) {
       commit('REMOVE_LIKE', { replyId });
       console.log('remove like user action');
+    },
+
+    addVote({ commit }, { topicId }) {
+      commit('ADD_VOTE', { topicId });
+      console.log('add vote user action');
+    },
+
+    removeVote({ commit }, { topicId }) {
+      commit('REMOVE_VOTE', { topicId });
+      console.log('remove vote user action');
     },
   },
 
@@ -113,18 +128,29 @@ export default {
       console.log('mutation : destroy currentUser');
     },
 
+    ADD_VOTE(state, { topicId }) {
+      state.topicsVoted.push(topicId);
+      console.log('topic id to be voted', topicId);
+    },
+
+    REMOVE_VOTE(state, { topicId }) {
+      const index = state.topicsVoted.findIndex((item) => item === topicId);
+      if (state.topicsVoted !== null && state.topicsVoted.length !== 0) {
+        state.topicsVoted.splice(index, 1);
+      }
+      console.log('array voted', state.topicsVoted);
+    },
+
     ADD_LIKE(state, { replyId }) {
-      state.myLikes.push(replyId);
-      console.log('array mylikes', state.myLikes);
+      state.repliesLiked.push(replyId);
+      // console.log('array mylikes', state.repliesLiked);
     },
 
     REMOVE_LIKE(state, { replyId }) {
-      const index = state.myLikes.findIndex((item) => item === replyId);
-      console.log('array mylikes before remove', state.myLikes);
-      console.log('item to remove', state.myLikes[index]);
-      if (state.myLikes !== null && state.myLikes.length !== 0) {
-        state.myLikes.splice(index, 1);
-        console.log('array mylikes after remove', state.myLikes);
+      const index = state.repliesLiked.findIndex((item) => item === replyId);
+      if (state.repliesLiked !== null && state.repliesLiked.length !== 0) {
+        state.repliesLiked.splice(index, 1);
+        // console.log('array mylikes after remove', state.repliesLiked);
       }
     },
   },

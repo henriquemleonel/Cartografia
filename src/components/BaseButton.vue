@@ -44,7 +44,7 @@ export default {
 
 <style lang="scss" scoped>
 $primaryColor: #000;
-$secondaryColor: #D0D0D0;
+$secondaryColor: #E7E7E7;
 
 .base-button {
   border: 0;
@@ -56,7 +56,7 @@ $secondaryColor: #D0D0D0;
   text-decoration: none;
   display: inline-block;
   text-align: center;
-  min-width: 80px;
+  min-width: 40px;
 }
 
 .base-button.disabled {
@@ -65,11 +65,27 @@ $secondaryColor: #D0D0D0;
   cursor: default;
 }
 
+.base-button:not(.disabled).transparent {
+  background: transparent;
+  padding: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-items: center;
+  text-transform: lowercase;
+}
+
+.base-button:not(.disabled).flat:hover {
+  background: lighten($secondaryColor, 0%);
+}
+
 .base-button:not(.disabled).flat {
   background: transparent;
   color: #FFF;
-  height: 24px;
+  max-height: 36px;
+  padding: 8px 16px 8px 16px;
   margin-top: -8px;
+  text-transform: lowercase;
 }
 
 // Primary
