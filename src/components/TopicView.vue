@@ -4,6 +4,14 @@
     <!-- header -->
     <div class="header">
       <logo class="identity" :blackMode="true"/>
+
+      <base-button class="reset-btn mg-top8" theme="flat" :to="{ name: 'Topics' }">
+        <i class="fas fa-arrow-left text-black"></i>
+        <span class="caption bolder mg-left8 text-black"> voltar aos debates </span>
+      </base-button>
+
+      <!-- <multicolor-line class="multicolor-line-top"/> -->
+
     </div>
 
     <!-- delete field -->
@@ -27,39 +35,80 @@
     <div class="topic-content">
 
       <span class="big-title bolder"> {{ topic.title }} </span>
+      <multicolor-line class="multicolor-line-top"/>
 
-      <div class="author row mg-top16">
+      <div class="author row mg-top8">
 
-        <span class="body-3 bolder text-uppercase"> {{ topic.user.name }} </span>
-        <span class="body-3 mg-left8"> | </span>
-        <span class=" body-3 bolder mg-left8"> {{ formatDate }} </span>
+        <span class="body-3 bolder text-gray"> {{ topic.user.name }} </span>
+        <span class="body-3 text-gray mg-left8"> - </span>
+        <span class="body-3 text-gray mg-left8"> {{ formatDate }} </span>
 
       </div>
 
-      <p class="body-2 bold mg-top32"> {{ topic.description }} </p>
+      <p class="body-2 mg-top32"> {{ topic.content }} </p>
 
     </div>
 
+    <!-- participate-area -->
+    <div class="participate-area">
+
+      <!-- common user -->
+        <base-button
+          class=""
+          @click="onReply"
+          v-if="!isLoggedIn"
+          theme="flat"
+        >
+          <!-- <i class="fas fa-plus reply-icon"></i> -->
+          <span class="body-2 bolder text-black"> Vote, Comente. Participe! </span>
+        </base-button>
+
+      <div class="participate-content row no-wrap" v-if="isLoggedIn">
+
+        <span id="vote-text" class="headline-2 bolder"> Vote, participe! </span>
+
+        <div class="row">
+
+          <base-button class="participate-button" theme="flat" @click="voteOnThis(true)">
+            <q-icon id="vote-icon1" class="vote-icon"  name="far fa-thumbs-up" size="xs"></q-icon>
+            <span id="vote-span1" class="caption bolder"> Apoio </span>
+          </base-button>
+
+          <base-button class="participate-button" theme="flat" @click="voteOnThis(false)">
+            <q-icon id="vote-icon2" class="vote-icon"  name="far fa-thumbs-down" size="xs"></q-icon>
+            <span id="vote-span2" class="caption bolder"> Não apoio </span>
+          </base-button>
+
+        </div>
+
+      </div>
+
+      <div id="vote-line"></div>
+
+    </div>
+
+    <!-- topic footer and user actions -->
     <div class="topic-footer">
 
       <div class="topic-footer-reply">
 
-        <span class="topic-footer-title headline bolder">Comentários</span>
-        <span class="caption bolder mg-left8">( {{ topic.replies.length !== 0 ? topic.replies.length : 'Seja o primero a comentar.' }} )</span>
+        <q-icon name="far fa-comment"></q-icon>
+        <span class="headline-3 text-gray bolder mg-left8">{{ replyes.length !== 0 ? `${replyes.length} comentários` : 'Seja o primero a comentar.' }}</span>
+        <!-- <span class="topic-footer-title headline-2 bolder">Comentários</span> -->
 
       </div>
 
       <div class="action-buttons">
 
         <!-- botão forceSignIn -->
-        <base-button
+        <!-- <base-button
           class="reset-button"
           @click="onReply"
           v-if="!isLoggedIn"
         >
-          <!-- <i class="fas fa-plus reply-icon"></i> -->
+          <i class="fas fa-plus reply-icon"></i>
           <span class="body-3 bolder"> Comentar </span>
-        </base-button>
+        </base-button> -->
 
         <!-- botao editar -->
         <base-button
@@ -85,19 +134,34 @@
 
     </div>
 
-    <div class="replies-section">
-      <div class="replies-content">
-        <reply
-          v-for="reply in topic.replies"
-          :key="reply.id"
-          :reply="reply"
-        />
-      </div>
+    <q-separator/>
+
+    <!-- reply-section -->
+    <div class="replies-content mg-top16">
+
+      <reply
+        v-for="reply in replyes"
+        :key="reply.id"
+        :reply="reply"
+        v-on:callReply="replyThis($event)"
+      />
+
     </div>
 
+    <q-separator/>
+
+    <!-- <q-scroll-area
+      class="scroll-area"
+      :thumb-style="thumbStyle"
+      :bar-style="barStyle"
+    >
+    </q-scroll-area> -->
+
+    <!-- reply-form -->
     <div class="reply-form">
 
       <reply-form
+        :replyToTag="replyToTag != null ? replyToTag : null"
         v-if="isLoggedIn"
         ref="replyForm"
       />
@@ -120,7 +184,6 @@ import Logo from './Logo.vue';
 export default {
   components: {
     Logo,
-    // Reply,
     BaseButton,
     BaseConfirmDialog,
     ReplyForm,
@@ -131,19 +194,42 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    replyes: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
       showConfirmDialog: this.isLoggedIn,
+      replyToTag: null,
+      thumbStyle: {
+        right: '0px',
+        top: '16px',
+        borderRadius: '0px',
+        backgroundColor: '#111111',
+        width: '9px',
+        heigth: '8px',
+        opacity: 0.75,
+      },
+      barStyle: {
+        right: '0px',
+        top: '16px',
+        borderRadius: '0px',
+        backgroundColor: '#eeeeee',
+        width: '9px',
+        opacity: 0.2,
+      },
     };
   },
   computed: {
     ...mapGetters({
       isLoggedIn: 'users/isLoggedIn',
       currentUser: 'users/getCurrentUser',
+      myVotes: 'users/getMyVotes',
     }),
     formatDate() {
-      const d = new Date(this.topic.date);
+      const d = new Date(this.topic.createdAt);
       const monthNames = ['Jan', 'Fev', 'Mar', 'Abril', 'Maio', 'Junho', 'Julho', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
       const month = monthNames[d.getMonth()];
       const year = d.getFullYear();
@@ -178,6 +264,51 @@ export default {
       }
       return false;
     },
+    replyThis(replyIdToTag) {
+      this.jumpToReplyForm();
+      this.$store.dispatch('topics/getReplyTag', {
+        replyTagId: replyIdToTag,
+      }).then((response) => {
+        this.replyToTag = response;
+        console.log('topicView/replyThis', response);
+      }).catch((error) => {
+        console.log('error replyToTag', error);
+      });
+    },
+    voteOnThis(type) {
+      if (type === true && !this.myVotes.includes(this.topic.id)) {
+        this.setVoteColor(true);
+        this.$store.dispatch('topics/voteOnThis', { newSupport: true })
+          .then(() => {
+            console.log('topicsView/ suport this', this.topic.id);
+          }).catch((error) => {
+            console.log('error vote', error);
+          });
+      } else if (type === false && this.myVotes.includes(this.topic.id)) {
+        this.setVoteColor(false);
+        this.$store.dispatch('topics/voteOnThis', { newSupport: false })
+          .then(() => {
+            console.log('topicView/ not suport this');
+          }).catch((error) => {
+            console.log('error vote', error);
+          });
+      }
+    },
+    setVoteColor(type) {
+      if (type !== true) {
+        console.log('nao apoiar');
+        document.getElementById('vote-span2').style.color = '#AD3B3B';
+        document.getElementById('vote-icon2').style.color = '#AD3B3B';
+        document.getElementById('vote-icon1').style.color = '#000';
+        document.getElementById('vote-span1').style.color = '#000';
+      } else {
+        console.log('apoiar');
+        document.getElementById('vote-span1').style.color = '#254C26';
+        document.getElementById('vote-icon1').style.color = '#254C26';
+        document.getElementById('vote-icon2').style.color = '#000';
+        document.getElementById('vote-span2').style.color = '#000';
+      }
+    },
   },
 };
 </script>
@@ -186,57 +317,113 @@ export default {
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
+
 .topic-view {
-  background: #f5f5f5;
+  background: #fff;
   border-radius: 3px;
-  padding: 32px;
+  padding: 0px 32px;
   // border: 2px solid red;
-  max-width: 850px;
+  max-width: 800px;
 }
 
 .header {
   width: 100%;
-  margin: 0px 0px 64px 0px;
-  // border: 2px solid blue;
+  margin: 0px 0px 8px 0px;
+}
+
+// .identity {
+//   position: absolute;
+//   top: 32px;
+//   left: 32px;
+// }
+
+.reset-btn {
+  margin-top: 8px !important;
+  width: 180px;
+  padding-left: 0px !important;
+}
+
+.multicolor-line-top {
+  height: 3px;
+  margin-top: 4px;
 }
 
 .topic-content {
-  margin: 32px 0px 16px 0px;
-  // border: 2px solid pink;
+  margin: 16px 0px 8px 0px;
+}
+
+p {
+  margin: 16px 0px;
+}
+
+.participate-area {
+  width: 100%;
+  // min-height: 16px;
+  margin-bottom: 8px;
+}
+
+.participate-content {
+  position: relative;
+  align-self: flex-end;
+  align-items: center;
+  justify-items: center;
+  padding: 8px 0px 8px 0px;
+}
+
+#vote-text {
+  color: black;
+  margin-top: -8px;
+  text-align: end;
+}
+
+#vote-line {
+  color: #000;
+  height: 4px;
+  width: 100%;
+}
+
+.participate-button {
+  margin-left: 8px;
+}
+
+.vote-icon {
+  color: black;
+  margin-right: 8px;
+}
+
+#vote-span1, #vote-span2 {
+  color: black;
 }
 
 .topic-footer {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  // position: relative;
-  margin-top: 45px;
-  padding-bottom: 8px;
+  width: calc(100% - 32px);
+  margin-top: 0px;
+  padding: 8px 8px 0px 0px;
   // border: 2px solid green;
 }
 
 .topic-footer-reply {
   width: 50%;
-  // position: relative;
   display: flex;
   justify-items: flex-end;
+  align-items: center;
   // border: 2px solid red;
 }
 
 .topic-footer-title {
-  align-self: flex-end;
-  justify-self: flex-end;
+  margin-left: 8px;
+  color: $gray4;
 }
 
 .action-buttons {
   width: 50%;
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: flex-end;
   justify-items: flex-end;
-  // position: relative;
-  // right: 32px;
-  // top: 0px;
 }
 
 .user-button {
@@ -246,7 +433,14 @@ export default {
 
 .reset-button {
   height: 35px;
-  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.scroll-area {
+  height: 700px;
+  width: 100%;
+  padding-right: 16px;
+  margin-top: 8px;
 }
 
 .reset-reply-icon {

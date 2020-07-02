@@ -1,20 +1,6 @@
 <template>
   <div class="reply-component row no-wrap">
 
-    <base-confirm-dialog
-      v-if="showConfirmDialog"
-      confirm-button-title="delete"
-      dismiss-button-title="cancel"
-      @dismiss="showConfirmDialog = false"
-      @confirm="deleteReply({ replyId: reply.id })"
-    >
-      <template #title>
-        Excluir esse comentário?
-      </template>
-      <template #default>
-        Você não pode desfazer essa ação.
-      </template>
-    </base-confirm-dialog>
 
     <div class="avatar">
       <base-avatar
@@ -30,30 +16,58 @@
       <div class="reply-header">
 
         <div class="author-right">
-          <span class="author-name body-2 bolder">
+          <span class="author-name body-3 bolder">
             {{ reply.user.name }}
           </span>
-          <span class="date caption bolder">
+          <span class="date caption bold">
             {{ formatDate }}
           </span>
         </div>
 
-        <div
-          v-if="!editing"
-          class="owner-actions"
-        >
-          <span class="">alo</span>
-          <i
-            v-if="isLoggedIn && currentUser && canEditTopic(currentUser.user.id, reply.user.id)"
-            class="action-icon fas fa-pencil-alt"
-            @click="editReply"
-          ></i>
-          <i
-            v-if="isLoggedIn && currentUser && canEditTopic(currentUser.user.id, reply.user.id)"
-            class="action-icon fas fa-trash"
-            @click="showConfirmDialog = true"
-          ></i>
+        <div class="owner-actions">
+
+          <div class="action-content" v-if="!editing && !deleteAction">
+            <i
+              v-if="isLoggedIn && currentUser && canEditTopic()"
+              class="action-icon far fa-edit"
+              @click="editing = true"
+            ></i>
+            <i
+              v-if="isLoggedIn && currentUser && canEditTopic()"
+              class="action-icon far fa-trash-alt"
+              @click="deleteAction = true, editing = false"
+            ></i>
+          </div>
+
+          <div class="row" v-if="deleteAction">
+            <span class="caption bold text-black al-self-center"> Deseja excluir este comentário?</span>
+
+            <base-button class="mg-left8" @click="deleteAction = false" theme="transparent">
+              <span class="caption bolder text-black">não</span>
+            </base-button>
+
+            <base-button class="mg-left8" @click="deleteReply" theme="transparent">
+              <span class="caption bolder text-black">sim</span>
+            </base-button>
+
+          </div>
+
         </div>
+
+        <!-- reply-this and like -->
+        <div class="action-replying row" v-if="!canEditTopic()">
+
+          <base-button v-if="isLoggedIn && currentUser" class="reply-button" theme="transparent" @click="replyThis()">
+            <span class="caption bolder" style="color: black;">Responder</span>
+          </base-button>
+
+          <i v-if="isLoggedIn && currentUser" class="action-icon far fa-heart" :class="{ 'liked': hasBeenLiked }" @click="likeReply()"/>
+          <i v-if="!isLoggedIn" class="action-icon no-pointer far fa-heart"/>
+
+          <span class="caption bolder no-pointer text-black mg-left8">{{ reply.numberOfLikes }}</span>
+
+        </div>
+        <!-- end reply action -->
 
       </div>
 
@@ -61,28 +75,32 @@
       <div class="reply-content body-3">
 
         <template v-if="!editing">
-          {{ reply.content }}
+
+          <reply-tag v-if="hasReplyTag" :replyTag="this.replyTag"/>
+
+          <span class="content-text">{{ reply.content }}</span>
         </template>
 
         <!-- edit -->
         <template v-else>
 
           <q-input
-            v-model="content"
+            class="mg-top8"
+            v-model="reply.content"
             :disabled="loading"
-            dark
             filled
             square
             autogrow
+            dense
           />
 
           <div class="action-editing">
 
-            <base-button class="cancel-button" theme="borderless" @click="editing = false">
+            <base-button class="cancel-button" theme="secondary" @click="editing = false">
               <span class="caption bolder">Cancelar</span>
             </base-button>
 
-            <base-button class="save-button" :disabled="loading" @click="saveReply">
+            <base-button class="save-button" theme="primary" :disabled="loading" @click="editReply">
               <span class="caption bolder"> {{ loading ? 'Salvando...' : 'Salvar' }} </span>
             </base-button>
 
@@ -91,21 +109,7 @@
         </template>
 
       </div>
-      <!-- fim de reply -->
-
-      <!-- reply this and like -->
-      <div class="action-replying" v-if="!canEditTopic(currentUser.user.id, reply.user.id)">
-
-        <base-button class="reply-button" theme="borderless" @click="reply">
-          <span class="caption bolder" style="color: white;">Responder</span>
-        </base-button>
-        <i
-            v-if="isLoggedIn && currentUser"
-            class="action-icon fas fa-thumbs-up"
-            @click="likeThisReply"
-          ></i>
-      </div>
-      <!-- fim de reply action -->
+      <!-- end reply -->
 
     </div>
 
@@ -113,17 +117,19 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import BaseConfirmDialog from './BaseConfirmDialog.vue';
+import { mapGetters } from 'vuex';
+// import BaseConfirmDialog from './BaseConfirmDialog.vue';
 import BaseAvatar from './BaseAvatar.vue';
 import BaseButton from './BaseButton.vue';
+import ReplyTag from './ReplyTag.vue';
 
 
 export default {
   components: {
     BaseAvatar,
     BaseButton,
-    BaseConfirmDialog,
+    ReplyTag,
+    // BaseConfirmDialog,
   },
   props: {
     reply: {
@@ -137,12 +143,16 @@ export default {
       content: '',
       editing: false,
       loading: false,
+      deleteAction: false,
+      liked: false,
+      replyTag: null,
     };
   },
   computed: {
     ...mapGetters({
       isLoggedIn: 'users/isLoggedIn',
       currentUser: 'users/getCurrentUser',
+      myLikes: 'users/getMyLikes',
     }),
     formatDate() {
       const d = new Date(this.reply.createdAt);
@@ -157,43 +167,82 @@ export default {
       }
       return `${day} de ${month} de ${year}`;
     },
+    hasBeenLiked() {
+      return this.myLikes.includes(this.reply.id);
+    },
+    hasReplyTag() {
+      return this.reply.replyTag != null;
+    },
+  },
+  created() {
+    this.getThisTag();
   },
   methods: {
-    ...mapActions([
-      'deleteReply',
-      'updateReply',
-    ]),
-    editReply() {
-      this.content = this.reply.content;
-      this.editing = true;
+    deleteReply() {
+      console.log('reply/deleteReply', this.reply.id);
+      this.$store.dispatch('topics/deleteReply', {
+        replyId: this.reply.id,
+      }).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log('reply/deleteReply ERROR', error);
+      });
     },
-    async saveReply() {
+    editReply() {
       this.loading = true;
-      try {
-        await this.updateReply({
-          replyId: this.reply.id,
-          data: { content: this.content },
-        });
+      console.log('reply/updateReply', this.reply.id);
+      this.$store.dispatch('topics/updateReply', {
+        replyId: this.reply.id,
+        data: { content: this.content },
+      }).then((response) => {
         this.editing = false;
         this.loading = false;
-      } catch (err) {
+        console.log(response.message);
+      }).catch((error) => {
         this.loading = false;
-      }
+        console.log('reply/updateReply ERROR', error);
+      });
     },
-    async likeThisReply() {
-      try {
-        await this.likeReply({
+    likeReply() {
+      if (!this.myLikes.includes(this.reply.id)) {
+        this.liked = true;
+        this.$store.dispatch('topics/likeReply', {
           replyId: this.reply.id,
+        }).then(() => {
+          // console.log('reply/likeReply');
+        }).catch((error) => {
+          console.log('reply/likeReply ERROR', error);
         });
-      } catch (error) {
-        console.log(error);
+      } else if (this.myLikes.includes(this.reply.id)) {
+        this.liked = false;
+        this.$store.dispatch('topics/unlikeReply', {
+          replyId: this.reply.id,
+        }).then(() => {
+          // console.log('reply/unlikeReply');
+        }).catch((error) => {
+          console.log('reply/unlikeReply ERROR', error);
+        });
       }
     },
-    canEditTopic(userId, ownerId) {
-      if (userId === ownerId) {
+    canEditTopic() {
+      if (this.currentUser !== null && this.currentUser.user.id === this.reply.user.id) {
         return true;
       }
       return false;
+    },
+    getThisTag() {
+      this.$store.dispatch('topics/getReplyTag', {
+        replyTagId: this.reply.replyTag,
+      }).then((response) => {
+        this.replyTag = response;
+        // console.log('tag response', response);
+      }).catch((error) => {
+        console.log('error getTag', error);
+      });
+    },
+    replyThis() {
+      this.$emit('callReply', this.reply.id);
+      console.log('id reset', this.reply.id);
     },
   },
 };
@@ -204,39 +253,47 @@ export default {
 @import '../styles/mixins.scss';
 
 $primaryColor: #000;
+$textBlack: #000;
 
 .reply-component {
-  margin: 8px 0px 32px 0px;
+  margin: 8px 0px 24px 0px;
 }
 
 .reply-header {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  max-height: 50px;
+  align-items: center;
   position: relative;
+  background-color: $gray1;
+  padding: 4px 8px 4px 8px;
+  max-height: 32px;
+  width: 100%;
 }
 
 .author-right {
-  width: 40%;
+  // width: 40%;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  max-height: 24px;
 }
 
 .author-name {
-  color: #fff;
+  color: $textBlack;
+  margin-right: 8px;
+  margin-top: 0px;
 }
 
 .date {
-  color: #fff;
-  margin-top: 3px;
+  color: $textBlack;
+  text-align: end !important;
+  line-height: 20px;
 }
 
 .owner-actions {
   position: absolute;
-  right: 0px !important;
-  top: 8px;
+  right: 8px !important;
   display: flex;
   align-items: center;
   justify-self: flex-end;
@@ -244,32 +301,45 @@ $primaryColor: #000;
 
 .action-icon {
   margin-left: 16px;
-  color: #fff;
+  color: $primaryColor;
   cursor: pointer;
 }
 
+.no-pointer {
+  cursor: default;
+}
+
+.liked {
+  color: #C95B40;
+}
+
 .reply-container {
-  padding: 8px 16px 16px 16px;
   margin-left: 8px;
-  background-color: #000;
+  background-color: #fff;
   width: 100%;
+  border: 1px solid $borderGray;
+  border-radius: 0px;
 }
 
 .reply-content {
-  margin: 16px 0px 8px 0px;
+  padding: 8px 8px 8px 8px;
   line-height: 1.7;
-  color: #fff;
+  border-top: 0px;
+}
+
+.content-text {
+  color: $textBlack;
+  margin-left: 4px;
 }
 
 .action-editing {
-  padding: 8px;
-  margin-top: 8px;
+  padding: 8px 8px 8px 0px;
 }
 
 .save-button {
   margin-right: 8px;
   background-color: #222;
-  padding: 8px;
+  padding: 4px 12px;
 
   &:hover {
     cursor: pointer;
@@ -278,8 +348,7 @@ $primaryColor: #000;
 
 .cancel-button {
   margin-right: 8px;
-  background-color: #222;
-  padding: 8px;
+  padding: 2px 12px;
 
   &:hover {
     cursor: pointer;
@@ -287,11 +356,14 @@ $primaryColor: #000;
 }
 
 .action-replying {
-  align-self: flex-end;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: hidden;
+  position: absolute;
+  right: 8px !important;
 }
 
 .reply-button {
-  color: white;
 
  &:hover {
     cursor: pointer;

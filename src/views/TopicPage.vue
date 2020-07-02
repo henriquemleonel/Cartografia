@@ -12,6 +12,7 @@
 
         <topic-view
           :topic="topic"
+          :replyes="replyes"
           @delete="onDeleteTopic"
         />
 
@@ -39,6 +40,7 @@ export default {
   computed: {
     ...mapGetters({
       topic: 'topics/getCurrentTopic',
+      replyes: 'topics/getCurrentTopicReplyes',
       isLoggedIn: 'users/isLoggedIn',
     }),
   },

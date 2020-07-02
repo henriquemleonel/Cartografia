@@ -27,6 +27,16 @@ $i: #C95B40;   // Instituição
 $error: #bb0000;
 $error2: #cc0000;
 
+$positive: #254C26;
+$negative: #AD3B3B;
+
+$borderGray: #D1D5DA;
+
+$gray1: #efeef0;
+$gray2: #D1D5DA;
+$gray3: #586069;
+$gray4: #464646;
+
 // breakpointes
 $breakpoints: (
   'phone':  640px,
@@ -36,90 +46,12 @@ $breakpoints: (
   'large': 1900px,
 ) !default;
 
-
-.bg-default {
-    background-color: f5f5f5;
-}
-
-.bg-dance {
-    background-color: $d;
-}
-
-.bg-sculpture {
-    background-color: $cS;
-}
-
-.bg-urban-art {
-    background-color: $uA;
-}
-
-.bg-digital-art {
-    background-color: $dA;
-}
-
-.bg-pop-culture {
-    background-color: $pC;
-}
-
-.bg-museology {
-    background-color: $mP;
-}
-
-.bg-hand-craft {
-    background-color: $hC;
-}
-
-.bg-photography {
-    background-color: $f;
-}
-
-.bg-literature {
-    background-color: $l;
-}
-
-.bg-cinema {
-    background-color: $cA;
-}
-
-.bg-representation {
-    background-color: $cR;
-}
-
-.bg-music {
-    background-color: $mU;
-}
-
-.bg-folklore {
-    background-color: $d;
-}
-
-.bg-gastronomy {
-    background-color: $g;
-}
-
-.bg-fashion {
-    background-color: $mO;
-}
-
-.bg-culture-producer {
-    background-color: $cP;
-}
-
-.bg-establishment {
-    background-color: $e;
-}
-
-.bg-institution {
-    background-color: $i;
-}
-
-
 // ----------------- typograph styleguide ---------------------------------
   
 .big-title {
-  font-size: 3rem;  // 48 px
+  font-size: 2.5rem;  // 40 px
   letter-spacing: -0.5px;
-  line-height: 2.5rem;
+  line-height: 2rem;
 }
 
 .title-1 {
@@ -131,6 +63,10 @@ $breakpoints: (
 }
 
 .title-3 {
+  font-size: 1.5rem; // 24px
+}
+
+.title-4 {
   font-size: 1.125rem; // 18 px
 }
 
@@ -159,7 +95,7 @@ $breakpoints: (
 }
 
 .body-3 {
-  font-size: 0.875rem;  // 16 px
+  font-size: 0.875rem;  // 14 px
   letter-spacing: 0.15px;
 }
 
@@ -220,4 +156,8 @@ $breakpoints: (
 
 .text-lowercase {
   text-transform: lowercase;
+}
+
+.text-gray {
+  color: $gray4;
 }

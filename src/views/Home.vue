@@ -37,7 +37,7 @@
             <span class="body-2">Agenda</span>
           </router-link>
 
-          <router-link class="link mg-top32" to="/debates">
+          <router-link class="link mg-top32" to="/topics">
             <span class="body-2">Debates</span>
           </router-link>
 
@@ -405,7 +405,7 @@ export default {
 .btn-custom {
   box-shadow: none;
   height: 40px;
-  min-width: 100px;
+  min-width: 80px;
   border-radius: 0px;
   background-color: black;
   transition: filter 0.2s;

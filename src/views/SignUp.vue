@@ -327,7 +327,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      options: 'loadCategories',
+      options: 'categories/loadCategories',
     }),
     formIsValid() {
       if (this.$v.$anyError || this.selected === null || this.terms === false ) {
@@ -446,27 +446,28 @@ export default {
     submit(){
       if (!this.$v.$anyError) {
         this.loading = true;
-        this.$store.dispatch('register', { data: {
+        const credentials = {
           username: this.username,
           lastname: this.lastname,
           email: this.email,
           password: this.password,
           passwordConfirmation: this.passwordConfirmation,
-          isValid: true,
+          isValid: true, 
           isAdmin: false,
           categoryId: this.selected.value,
-        }})
-        .then((response) => {
-          this.message = 'Só uns segundinhos';
-          this.loadingTransition();
-          this.$router.push({ name: 'SignIn' });
-        })
-        .catch ((error) => {
-          if(error.message === 'Request failed with status code 400') {
-            this.message = 'Desculpe, houve um erro. Tente Novamente mais tarde';
-          }
-          this.loadingTransition();
-        });
+        };
+        this.$store.dispatch('users/signUp', { credentials })
+          .then((response) => {
+            this.message = 'Só uns segundinhos';
+            this.loadingTransition();
+            this.$router.push({ name: 'SignIn' });
+          })
+          .catch ((error) => {
+            if(error.message === 'Request failed with status code 400') {
+              this.message = 'Desculpe, houve um erro. Tente Novamente mais tarde';
+            }
+            this.loadingTransition();
+          });
       }
     },
   },

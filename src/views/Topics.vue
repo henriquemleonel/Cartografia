@@ -143,6 +143,7 @@ export default {
   z-index: 0;
   width: 100%;
   height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -156,7 +157,7 @@ export default {
 .aside {
   background-color: white;
   height: 100%;
-  width: 350px;
+  width: 250px;
   padding: 16px;
   margin: 8px 8px 0px 0px;
   z-index: 1;
@@ -200,9 +201,10 @@ export default {
 
 .content {
   height: 100vh;
+  background-color: #f5f5f5;
   width: 100%;
-  padding: 8px 0px 0px 0px;
-  max-width: 1080px;
+  padding: 16px 0px 8px 8px;
+  max-width: calc(3 * 360px);
   // overflow: hidden;
   z-index: 1;
 
@@ -214,14 +216,14 @@ export default {
   @include for-desktop-up {
     align-self: center;
     margin: 0px;
-    padding: 16px 8px 8px 0px;
+    // padding: 16px 8px 8px 0px;
   }
 }
 
 .scrollArea {
   height: 100vh;
   width: 100%;
-  padding-right: 16px;
+  padding: 8px 16px 16px 0px;
 
   @include for-phone-only {
     display: none;

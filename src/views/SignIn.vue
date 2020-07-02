@@ -9,7 +9,7 @@
 
       <div class="card column">
 
-        <span class="title title-2 bolder"> Olá novamente </span>
+        <span class="title title-3 bolder"> Olá novamente </span>
         <router-link class="link" to="/signUp">
           <span class="body-3">Novo Usuário? Cadastre-se</span>
         </router-link>
@@ -53,12 +53,13 @@
             hint="Mínimo de 8 caracteres"
           >
             <template v-slot:append>
-              <q-icon
-                :name="isPwd ? 'far fa-eye' : 'far fa-eye-slash'"
+              <!-- <q-icon
+                :name="isPwd ? 'visibility' : 'visibility_off'"
                 size="18px"
                 class="cursor-pointer"
                 @click="isPwd = !isPwd"
-              />
+              /> -->
+              <i :class="{'far fa-eye': isPwd, 'far fa-eye-slash': !isPwd}" @click="isPwd = !isPwd"></i>
             </template>
           </q-input>
 
@@ -69,10 +70,6 @@
           <router-link class="link" to="/recover">
             <span class="body-3">Esqueceu a senha?</span>
           </router-link>
-
-          <!-- <router-link to="/signUp">
-            <a class="link">Novo Usuário? Cadastre-se</a>
-          </router-link> -->
 
           <q-btn
             flat
@@ -150,10 +147,14 @@ export default {
         }).catch((error) => {
           if(error.message === 'Request failed with status code 400') {
             this.errorMessage = 'Não encontramos uma conta com esse email';
-          } else if (error === 'Request failed with status code 401') {
-            this.errorMessage === 'Email ou senha inválidos';
           }
-          console.log('err', error.message);
+          if (error.message === 'Request failed with status code 401') {
+            this.errorMessage = 'Email ou senha inválidos';
+          }
+          if (error.message === 'timeout of 5000ms exceeded') {
+            this.errorMessage = 'Houve um Problema, tente novamente';
+          }
+          console.log('error login', error.message);
         })
       }
     },
@@ -260,7 +261,7 @@ export default {
 }
 
 .input-field {
-  width: 100%;
+  width: 350px;
   margin-top: 16px;
 
   @include for-phone-only {

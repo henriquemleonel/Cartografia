@@ -2,33 +2,33 @@
   <!-- item to be selected in topics-page -->
   <div class="topic-item" @click="emitThisTopic()" :style="{ 'background-color': category.color }">
 
-    <div class="content column">
+    <div class="card column">
 
-      <span class="big-title bolder"> {{ title }} </span>
+      <span class="big-title bolder"> {{ topic.title }} </span>
 
-      <span class="body-2 bolder mg-top32"> {{ category.label }} </span>
+      <span class="caption bold mg-top8"> {{ category.label }} </span>
       <!-- topicOwner & date -->
-      <div class="row">
+      <div class="row mg-top16">
 
-        <span class="body-2 bold"> {{ user.name }} </span>
+        <span class="body-3 bolder"> {{ topic.user.name }} </span>
 
-        <span class="body-2 bold  mg-left8">| {{ formatDate }} </span>
+        <span class="body-3 bold mg-left8">- {{ formatDate }} </span>
 
       </div>
 
-      <span class="body-2 bold mg-top32"> {{ description }} </span>
+      <span class="caption bold mg-top16"> {{ formatDescription }} </span>
 
-      <div class="row mg-top32">
+      <div class="row mg-top16">
         <!-- <i class="far fa-thumbs-up"></i> -->
-        <span class="caption bolder"> {{ likes }} likes </span>
+        <span class="caption bolder"> {{ topic.likes }} likes </span>
         <span class="caption bolder mg-left8"> | </span>
-        <span class="caption bolder mg-left8"> {{ dislikes }} dislikes </span>
+        <span class="caption bolder mg-left8"> {{ topic.dislikes }} dislikes </span>
       </div>
 
       <div class="row mg-top8">
-        <span class="caption bolder"> {{ suport }} apoios </span>
+        <span class="caption bolder"> {{ topic.likes + topic.dislikes }} votos </span>
         <span class="caption bolder mg-left8"> | </span>
-        <span class="caption bolder mg-left8"> {{ numberOfReplies }} comentários </span>
+        <span class="caption bolder mg-left8"> {{ topic.numberOfReplies }} comentários </span>
       </div>
 
     </div>
@@ -43,16 +43,6 @@ export default {
   name: 'topicItem',
   data() {
     return {
-      id: this.topic.id,
-      title: this.topic.title,
-      user: this.topic.user,
-      date: this.topic.date,
-      description: this.topic.description,
-      categoryId: this.topic.categoryId,
-      likes: this.topic.likes,
-      dislikes: this.topic.dislikes,
-      suport: this.topic.suport,
-      numberOfReplies: this.topic.numberOfReplies,
       category: {
         label: '',
         value: '0',
@@ -71,7 +61,7 @@ export default {
       options: 'categories/loadCategories',
     }),
     formatDate() {
-      const d = new Date(this.date);
+      const d = new Date(this.topic.createdAt);
       const monthNames = ['Jan', 'Fev', 'Mar', 'Abril', 'Maio', 'Junho', 'Julho', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
       const month = monthNames[d.getMonth()];
       let day;
@@ -82,23 +72,33 @@ export default {
       }
       return `${day} de ${month}`;
     },
+    formatDescription() {
+      const limit = 150;
+      const str = this.topic.content;
+      if (str.length > limit) {
+        return str.substring(0, limit).concat('...');
+      }
+      return this.topic.description;
+    },
   },
   mounted() {
     this.setCategory();
   },
   methods: {
     ...mapActions('topics', [
-      'loadCurrentTopic',
+      'localLoadCurrentTopic',
+      'localLoadCurrentTopicReplyes',
     ]),
     setCategory() {
       const vm = this;
-      const el = this.options.find((item) => item.value === vm.categoryId.toString());
+      const el = this.options.find((item) => item.value === vm.topic.categoryId.toString());
       this.category = el;
     },
-    emitThisTopic() {
-      console.log('topic_clicked', this.id);
-      this.loadCurrentTopic({ topicId: this.id });
-      this.$router.push({ name: 'TopicPage', params: { topicId: this.id } });
+    async emitThisTopic() {
+      console.log('topicItem/emitThisTopic', this.topic.id);
+      await this.localLoadCurrentTopic({ topicId: this.topic.id });
+      await this.localLoadCurrentTopicReplyes({ topicId: this.topic.id });
+      this.$router.push({ name: 'TopicPage', params: { topicId: this.topic.id } });
     },
   },
 };
@@ -117,7 +117,7 @@ export default {
 .topic-item {
   overflow: hidden;
   width: 350px;
-  margin: 8px 4px 0px 0px;
+  margin: 0px 4px 8px 0px;
   transition: 0.2s ease-in;
 
   @include for-phone-only {
@@ -126,13 +126,12 @@ export default {
   }
 
   &:hover {
-    transform: scale(1.02);
     cursor: pointer;
   }
 }
 
-.content {
-  padding: 32px;
+.card {
+  padding: 24px 32px;
 }
 
 .line-h16 {

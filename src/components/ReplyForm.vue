@@ -1,37 +1,60 @@
 <template>
   <div class="reply-form">
 
-    <q-input
-      v-model="content"
-      ref="input"
-      class="text-area"
-      placeholder="Escreva aqui..."
-      :errors="$v.content"
-      :disabled="loading"
-      filled
-      square
-    />
+    <span class="body-2 bolder">Deixe seu comentário</span>
+    <!-- <q-separator/> -->
 
-    <base-button
-      class="reply-button"
-      :disabled="loading"
-      @click="reply"
-    >
-      {{ loading ? 'Comentando...' : 'Comentar' }}
-    </base-button>
+    <div class="reply-content">
+
+      <reply-tag v-if="replyToTag != null" :replyTag="replyToTag"/>
+
+      <q-input
+        v-model="content"
+        ref="input"
+        class="text-area"
+        placeholder="Escreva aqui..."
+        :errors="$v.content"
+        :disabled="loading"
+        square
+        dense
+      />
+
+      <div class="row no-wrap mg-top8">
+
+        <base-button
+          class="reply-button cancel-button"
+          @click="cancel"
+          :theme="this.content === '' ? 'secondary' : 'disabled'"
+        >
+          <span class="caption bolder"> Cancelar </span>
+        </base-button>
+
+        <base-button
+          class="reply-button"
+          @click="reply"
+          :theme="this.content != '' ? 'primary' : 'disabled'"
+        >
+          <span class="caption bolder"> {{ loading ? 'Comentando...' : 'Comentar' }} </span>
+        </base-button>
+
+      </div>
+
+    </div>
 
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+// import { mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 
 import BaseButton from './BaseButton.vue';
+import ReplyTag from './ReplyTag.vue';
 
 export default {
   components: {
     BaseButton,
+    ReplyTag,
   },
   data() {
     return {
@@ -39,24 +62,42 @@ export default {
       loading: false,
     };
   },
+  props: {
+    replyToTag: {
+      type: Object,
+      default: null,
+    },
+  },
   validations: {
     content: { required },
   },
   methods: {
-    ...mapActions(['addReply']),
-    async reply() {
+    reply() {
       this.$v.$touch();
       if (!this.$v.$anyError) {
         this.loading = true;
-        try {
-          await this.addReply({ data: { content: this.content } });
-          this.content = '';
-          this.$v.$reset();
-          this.loading = false;
-        } catch (err) {
-          this.loading = false;
+        let tagId = null;
+        if (this.replyToTag != null) {
+          tagId = this.replyToTag.id;
         }
+        const newReply = { content: this.content, replyTag: tagId };
+        this.$store.dispatch('topics/addReply', { data: newReply })
+          .then(() => {
+            this.content = '';
+            this.replyToTag = null;
+            this.$v.$reset();
+            this.loading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.loading = false;
+            this.replyToTag = null;
+          });
       }
+    },
+    cancel() {
+      this.replyToTag = null;
+      this.content = '';
     },
     focus() {
       this.$refs.input.focus();
@@ -66,23 +107,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../styles/variables.scss';
 
 .reply-form {
   display: flex;
   // justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  margin: 16px 0px 16px 0px;
-  width: 90%;
+  margin: 16px 0px 32px 0px;
+  width: 100%;
+}
+
+.reply-content {
+  border: 1px solid $borderGray;
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
 }
 
 .text-area {
+  margin-top: 0px;
   width: 100%;
 }
 
 .reply-button {
   align-self: flex-start;
-  margin-top: 10px;
+  margin-top: 8px;
+}
+
+.cancel-button {
+  margin-right: 8px;
+  padding: 6px;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 </style>

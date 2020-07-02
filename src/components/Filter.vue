@@ -10,11 +10,11 @@
           <q-item-section class="icon-content" avatar>
 
             <!-- iconId -1 : index of array of icons (0 a 17) -->
-            <icon-base :id="`icon-${item.value}`" :iconId="item.value -1" width="16" :setWhite="false" />
+            <icon-base :id="`icon-${item.value}`" :iconId="item.value -1" width="12" :setWhite="false" />
 
           </q-item-section>
 
-          <q-item-section class="label-content caption bolder" :id="`category-label-${item.value}`"> {{ item.label }} </q-item-section>
+          <q-item-section class="label-content overline bolder" :id="`category-label-${item.value}`"> {{ item.label }} </q-item-section>
 
         </q-item>
 
@@ -74,18 +74,19 @@ export default {
 
 .filter {
   // width: inherit;
-  width: 200px;
+  width: 180px;
+  overflow: hidden;
 }
 
 .item {
-  min-height: 25px;
-  padding: 8px 8px 8px 16px;
+  height: 20px;
+  padding: 8px 8px 8px 12px;
 }
 
 .icon-content {
   margin-right: 0px;
   padding: 0px !important;
-  min-width: 32px !important;
+  min-width: 22px !important;
   // border: 2px solid red;
 }
 

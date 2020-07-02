@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     backgroundColor() {
-      return '#000';
+      return '#151515';
     },
   },
 };
@@ -51,7 +51,7 @@ export default {
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
-$primaryColor: #000;
+$primaryColor: #151515;
 
 .base-avatar {
   border-radius: 0px;

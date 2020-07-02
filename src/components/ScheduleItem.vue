@@ -1,7 +1,7 @@
 <template>
   <div class="app-component">
 
-    <div class="content column" :style="{ 'background-color': category.color }">
+    <div class="card column" :style="{ 'background-color': category.color }">
 
       <span class="big-title bolder line-h16"> {{ title }} </span>
       <span class="caption bolder mg-top8"> {{ category.label }} </span>
@@ -100,6 +100,8 @@ export default {
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
+$cardWidth: 320px;
+
 * {
   font-family: 'Helvetica';
   box-sizing: border-box;
@@ -107,9 +109,8 @@ export default {
 
 .app-component {
   overflow: hidden;
-  width: 350px;
-  min-width: 350px;
-  margin: 8px 8px 0px 4px;
+  width: $cardWidth;
+  margin: 0px 8px 8px 4px;
   transition: transform .2s;
   overflow: hidden;
 
@@ -124,8 +125,9 @@ export default {
   }
 }
 
-.content {
-  padding: 32px;
+.card {
+  padding: 24px 32px;
+  max-width: $cardWidth;
 }
 
 .line-h16 {
@@ -135,7 +137,7 @@ export default {
 .img-box {
   padding: 0px;
   margin: 0px;
-  width: 100%;
+  width: $cardWidth;
   max-height: 250px;
   overflow: hidden;
 

@@ -2,15 +2,15 @@
   <div class="box" :class="{ 'black-mode' : blackMode, 'bordered' : bordered }" @click="goToHome()">
 
     <div class="top">
-      <span id="title" class="title-2 bolder"> Cartografia da Cultura. </span>
-      <span id="m-title" class="title-2 bolder"> Carto CG. </span>
+      <span id="title" class="title-3 bolder"> Cartografia da Cultura. </span>
+      <span id="m-title" class="title-3 bolder"> Carto CG. </span>
       <!-- <div class="whitespace"></div> -->
     </div>
 
     <div class="bottom column">
-      <span class="heading bold"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
+      <span id="forum-info" class="body-3 bolder"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
       <div class="line"></div>
-      <span class="caption bold"> cultura em movimento </span>
+      <span id="sub-info" class="overline bolder"> cultura em movimento </span>
     </div>
 
   </div>
@@ -50,8 +50,8 @@ export default {
   //background-color: white;
   overflow: hidden;
   padding: 16px;
-  height: 200px;
-  width: 200px;
+  height: 180px;
+  width: 180px;
   // border: 2px solid black;
   background-color: white;
   position: relative;
@@ -73,7 +73,7 @@ export default {
 }
 
 #title {
-  line-height: 1.875rem;
+  line-height: 1.6rem;
 
   @include for-phone-only {
     display: none;
@@ -119,7 +119,7 @@ export default {
     background-color: white;
   }
 
-  .title-2, .heading, .caption, .overline, .nd-sub {
+  #title, #forum-info, #sub-info, .nd-sub {
     color: white;
   }
 }

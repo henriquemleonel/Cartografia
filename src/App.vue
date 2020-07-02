@@ -32,6 +32,12 @@
   display: none !important;
 }
 
+// --------------- quasar reset class -----------------------
+.q-item {
+  min-height: 32px !important;
+  padding: 4px;
+}
+
 // ----------------- typograph styleguide -------------------
 * {
   box-sizing: border-box;
@@ -39,16 +45,11 @@
   font-family: 'Helvetica';
 }
 
-.font2 {
-  font-family: 'Courier New' !important;
-}
-
 .txt-al-jus {
   text-align: justify;
 }
 
 .content-center {
-  // background-color: white;
   display: flex;
   align-items: center;
 }
@@ -103,88 +104,6 @@
   }
 }
 
-// ---------------- buttons -------------------------
-.btn-primary {
-  box-shadow: none;
-  max-width: 150px;
-  border-radius: 0px;
-  border: none;
-  padding: 0px 8px 0px 8px;
-  background-color: black;
-
-  &:hover {
-    border: 2px double white;
-    cursor: pointer;
-    // transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-  }
-}
-
-.btn-options {
-  // min-height: 25px;
-  // min-width: 60px;
-  box-shadow: none;
-  padding: 0px 8px 0px 8px;
-  border: 1px solid white;
-  border-radius: 0px;
-  background-color: transparent;
-  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-
-  &:hover {
-    border-top: 1px solid white;
-    border-left: 1px solid white;
-    border-bottom: 4px solid white;
-    border-right: 1px solid white;
-    cursor: pointer;
-    // transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-  }
-}
-
-.primary-action {
-  height: 25px;
-  // min-width: 60px;
-  box-shadow: none;
-  padding: 0px 8px 0px 8px;
-  border: 1px solid white;
-  border-radius: 0px;
-  background-color: transparent;
-  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-
-  &:hover {
-    border: 2px solid white;
-    cursor: pointer;
-    // transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-  }
-}
-
-.secondary-action {
-  height: 25px;
-  // min-width: 60px;
-  box-shadow: none;
-  padding: 0px 8px 0px 8px;
-  border-top: none;
-  border-left: none;
-  border-bottom: 2px solid white;
-  border-right: none;
-  border-radius: 0px;
-  background-color: transparent;
-  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-
-  &:hover {
-    border-bottom: 4px solid white;
-    cursor: pointer;
-    // transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-  }
-
-}
-
-.text-secondary-action {
-  color: black;
-
-  &:hover {
-    color: white;
-  }
-}
-
 // ---------------- patterns components -------------------
 .reset-btn {
     border-radius: 0px !important;
@@ -202,8 +121,17 @@ display: flex;
 flex-direction: row;
 }
 
+.row-reverse {
+display: flex;
+flex-direction: row-reverse;
+}
+
 .jus-items-end {
   justify-content: flex-end;
+}
+
+.jus-items-center {
+  justify-content: center;
 }
 
 .al-items-end {
@@ -257,6 +185,10 @@ flex-direction: row;
 
 .mg-top-n16 {
   margin-top: -16px;
+}
+
+.mg-top24 {
+  margin-top: 24px;
 }
 
 .mg-top32 {

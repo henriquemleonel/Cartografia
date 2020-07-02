@@ -22,7 +22,7 @@
     <div class="content">
 
       <q-scroll-area
-        class="scrollArea"
+        class="scroll-area"
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
         v-if="handleResize"
@@ -143,12 +143,13 @@ export default {
 .aside {
   background-color: white;
   height: 100%;
-  width: 350px;
-  padding: 16px;
+  width: 250px;
+  padding: 32px 16px;
   margin: 8px 8px 0px 0px;
   z-index: 1;
   display: flex;
   flex-direction: column;
+  // border: 2px solid pink;
 
   @include for-phone-only {
     height: 80px;
@@ -187,8 +188,8 @@ export default {
 
 .content {
   height: 100vh;
-  width: calc(100% - 350px);
-  padding: 8px 0px 0px 0px;
+  background-color: #f5f5f5;
+  width: calc(3 * 335px);
   overflow: hidden;
   z-index: 1;
 
@@ -200,18 +201,14 @@ export default {
   @include for-desktop-up {
     align-self: center;
     margin: 0px;
-    padding: 16px 8px 8px 0px;
+    padding: 24px 8px 8px 8px;
     max-width: 1240px;
   }
 }
 
-.item {
-  margin: 8px;
-}
-
-.scrollArea {
+.scroll-area {
   height: 100%;
-  width: 100%;
+  // width: 100%;
   padding-right: 16px;
 
   @include for-phone-only {
