@@ -24,7 +24,7 @@
         <base-button
           class="reply-button cancel-button"
           @click="cancel"
-          :theme="this.content === '' ? 'secondary' : 'disabled'"
+          :theme="this.content !== '' ? 'secondary' : 'disabled'"
         >
           <span class="caption bolder"> Cancelar </span>
         </base-button>
@@ -32,7 +32,7 @@
         <base-button
           class="reply-button"
           @click="reply"
-          :theme="this.content != '' ? 'primary' : 'disabled'"
+          theme="primary"
         >
           <span class="caption bolder"> {{ loading ? 'Comentando...' : 'Comentar' }} </span>
         </base-button>
@@ -74,7 +74,7 @@ export default {
   methods: {
     reply() {
       this.$v.$touch();
-      if (!this.$v.$anyError) {
+      if (!this.$v.$anyError && this.content !== '') {
         this.loading = true;
         let tagId = null;
         if (this.replyToTag != null) {

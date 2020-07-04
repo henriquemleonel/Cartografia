@@ -63,52 +63,60 @@
           <span class="body-2 bolder text-black"> Vote, Comente. Participe! </span>
         </base-button>
 
+      <div class="column">
+        <span class="caption text-red"> myVotes: {{ myVotes }}</span>
+        <span class="caption text-red"> topic.id: {{ this.topic.id }}</span>
+        <span class="caption text-red"> have support: {{ hasBeenSupported }}</span>
+        <!-- <span class="caption text-red"> support obejct: {{ supportStatus }}</span> -->
+        <span class="caption text-red"> votos a favor: {{ topic.positiveSupports }}</span>
+        <span class="caption text-red"> votos contra: {{ topic.negativeSupports }}</span>
+      </div>
+
+      <!-- registered user -->
       <div class="participate-content row no-wrap" v-if="isLoggedIn">
 
         <span id="vote-text" class="headline-2 bolder"> Vote, participe! </span>
 
         <div class="row">
 
-          <base-button class="participate-button" theme="flat" @click="voteOnThis(true)">
+          <base-button
+            class="participate-button"
+            :theme="supportStatus === null ? 'secondary' : 'flat'"
+            @click="supportThis(true), setVoteColor(true)"
+          >
             <q-icon id="vote-icon1" class="vote-icon"  name="far fa-thumbs-up" size="xs"></q-icon>
             <span id="vote-span1" class="caption bolder"> Apoio </span>
+
           </base-button>
 
-          <base-button class="participate-button" theme="flat" @click="voteOnThis(false)">
+          <base-button
+            class="participate-button"
+            theme="flat"
+            @click="supportThis(false), setVoteColor(false)"
+          >
             <q-icon id="vote-icon2" class="vote-icon"  name="far fa-thumbs-down" size="xs"></q-icon>
             <span id="vote-span2" class="caption bolder"> Não apoio </span>
+
           </base-button>
 
         </div>
 
       </div>
 
-      <div id="vote-line"></div>
-
     </div>
 
-    <!-- topic footer and user actions -->
+    <!-- topic footer and owner actions -->
     <div class="topic-footer">
 
       <div class="topic-footer-reply">
 
         <q-icon name="far fa-comment"></q-icon>
-        <span class="headline-3 text-gray bolder mg-left8">{{ replyes.length !== 0 ? `${replyes.length} comentários` : 'Seja o primero a comentar.' }}</span>
+        <span class="headline-3 text-gray bolder mg-left8">{{ replyes.length !== 0 ? `${replyes.length} comentários` : 'seja o primero a comentar.' }}</span>
         <!-- <span class="topic-footer-title headline-2 bolder">Comentários</span> -->
 
       </div>
 
       <div class="action-buttons">
-
-        <!-- botão forceSignIn -->
-        <!-- <base-button
-          class="reset-button"
-          @click="onReply"
-          v-if="!isLoggedIn"
-        >
-          <i class="fas fa-plus reply-icon"></i>
-          <span class="body-3 bolder"> Comentar </span>
-        </base-button> -->
 
         <!-- botao editar -->
         <base-button
@@ -241,6 +249,13 @@ export default {
       }
       return `${day} de ${month} de ${year}`;
     },
+    hasBeenSupported() {
+      // nao funfa
+      if (this.myVotes.includes((el) => el.topicId === this.topic.id)) {
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     ...mapActions(['setNextRoute']),
@@ -275,23 +290,16 @@ export default {
         console.log('error replyToTag', error);
       });
     },
-    voteOnThis(type) {
-      if (type === true && !this.myVotes.includes(this.topic.id)) {
-        this.setVoteColor(true);
-        this.$store.dispatch('topics/voteOnThis', { newSupport: true })
+    supportThis(type) {
+      if (this.myVotes.some((el) => el.id === this.topic.id)) {
+        this.$store.dispatch('users/supportThis', { topicId: this.topic.id, supportType: type })
           .then(() => {
-            console.log('topicsView/ suport this', this.topic.id);
+            console.log('topicsView/supportThis', this.topic.id);
           }).catch((error) => {
             console.log('error vote', error);
           });
-      } else if (type === false && this.myVotes.includes(this.topic.id)) {
-        this.setVoteColor(false);
-        this.$store.dispatch('topics/voteOnThis', { newSupport: false })
-          .then(() => {
-            console.log('topicView/ not suport this');
-          }).catch((error) => {
-            console.log('error vote', error);
-          });
+      } else {
+        console.log('tem voto, dispacth(users/reverseSupport');
       }
     },
     setVoteColor(type) {
@@ -308,6 +316,19 @@ export default {
         document.getElementById('vote-icon2').style.color = '#000';
         document.getElementById('vote-span2').style.color = '#000';
       }
+    },
+    supportStatus() {
+      if (this.hasBeenSupported) {
+        const index = this.myVotes.findIndex((el) => el.topicId === this.topicId);
+        console.log('topicView/supportStatus', this.myVotes[index]);
+        return this.myVotes[index];
+        // if (this.myVotes[index].supportType === true) {
+        //   return true;
+        // }
+        // return false;
+      }
+      console.log('topicView/supportStatus: null');
+      return null;
     },
   },
 };
@@ -376,12 +397,6 @@ p {
   text-align: end;
 }
 
-#vote-line {
-  color: #000;
-  height: 4px;
-  width: 100%;
-}
-
 .participate-button {
   margin-left: 8px;
 }
@@ -419,11 +434,12 @@ p {
 }
 
 .action-buttons {
+  display: none;
   width: 50%;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: flex-end;
-  justify-items: flex-end;
+  // display: flex;
+  // flex-direction: row-reverse;
+  // align-items: flex-end;
+  // justify-items: flex-end;
 }
 
 .user-button {

@@ -84,10 +84,12 @@
         <!-- edit -->
         <template v-else>
 
+          <!-- <span class="content-text">{{ reply.content }}</span> -->
           <q-input
             class="mg-top8"
-            v-model="reply.content"
+            v-model="content"
             :disabled="loading"
+            :label="reply.content"
             filled
             square
             autogrow
@@ -190,14 +192,14 @@ export default {
     },
     editReply() {
       this.loading = true;
-      console.log('reply/updateReply', this.reply.id);
+      console.log('reply/updateReply - ID', this.reply.id);
+      // console.log('reply/updateReply - content', this.content);
       this.$store.dispatch('topics/updateReply', {
         replyId: this.reply.id,
-        data: { content: this.content },
-      }).then((response) => {
+        data: this.content,
+      }).then(() => {
         this.editing = false;
         this.loading = false;
-        console.log(response.message);
       }).catch((error) => {
         this.loading = false;
         console.log('reply/updateReply ERROR', error);

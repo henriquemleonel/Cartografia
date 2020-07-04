@@ -142,7 +142,7 @@ export default {
         views: 0,
       },
     ],
-    replyes: [
+    replies: [
       {
         id: 1,
         topicId: 1,
@@ -251,8 +251,9 @@ export default {
 
     // TO BE DELETED
     localLoadCurrentTopicReplyes({ state, commit }, { topicId }) {
-      const data = state.replyes.filter(
-        (reply) => reply.topicId !== topicId,
+      console.log('topics/localLoadCurrentReplies', topicId);
+      const data = state.replies.filter(
+        (reply) => reply.topicId === topicId,
       );
       commit('SET_CURRENT_TOPIC_REPLYES', data);
     },
@@ -371,17 +372,17 @@ export default {
     // },
 
     // OK
-    supportThisTopic({ state, commit }, { data }) {
+    supportCurrentTopic({ state, commit }, { supportType }) {
       // call this action from usersModule, after conditions are processed.
       // post to api, this current topic id, to be supported (approved/true || notApproved/false).
-      const newSupport = { topicId: state.currentTopic.id, support: data };
+      const newSupport = { topicId: state.currentTopic.id, support: supportType };
       // Promise((resolve, reject) => {
       //   api.post('/supportThisTopic', {
       //     newSupport,
       //   })
       //     .then((response) => {
-      //       console.log('topics/supportThis');
-      //       commit('ADD_SUPPORT', data);
+      //       console.log('topics/supportThis - RESPONSE');
+      //       commit('ADD_SUPPORT', supportType);
       //       resolve(response);
       //     })
       //     .catch((error) => {
@@ -389,8 +390,8 @@ export default {
       //       reject(error);
       //     });
       // });
-      console.log('topics/supportThisTopic', newSupport);
-      commit('ADD_SUPPORT', { data });
+      console.log('topics/supportCurrentTopic', newSupport);
+      commit('ADD_SUPPORT', { supportType });
     },
 
     // OK
@@ -460,11 +461,12 @@ export default {
 
     // TO BE REWIEWED
     updateReply({ commit }, { replyId, data }) {
+      console.log('topics/updateReply', replyId);
+      // console.log('topics/updateReply', data);
       // post to api, this reply id and newData to be updated.
       // api post action HERE ------ (replyId, data);
       // then
       commit('UPDATE_REPLY', { replyId, data }); // update local storage.
-      return replyId;
     },
 
     // TO BE REWIEWED
@@ -528,8 +530,8 @@ export default {
     },
 
     // TO BE REWIEWED
-    ADD_SUPPORT(state, { support }) {
-      if (support === true) {
+    ADD_SUPPORT(state, { supportType }) {
+      if (supportType === true) {
         // approved
         state.currentTopic.positiveSupports += 1;
       } else {
@@ -551,27 +553,26 @@ export default {
     // OK
     ADD_REPLY_TO_CURRENT_TOPIC(state, data) {
       console.log('ADD_REPLY_TO_CURRENT_TOPIC', data);
-      state.currentTopicReplies = [
-        ...state.currentTopicReplies,
-        data,
-      ];
+      // state.currentTopicReplies.push(data);
+      state.replies.push(data); // TO BE DELETED
     },
 
-    // TO BE REWIEWED - PERSIST AFTER DELETE
+    // Ok
     DELETE_REPLY(state, { replyId }) {
       console.log('topics/DELETE_REPLY', replyId);
-      state.currentTopicReplies = state.currentTopicReplies.filter(
-        (reply) => reply.id !== replyId,
-      );
+      // const replyIndex = state.currentTopicReplies.findIndex((reply) => reply.id === replyId);
+      // state.currentTopicReplies.splice(replyIndex, 1);
+      const replyIndex = state.replies.findIndex((reply) => reply.id === replyId); // TO BE DELETED
+      state.replies.splice(replyIndex, 1); // TO BE DELETED
     },
 
     // TO BE IMPLEMENTED
-    // UPDATE_REPLY({ state }, { replyId, data }) {
-    //   const replyIndex = state.currentTopicReplies.map((reply) => reply.id).indexOf(replyId);
-    //   if (replyIndex !== -1) {
-    //     Vue.set(state.currentTopicReplies, replyIndex, { ...state.currentTopicReplies[replyIndex], ...data });
-    //   }
-    // },
+    UPDATE_REPLY(state, { replyId, data }) {
+      // const replyIndex = state.currentTopicReplies.findIndex((reply) => reply.id === replyId);
+      // state.currentTopicReplies[replyIndex].content = data;
+      const replyIndex = state.replies.findIndex((reply) => reply.id === replyId); // TO BE DELETED
+      state.replies[replyIndex].content = data; // TO BE DELETED
+    },
 
     // OK
     LIKE_REPLY(state, { replyId }) {

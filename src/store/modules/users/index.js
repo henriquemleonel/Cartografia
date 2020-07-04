@@ -1,15 +1,16 @@
 import api from '../../../apiClient';
-import permissions from './Permissions';
+// import permissions from './Permissions';
 
 export default {
   namespaced: true,
+
   state: {
     currentUser: null,
     isAdmin: null,
     myPin: null,
     myEvents: null,
     repliesLiked: [],
-    topicsVoted: [],
+    topicsSupported: [],
   },
 
   getters: {
@@ -26,7 +27,7 @@ export default {
     getMyPinState: (state) => state.myPin !== null,
     getMyEvents: (state) => state.myEvents,
     getMyLikes: (state) => state.repliesLiked,
-    getMyVotes: (state) => state.topicsVoted,
+    getMyVotes: (state) => state.topicsSupported,
     getUserReference(state) {
       const userRef = {
         id: state.currentUser.user.id,
@@ -40,18 +41,27 @@ export default {
   },
 
   actions: {
-    signUp({ credentials }) {
-      console.log('users/register (data)', credentials);
-      Promise((resolve, reject) => {
-        api.post('/signup', { credentials },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
+    signUp(context, { credentials }) {
+      // console.log('context', context);
+      return new Promise((resolve, reject) => {
+        api.post('/signup', {
+          firstName: credentials.firstName,
+          lastName: credentials.lastName,
+          email: credentials.email,
+          password: credentials.password,
+          confirmPassword: credentials.confirmPassword,
+          isValid: true,
+          isAdmin: false,
+          categoryId: credentials.categoryId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
           .then((response) => {
-            console.log('reponse', response.data);
-            const message = 'ok';
+            console.log('users/signUp - response', response.data);
+            const message = 'Action Completed';
             resolve(response);
             return message;
           })
@@ -99,6 +109,13 @@ export default {
       console.log('remove like user action');
     },
 
+    supportThis({ dispatch, commit }, { topicId, supportType }) {
+      console.log('users/supportThis', topicId);
+      const newSupport = { topicId, supportType };
+      dispatch('topics/supportCurrentTopic', { supportType }, { root: true }); // dispatch supportType to increment or decrement topics/supportCount
+      commit('ADD_SUPPORT', newSupport); // store support locally
+    },
+
     addVote({ commit }, { topicId }) {
       commit('ADD_VOTE', { topicId });
       console.log('add vote user action');
@@ -113,10 +130,9 @@ export default {
   mutations: {
 
     SET_CURRENT_USER(state, user) {
-      console.log('mutation set current user', user);
+      console.log('users/SET_CURRENT_USER', user);
       state.currentUser = {
         user,
-        permissions,
       };
     },
 
@@ -128,17 +144,17 @@ export default {
       console.log('mutation : destroy currentUser');
     },
 
-    ADD_VOTE(state, { topicId }) {
-      state.topicsVoted.push(topicId);
-      console.log('topic id to be voted', topicId);
+    ADD_SUPPORT(state, newSupport) {
+      console.log('users/ADD_SUPPORT', newSupport);
+      state.topicsSupported.push(newSupport);
     },
 
     REMOVE_VOTE(state, { topicId }) {
-      const index = state.topicsVoted.findIndex((item) => item === topicId);
-      if (state.topicsVoted !== null && state.topicsVoted.length !== 0) {
-        state.topicsVoted.splice(index, 1);
+      const index = state.topicsSupported.findIndex((item) => item === topicId);
+      if (state.topicsSupported !== null && state.topicsSupported.length !== 0) {
+        state.topicsSupported.splice(index, 1);
       }
-      console.log('array voted', state.topicsVoted);
+      console.log('array voted', state.topicsSupported);
     },
 
     ADD_LIKE(state, { replyId }) {
