@@ -121,9 +121,13 @@ export default {
       console.log('add vote user action');
     },
 
-    removeVote({ commit }, { topicId }) {
-      commit('REMOVE_VOTE', { topicId });
-      console.log('remove vote user action');
+    changeSupport({ dispatch, state }, { topicId, newSupportType }) {
+      console.log('users/changeSupport', newSupportType);
+      const index = state.topicsSupported.findIndex((el) => el.topicId === topicId);
+      console.log('currentSupportType', state.topicsSupported[index].supportType);
+      state.topicsSupported[index].supportType = newSupportType;
+      console.log('newSupportType', state.topicsSupported[index].supportType);
+      dispatch('topics/changeSupportCurrentTopic', { newSupportType }, { root: true }); // switch support count
     },
   },
 

@@ -84,7 +84,7 @@ $secondaryColor: #E7E7E7;
   color: #FFF;
   max-height: 36px;
   padding: 8px 16px 8px 16px;
-  margin-top: -8px;
+  // margin-top: -8px;
   text-transform: lowercase;
 }
 

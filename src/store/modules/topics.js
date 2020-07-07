@@ -395,6 +395,31 @@ export default {
     },
 
     // OK
+    changeSupportCurrentTopic({ state, commit }, { newSupportType }) {
+      // call this action from usersModule, after conditions are processed.
+      // switch support count
+      // if supportType == true, (increment positiveSupports, decrement negativeSupport)
+      const newSupport = { topicId: state.currentTopic.id, support: newSupportType };
+      // Promise((resolve, reject) => {
+      //   api.post('/updateSupportThisTopic', {
+      //     newSupport,
+      //   })
+      //     .then((response) => {
+      //       console.log('topics/updateThisSupport - RESPONSE');
+      //       commit('CHANGE_SUPPORT', newSupportType);
+      //       resolve(response);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error.message);
+      //       reject(error);
+      //     });
+      // });
+      console.log(newSupport); // TO BE DELETED
+      console.log('topics/supportCurrentTopic', { newSupportType }); // TO BE DELETED
+      commit('CHANGE_SUPPORT', newSupportType); // TO BE DELETED
+    },
+
+    // OK
     addReply({
       state,
       commit,
@@ -531,12 +556,29 @@ export default {
 
     // TO BE REWIEWED
     ADD_SUPPORT(state, { supportType }) {
-      if (supportType === true) {
+      console.log('melao');
+      if (supportType) {
         // approved
         state.currentTopic.positiveSupports += 1;
       } else {
         // not approved
         state.currentTopic.negativeSupports += 1;
+      }
+    },
+
+    // TO BE REWIWED
+    CHANGE_SUPPORT(state, newSupportType) {
+      console.log('banana', newSupportType);
+      if (newSupportType) {
+        console.log('topics/CHANGE_SUPPORT: F => T');
+        state.currentTopic.positiveSupports += 1;
+        state.currentTopic.negativeSupports -= 1;
+        // commit('NEGATIVE_SUPPORT_DECREMENT');
+      } else {
+        console.log('topics/CHANGE_SUPPORT: T => F');
+        state.currentTopic.negativeSupports += 1;
+        state.currentTopic.positiveSupports -= 1;
+        // commit('POSITIVE_SUPPORT_DECREMENT');
       }
     },
 

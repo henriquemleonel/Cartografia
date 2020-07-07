@@ -199,6 +199,10 @@ flex-direction: row-reverse;
   margin-bottom: 8px;
 }
 
+.mg-bottom-n8 {
+  margin-bottom: -8px;
+}
+
 .mg-bottom16 {
   margin-bottom: 16px;
 }

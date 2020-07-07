@@ -49,6 +49,16 @@
 
     </div>
 
+    <div class="topic-stats">
+      <span class="body-3 bold mg-right16"> {{ topic.positiveSupports + topic.negativeSupports }} <strong>votos</strong> </span>
+
+      <q-icon class="vote-icon mg-top-n8" name="far fa-thumbs-up" size="xs"></q-icon>
+      <span class="body-3 bolder mg-right16"> {{ supportsPercentage(true) }}%</span>
+
+      <q-icon class="vote-icon" name="far fa-thumbs-down" size="xs"></q-icon>
+      <span class="body-3 bolder mg-right16"> {{ supportsPercentage(false) }}%</span>
+    </div>
+
     <!-- participate-area -->
     <div class="participate-area">
 
@@ -63,15 +73,6 @@
           <span class="body-2 bolder text-black"> Vote, Comente. Participe! </span>
         </base-button>
 
-      <div class="column">
-        <span class="caption text-red"> myVotes: {{ myVotes }}</span>
-        <span class="caption text-red"> topic.id: {{ this.topic.id }}</span>
-        <span class="caption text-red"> have support: {{ hasBeenSupported }}</span>
-        <!-- <span class="caption text-red"> support obejct: {{ supportStatus }}</span> -->
-        <span class="caption text-red"> votos a favor: {{ topic.positiveSupports }}</span>
-        <span class="caption text-red"> votos contra: {{ topic.negativeSupports }}</span>
-      </div>
-
       <!-- registered user -->
       <div class="participate-content row no-wrap" v-if="isLoggedIn">
 
@@ -81,21 +82,21 @@
 
           <base-button
             class="participate-button"
-            :theme="supportStatus === null ? 'secondary' : 'flat'"
-            @click="supportThis(true), setVoteColor(true)"
+            :theme="supportStatus === true ? 'primary' : 'flat'"
+            @click="supportThis(true)"
           >
-            <q-icon id="vote-icon1" class="vote-icon"  name="far fa-thumbs-up" size="xs"></q-icon>
-            <span id="vote-span1" class="caption bolder"> Apoio </span>
+            <!-- <q-icon class="vote-icon" :class="{ 'positive-support': supportStatus }"  name="far fa-thumbs-up" size="xs"></q-icon> -->
+            <span class="body-3 bolder vote-icon" :class="{ 'text-white' : supportStatus }"> Apoiar </span>
 
           </base-button>
 
           <base-button
             class="participate-button"
-            theme="flat"
-            @click="supportThis(false), setVoteColor(false)"
+            :theme="supportStatus === false ? 'primary' : 'flat'"
+            @click="supportThis(false)"
           >
-            <q-icon id="vote-icon2" class="vote-icon"  name="far fa-thumbs-down" size="xs"></q-icon>
-            <span id="vote-span2" class="caption bolder"> Não apoio </span>
+            <!-- <q-icon class="vote-icon" :class="{ 'negative-support': !supportStatus }" name="far fa-thumbs-down" size="xs"></q-icon> -->
+            <span class="body-3 bolder vote-icon" :class="{ 'text-white': !supportStatus }"> Não apoiar </span>
 
           </base-button>
 
@@ -141,8 +142,6 @@
       </div>
 
     </div>
-
-    <q-separator/>
 
     <!-- reply-section -->
     <div class="replies-content mg-top16">
@@ -250,11 +249,15 @@ export default {
       return `${day} de ${month} de ${year}`;
     },
     hasBeenSupported() {
-      // nao funfa
-      if (this.myVotes.includes((el) => el.topicId === this.topic.id)) {
-        return true;
+      return this.myVotes.some((el) => el.topicId === this.topic.id);
+    },
+    supportStatus() {
+      if (this.hasBeenSupported) {
+        const currentSupport = this.myVotes.find((el) => el.topicId === this.topic.id);
+        console.log('topicView/supportStatus', currentSupport);
+        return currentSupport.supportType;
       }
-      return false;
+      return null;
     },
   },
   methods: {
@@ -290,45 +293,32 @@ export default {
         console.log('error replyToTag', error);
       });
     },
-    supportThis(type) {
-      if (this.myVotes.some((el) => el.id === this.topic.id)) {
-        this.$store.dispatch('users/supportThis', { topicId: this.topic.id, supportType: type })
+    supportThis(triggerType) {
+      if (!this.hasBeenSupported) {
+        this.$store.dispatch('users/supportThis', { topicId: this.topic.id, supportType: triggerType })
+          .then(() => {
+            console.log('topicsView/supportThis', this.topic.id);
+          }).catch((error) => {
+            console.log('topicView/supportThis - ERROR', error);
+          });
+      } else if (this.supportStatus !== triggerType) {
+        console.log('topicsView/changeSupport');
+        this.$store.dispatch('users/changeSupport', { topicId: this.topic.id, newSupportType: triggerType })
           .then(() => {
             console.log('topicsView/supportThis', this.topic.id);
           }).catch((error) => {
             console.log('error vote', error);
           });
-      } else {
-        console.log('tem voto, dispacth(users/reverseSupport');
       }
     },
-    setVoteColor(type) {
-      if (type !== true) {
-        console.log('nao apoiar');
-        document.getElementById('vote-span2').style.color = '#AD3B3B';
-        document.getElementById('vote-icon2').style.color = '#AD3B3B';
-        document.getElementById('vote-icon1').style.color = '#000';
-        document.getElementById('vote-span1').style.color = '#000';
-      } else {
-        console.log('apoiar');
-        document.getElementById('vote-span1').style.color = '#254C26';
-        document.getElementById('vote-icon1').style.color = '#254C26';
-        document.getElementById('vote-icon2').style.color = '#000';
-        document.getElementById('vote-span2').style.color = '#000';
+    supportsPercentage(type) {
+      const posAmount = parseInt(this.topic.positiveSupports, 10);
+      const negAmount = parseInt(this.topic.negativeSupports, 10);
+      const totalSupports = parseInt(posAmount + negAmount, 10);
+      if (type === true) {
+        return parseInt((posAmount / totalSupports) * 100, 10);
       }
-    },
-    supportStatus() {
-      if (this.hasBeenSupported) {
-        const index = this.myVotes.findIndex((el) => el.topicId === this.topicId);
-        console.log('topicView/supportStatus', this.myVotes[index]);
-        return this.myVotes[index];
-        // if (this.myVotes[index].supportType === true) {
-        //   return true;
-        // }
-        // return false;
-      }
-      console.log('topicView/supportStatus: null');
-      return null;
+      return parseInt((negAmount / totalSupports) * 100, 10);
     },
   },
 };
@@ -370,30 +360,40 @@ export default {
 }
 
 .topic-content {
-  margin: 16px 0px 8px 0px;
+  margin: 16px 0px 0px 0px;
 }
 
 p {
   margin: 16px 0px;
 }
 
-.participate-area {
+.topic-stats {
   width: 100%;
-  // min-height: 16px;
-  margin-bottom: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 4px;
+  // margin-bottom: 8px;
+  border-bottom: 1px solid $borderGray;
 }
 
 .participate-content {
   position: relative;
   align-self: flex-end;
   align-items: center;
-  justify-items: center;
-  padding: 8px 0px 8px 0px;
+  justify-content: flex-end;
+}
+
+.participate-area {
+  width: 100%;
+  padding: 8px;
+  position: relative;
 }
 
 #vote-text {
   color: black;
-  margin-top: -8px;
+  margin: -8px 16px 0px -8px;
   text-align: end;
 }
 
@@ -404,6 +404,15 @@ p {
 .vote-icon {
   color: black;
   margin-right: 8px;
+  margin-left: 16px;
+}
+
+.positive-support {
+  color: #254C26 !important;
+}
+
+.negative-support {
+  color: #AD3B3B !important;
 }
 
 #vote-span1, #vote-span2 {
@@ -414,10 +423,10 @@ p {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  width: calc(100% - 32px);
+  width: 100%;
   margin-top: 0px;
-  padding: 8px 8px 0px 0px;
-  // border: 2px solid green;
+  padding: 8px 8px 4px 0px;
+  border-bottom: 1px solid $borderGray;
 }
 
 .topic-footer-reply {
@@ -425,7 +434,6 @@ p {
   display: flex;
   justify-items: flex-end;
   align-items: center;
-  // border: 2px solid red;
 }
 
 .topic-footer-title {
