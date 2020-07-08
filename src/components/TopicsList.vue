@@ -58,9 +58,12 @@ export default {
 }
 
 .content {
-  box-shadow: 0 1px 5px 0 hsla(0, 0, 0, 0.2);
-  border-radius: 4px;
   overflow: hidden;
+}
+
+.grid {
+  border-radius: 0px !important;
+  box-shadow: none !important;
 }
 
 .topic-item + .topic-item {

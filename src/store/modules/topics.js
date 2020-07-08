@@ -18,7 +18,7 @@ export default {
         content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         positiveSupports: 170,
         negativeSupports: 65,
-        numberOfReplyes: 2,
+        numberOfReplies: 2,
         views: 0,
       },
       {
@@ -33,7 +33,7 @@ export default {
         content: 'pula fogueira',
         positiveSupports: 170,
         negativeSupports: 64,
-        numberOfReplyes: 12,
+        numberOfReplies: 12,
         views: 0,
       },
       {
@@ -48,7 +48,7 @@ export default {
         content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         positiveSupports: 170,
         negativeSupports: 64,
-        numberOfReplyes: 12,
+        numberOfReplies: 12,
         views: 0,
       },
       {
@@ -63,7 +63,7 @@ export default {
         content: 'indústria tipográfica ede impressos,',
         positiveSupports: 170,
         negativeSupports: 64,
-        numberOfReplyes: 12,
+        numberOfReplies: 12,
         views: 0,
       },
       {
@@ -78,7 +78,7 @@ export default {
         content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
         positiveSupports: 170,
         negativeSupports: 64,
-        numberOfReplyes: 12,
+        numberOfReplies: 12,
         views: 0,
       },
       {
@@ -93,7 +93,7 @@ export default {
         content: 'pula fogueira ',
         positiveSupports: 170,
         negativeSupports: 64,
-        numberOfReplyes: 12,
+        numberOfReplies: 12,
         views: 0,
       },
       {
@@ -108,7 +108,7 @@ export default {
         content: 'photo graph u',
         positiveSupports: 170,
         negativeSupports: 64,
-        numberOfReplyes: 12,
+        numberOfReplies: 12,
         views: 0,
       },
       {
@@ -123,7 +123,7 @@ export default {
         content: 'photo graph u',
         positiveSupports: 170,
         negativeSupports: 64,
-        numberOfReplyes: 12,
+        numberOfReplies: 12,
         views: 0,
       },
       {
@@ -138,7 +138,7 @@ export default {
         content: 'photo graph u',
         positiveSupports: 170,
         negativeSupports: 64,
-        numberOfReplyes: 12,
+        numberOfReplies: 12,
         views: 0,
       },
     ],
@@ -338,7 +338,7 @@ export default {
         content: data.content,
         positiveSupports: 0,
         negativeSupports: 0,
-        numberOfReplyes: 0,
+        numberOfReplies: 0,
         views: 0,
       };
       console.log('topics/createNewTopic', newTopic);

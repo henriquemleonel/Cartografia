@@ -57,6 +57,9 @@
 
       <q-icon class="vote-icon" name="far fa-thumbs-down" size="xs"></q-icon>
       <span class="body-3 bolder mg-right16"> {{ supportsPercentage(false) }}%</span>
+
+      <!-- <span class="body-3 bolder mg-right16"> votei: {{ hasBeenSupported }}</span> -->
+
     </div>
 
     <!-- participate-area -->
@@ -74,29 +77,35 @@
         </base-button>
 
       <!-- registered user -->
-      <div class="participate-content row no-wrap" v-if="isLoggedIn">
+      <div class="participate-content row" v-if="isLoggedIn">
 
-        <span id="vote-text" class="headline-2 bolder"> Vote, participe! </span>
+        <div class="row" v-if="hasBeenSupported">
+          <q-icon class="vote-icon" name="far fa-thumbs-up" size="xs" v-if="supportStatus"></q-icon>
+          <q-icon class="vote-icon mg-top4" name="far fa-thumbs-down" size="xs" v-if="!supportStatus"></q-icon>
+          <span id="vote-text" class="body-2 bolder"> {{ supportStatus === true ? 'Apoiei este Tópico' : 'Não apoiei este Tópico'}} </span>
+        </div>
 
-        <div class="row">
+        <div class="row" v-if="!hasBeenSupported">
+
+          <span class="headline-2 bolder"> Vote, participe! </span>
 
           <base-button
             class="participate-button"
-            :theme="supportStatus === true ? 'primary' : 'flat'"
+            theme="secondary"
             @click="supportThis(true)"
           >
             <!-- <q-icon class="vote-icon" :class="{ 'positive-support': supportStatus }"  name="far fa-thumbs-up" size="xs"></q-icon> -->
-            <span class="body-3 bolder vote-icon" :class="{ 'text-white' : supportStatus }"> Apoiar </span>
+            <span class="body-3 bolder"> Apoiar </span>
 
           </base-button>
 
           <base-button
             class="participate-button"
-            :theme="supportStatus === false ? 'primary' : 'flat'"
+            theme="secondary"
             @click="supportThis(false)"
           >
             <!-- <q-icon class="vote-icon" :class="{ 'negative-support': !supportStatus }" name="far fa-thumbs-down" size="xs"></q-icon> -->
-            <span class="body-3 bolder vote-icon" :class="{ 'text-white': !supportStatus }"> Não apoiar </span>
+            <span class="body-3 bolder"> Não apoiar </span>
 
           </base-button>
 
@@ -294,22 +303,12 @@ export default {
       });
     },
     supportThis(triggerType) {
-      if (!this.hasBeenSupported) {
-        this.$store.dispatch('users/supportThis', { topicId: this.topic.id, supportType: triggerType })
-          .then(() => {
-            console.log('topicsView/supportThis', this.topic.id);
-          }).catch((error) => {
-            console.log('topicView/supportThis - ERROR', error);
-          });
-      } else if (this.supportStatus !== triggerType) {
-        console.log('topicsView/changeSupport');
-        this.$store.dispatch('users/changeSupport', { topicId: this.topic.id, newSupportType: triggerType })
-          .then(() => {
-            console.log('topicsView/supportThis', this.topic.id);
-          }).catch((error) => {
-            console.log('error vote', error);
-          });
-      }
+      this.$store.dispatch('users/supportThis', { topicId: this.topic.id, supportType: triggerType })
+        .then(() => {
+          console.log('topicsView/supportThis', this.topic.id);
+        }).catch((error) => {
+          console.log('topicView/supportThis - ERROR', error);
+        });
     },
     supportsPercentage(type) {
       const posAmount = parseInt(this.topic.positiveSupports, 10);
@@ -393,7 +392,7 @@ p {
 
 #vote-text {
   color: black;
-  margin: -8px 16px 0px -8px;
+  margin: 0px 0px 0px 0px;
   text-align: end;
 }
 

@@ -138,6 +138,10 @@ flex-direction: row-reverse;
   align-items: flex-end;
 }
 
+.al-items-center {
+  align-items: center;
+}
+
 .al-self-end {
   align-self: flex-end;
 }
@@ -167,6 +171,10 @@ flex-direction: row-reverse;
 }
 
 // ------------------- margins ---------------------------
+.mg-top4 {
+  margin-top: 4px;
+}
+
 .mg-top8 {
   margin-top: 8px;
 }
@@ -207,8 +215,16 @@ flex-direction: row-reverse;
   margin-bottom: 16px;
 }
 
+.mg-left-n4 {
+  margin-left: -4px;
+}
+
 .mg-left8 {
   margin-left: 8px;
+}
+
+.mg-left-n8 {
+  margin-left: -8px;
 }
 
 .mg-left16 {
