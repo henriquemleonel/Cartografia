@@ -50,7 +50,7 @@ export default {
   methods: {
     emit(sel) {
       if (this.selected.includes(sel)) {
-        this.$emit('callFilter', sel.value);
+        this.$emit('call-filter', sel.value);
         // console.log('delete', sel);
         const index = this.selected.indexOf(sel); // resgata do array o index fo elemento selecionado
         const element = this.selected[index]; // resgata o elemento selecionado
@@ -59,7 +59,7 @@ export default {
         document.getElementById(`category-label-${sel.value}`).style.color = '#000'; // restaura a cor do label
         this.selected.splice(index, 1); // remove elemento do array backup
       } else {
-        this.$emit('callFilter', sel.value);
+        this.$emit('call-filter', sel.value);
         // console.log('push selected', sel);
         this.selected.push(sel); // salva elemento selecionado no array
         document.getElementById(`icon-${sel.value}`).getElementById('g').setAttribute('fill', '#b8bfc2'); // seta a nova cor para o svg icon

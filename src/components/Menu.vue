@@ -153,7 +153,7 @@ export default {
       this.expand = !this.expand;
     },
     passCall(el) {
-      this.$emit('callFilter', el);
+      this.$emit('call-filter', el);
     },
   },
 };

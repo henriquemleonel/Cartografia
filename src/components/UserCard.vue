@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     emitLogout() {
-      this.$emit('emitLogout');
+      this.$emit('emit-logout');
     },
     passwordEdit() {
       console.log('editar senha');

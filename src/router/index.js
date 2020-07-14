@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
+    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
   },
   {
     path: '/about',
@@ -131,14 +131,14 @@ const scrollBehavior = (to, from, savedPosition) => {
   return position;
 };
 
-const router = new VueRouter({
+const Router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
   scrollBehavior,
 });
 
-router.beforeEach((to, from, next) => {
+Router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     // const accessToken = localStorage.getItem('access_token');
     // const accessToken = sessionStorage.getItem('access_token');
@@ -156,4 +156,4 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-export default router;
+export default Router;

@@ -327,7 +327,6 @@ export default {
 @import '../styles/variables.scss';
 @import '../styles/mixins.scss';
 
-
 .topic-view {
   background: #fff;
   border-radius: 3px;
@@ -371,7 +370,7 @@ p {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   padding-bottom: 4px;
   // margin-bottom: 8px;
   border-bottom: 1px solid $borderGray;

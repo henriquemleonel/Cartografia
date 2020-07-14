@@ -4,9 +4,9 @@ export default {
     events: [
       {
         id: 1,
-        userRef: '',
+        userId: '',
         title: 'Dance_Fest',
-        date: '2020/05/13', // format iso YYYY/MM/DD
+        date: '2020/05/13', // ADD ISO FORMAT ---  YYYY-MM-DDTHH:mm:ss.sssZ
         time: '13:00',
         address: {
           street: 'Rua do Dinar',
@@ -21,6 +21,7 @@ export default {
       },
       {
         id: 2,
+        userId: '',
         title: 'Festival Forró',
         date: '2020/04/05', // format iso YYYY/MM/DD
         time: '18:00',
@@ -33,6 +34,7 @@ export default {
       },
       {
         id: 3,
+        userId: '',
         title: '"Como não viver em isolamento"',
         date: '2020/05/07',
         time: '18:00',
@@ -45,6 +47,7 @@ export default {
       },
       {
         id: 4,
+        userId: '',
         title: 'Fashion Trends CG',
         date: '2020/05/12',
         time: '18:00',
@@ -57,6 +60,7 @@ export default {
       },
       {
         id: 5,
+        userId: '',
         title: 'Mis Hitchcok',
         date: '2020/05/16',
         time: '18:00',
@@ -69,6 +73,7 @@ export default {
       },
       {
         id: 6,
+        userId: '',
         title: 'Festa Junina',
         date: '2020/05/21',
         time: '18:00',
@@ -81,6 +86,7 @@ export default {
       },
       {
         id: 7,
+        userId: '',
         title: 'Photo Export',
         date: '2020/05/23',
         time: '18:00',
@@ -93,6 +99,7 @@ export default {
       },
       {
         id: 8,
+        userId: '',
         title: 'Print',
         date: '2020/05/28',
         time: '18:00',
@@ -105,6 +112,7 @@ export default {
       },
       {
         id: 9,
+        userId: '',
         title: 'Dance_Fest',
         date: '2020/05/30',
         time: '18:00',
@@ -117,6 +125,7 @@ export default {
       },
       {
         id: 10,
+        userId: '',
         title: 'Festival Forró',
         date: '2020/06/01',
         time: '18:00',
@@ -129,6 +138,7 @@ export default {
       },
       {
         id: 11,
+        userId: '',
         title: 'Coo ka',
         date: '2020/08/03',
         time: '18:00',

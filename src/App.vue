@@ -262,7 +262,6 @@ flex-direction: row-reverse;
   margin-left: 0;
 }
 
-
 // ----------------- paddings ----------------------------
 .padding-0 {
   padding: 0px;

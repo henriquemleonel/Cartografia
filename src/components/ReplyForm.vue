@@ -65,7 +65,8 @@ export default {
   props: {
     replyToTag: {
       type: Object,
-      default: null,
+      default: () => {},
+      required: true,
     },
   },
   validations: {
@@ -84,19 +85,19 @@ export default {
         this.$store.dispatch('topics/addReply', { data: newReply })
           .then(() => {
             this.content = '';
-            this.replyToTag = null;
+            // this.replyToTag = {};
             this.$v.$reset();
             this.loading = false;
           })
           .catch((error) => {
             console.log(error);
             this.loading = false;
-            this.replyToTag = null;
+            // this.replyToTag = {};
           });
       }
     },
     cancel() {
-      this.replyToTag = null;
+      // this.replyToTag = {};
       this.content = '';
     },
     focus() {

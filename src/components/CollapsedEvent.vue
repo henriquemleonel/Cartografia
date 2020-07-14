@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     emitThisEvent() {
-      this.$emit('eventIdToEdit', this.id);
+      this.$emit('event-to-edit', this.id);
       console.log('shortEvent to edit : (id)', this.id); // emitindo que o shortEvent a ser editado
       // this.showThisShort = false;
     },
@@ -203,7 +203,6 @@ export default {
 .roll-in {
   animation: roll-out 1s linear reverse;
 }
-
 
 @keyframes roll-out {
   0% {

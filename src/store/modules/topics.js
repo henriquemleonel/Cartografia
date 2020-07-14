@@ -373,15 +373,13 @@ export default {
 
     // OK
     supportCurrentTopic({ state, commit }, { supportType }) {
-      // call this action from usersModule, after conditions are processed.
-      // post to api, this current topic id, to be supported (approved/true || notApproved/false).
-      const newSupport = { topicId: state.currentTopic.id, support: supportType };
       // Promise((resolve, reject) => {
-      //   api.post('/supportThisTopic', {
-      //     newSupport,
+      //   api.patch('/updateSupport', {
+      //     topicId: state.currentTopic.id,
+      //     supportType,
       //   })
       //     .then((response) => {
-      //       console.log('topics/supportThis - RESPONSE');
+      //       console.log('topics/supportThis response', response.message);
       //       commit('ADD_SUPPORT', supportType);
       //       resolve(response);
       //     })
@@ -390,33 +388,9 @@ export default {
       //       reject(error);
       //     });
       // });
-      console.log('topics/supportCurrentTopic', newSupport);
-      commit('ADD_SUPPORT', { supportType });
-    },
-
-    // OK
-    changeSupportCurrentTopic({ state, commit }, { newSupportType }) {
-      // call this action from usersModule, after conditions are processed.
-      // switch support count
-      // if supportType == true, (increment positiveSupports, decrement negativeSupport)
-      const newSupport = { topicId: state.currentTopic.id, support: newSupportType };
-      // Promise((resolve, reject) => {
-      //   api.post('/updateSupportThisTopic', {
-      //     newSupport,
-      //   })
-      //     .then((response) => {
-      //       console.log('topics/updateThisSupport - RESPONSE');
-      //       commit('CHANGE_SUPPORT', newSupportType);
-      //       resolve(response);
-      //     })
-      //     .catch((error) => {
-      //       console.log(error.message);
-      //       reject(error);
-      //     });
-      // });
-      console.log(newSupport); // TO BE DELETED
-      console.log('topics/supportCurrentTopic', { newSupportType }); // TO BE DELETED
-      commit('CHANGE_SUPPORT', newSupportType); // TO BE DELETED
+      const newSupport = { topicId: state.currentTopic.id, support: supportType }; // TO BE DELETED
+      console.log('topics/supportCurrentTopic', newSupport); // TO BE DELETED
+      commit('ADD_SUPPORT', { supportType }); // TO BE DELETED
     },
 
     // OK
@@ -494,22 +468,28 @@ export default {
       commit('UPDATE_REPLY', { replyId, data }); // update local storage.
     },
 
-    // TO BE REWIEWED
-    likeReply({ dispatch, commit }, { replyId }) {
-      // post to api, a reply element on this topic, to be liked.
-      // then
-      dispatch('users/addLike', { replyId }, { root: true }); // add from local user register like to this reply
-      commit('LIKE_REPLY', { replyId });
-      return replyId;
+    // TO BE TESTED
+    incrementLikeInReply({ commit }, { replyId }) {
+      // Promise((resolve, reject) => {
+      //   api.patch('/incrementLikeInReply', {
+      //     replyId,
+      //   })
+      //     .then((response) => {
+      //       console.log('topics/incrementLikeInReply', response.message);
+      //       commit('INCREMENT_LIKE_IN_REPLY', { replyId });
+      //     })
+      //     .catch((error) => {
+      //       console.log(error.message);
+      //       reject(error);
+      //     });
+      // });
+      commit('INCREMENT_LIKE_IN_REPLY', { replyId });
     },
 
-    // TO BE REWIEWED
-    unlikeReply({ dispatch, commit }, { replyId }) {
-      // post to api, reply element on this topic, to be unliked.
-      // then
-      dispatch('users/removeLike', { replyId }, { root: true }); // remove from local user register like to this reply
-      commit('UNLIKE_REPLY', { replyId });
-      return replyId;
+    // TO BE TESTED
+    decrementLikeInReply({ commit }, { replyId }) {
+      console.log('topics/decrementLikeInReply', replyId);
+      commit('DECREMENT_LIKE_IN_REPLY', { replyId });
     },
 
     // TO BE REWIEWED
@@ -556,7 +536,6 @@ export default {
 
     // TO BE REWIEWED
     ADD_SUPPORT(state, { supportType }) {
-      console.log('melao');
       if (supportType) {
         // approved
         state.currentTopic.positiveSupports += 1;
@@ -566,28 +545,12 @@ export default {
       }
     },
 
-    // TO BE REWIWED
-    CHANGE_SUPPORT(state, newSupportType) {
-      console.log('banana', newSupportType);
-      if (newSupportType) {
-        console.log('topics/CHANGE_SUPPORT: F => T');
-        state.currentTopic.positiveSupports += 1;
-        state.currentTopic.negativeSupports -= 1;
-        // commit('NEGATIVE_SUPPORT_DECREMENT');
-      } else {
-        console.log('topics/CHANGE_SUPPORT: T => F');
-        state.currentTopic.negativeSupports += 1;
-        state.currentTopic.positiveSupports -= 1;
-        // commit('POSITIVE_SUPPORT_DECREMENT');
-      }
-    },
-
-    // OK
+    // NO CALLED
     POSITIVE_SUPPORT_DECREMENT(state) {
       state.currentTopic.positiveSupports -= 1;
     },
 
-    // OK
+    // NO CALLED
     NEGATIVE_SUPPORT_DECREMENT(state) {
       state.currentTopic.negativeSupports -= 1;
     },
@@ -617,13 +580,13 @@ export default {
     },
 
     // OK
-    LIKE_REPLY(state, { replyId }) {
+    INCREMENT_LIKE_IN_REPLY(state, { replyId }) {
       const replyIndex = state.currentTopicReplies.findIndex((reply) => reply.id === replyId);
       state.currentTopicReplies[replyIndex].numberOfLikes += 1;
     },
 
     // OK
-    UNLIKE_REPLY(state, { replyId }) {
+    DECREMENT_LIKE_IN_REPLY(state, { replyId }) {
       const replyIndex = state.currentTopicReplies.findIndex((reply) => reply.id === replyId);
       state.currentTopicReplies[replyIndex].numberOfLikes -= 1;
     },

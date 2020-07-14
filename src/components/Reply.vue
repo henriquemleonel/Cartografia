@@ -1,7 +1,5 @@
 <template>
   <div class="reply-component row no-wrap">
-
-
     <div class="avatar">
       <base-avatar
         class="author-left"
@@ -125,7 +123,6 @@ import BaseAvatar from './BaseAvatar.vue';
 import BaseButton from './BaseButton.vue';
 import ReplyTag from './ReplyTag.vue';
 
-
 export default {
   components: {
     BaseAvatar,
@@ -170,7 +167,7 @@ export default {
       return `${day} de ${month} de ${year}`;
     },
     hasBeenLiked() {
-      return this.myLikes.includes(this.reply.id);
+      return this.myLikes.some((el) => el.replyId === this.reply.id);
     },
     hasReplyTag() {
       return this.reply.replyTag != null;
@@ -206,18 +203,18 @@ export default {
       });
     },
     likeReply() {
-      if (!this.myLikes.includes(this.reply.id)) {
+      if (!this.hasBeenLiked()) {
         this.liked = true;
-        this.$store.dispatch('topics/likeReply', {
+        this.$store.dispatch('users/likeReply', {
           replyId: this.reply.id,
         }).then(() => {
           // console.log('reply/likeReply');
         }).catch((error) => {
           console.log('reply/likeReply ERROR', error);
         });
-      } else if (this.myLikes.includes(this.reply.id)) {
+      } else if (this.hasBeenLiked()) {
         this.liked = false;
-        this.$store.dispatch('topics/unlikeReply', {
+        this.$store.dispatch('users/unlikeReply', {
           replyId: this.reply.id,
         }).then(() => {
           // console.log('reply/unlikeReply');
@@ -243,7 +240,7 @@ export default {
       });
     },
     replyThis() {
-      this.$emit('callReply', this.reply.id);
+      this.$emit('call-reply', this.reply.id);
       console.log('id reset', this.reply.id);
     },
   },
