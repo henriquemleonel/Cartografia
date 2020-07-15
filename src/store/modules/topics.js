@@ -231,6 +231,8 @@ export default {
     key: null,
     currentTopic: null,
     currentTopicReplies: null,
+    currentFilter: null,
+    amount: 12, // number of topics required in request
   },
 
   getters: {
@@ -258,18 +260,36 @@ export default {
       commit('SET_CURRENT_TOPIC_REPLYES', data);
     },
 
+    // TO IMPLEMENT REQUEST - ADD TOKEN
+    loadInitialTopics({ state, commit }) {
+      Promise((resolve, reject) => {
+        api.get('/getInitialTopics', {
+          params: {
+            amount: state.amount,
+          },
+        })
+          .then((response) => {
+            console.log('topics/loadInitialTopics');
+            commit('SET_TOPICS_LIST', response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            reject(error);
+          });
+      });
+    },
+
     // TO BE IMPLEMENTED
-    loadCurrentTopics({ commit }, { filters }) {
+    loadMoreTopics({ commit }, { filterOption, streamCount }) {
       // this action is performed every time the user reaches the last topic on the topics page.
       // api get 12 topics elements as object array, in ascending order by date, based on current filter. *** this appears like unsplash loading.
       let currentTopics = [];
-      if (filters === 'noFilters') {
-        currentTopics = api.get('NoFilters');
-      } else if (filters === 'moreActives') {
+      if (filterOption === 'moreActives') {
         currentTopics = api.get('moreActive');
-      } else if (filters === 'mostReplyededs') {
+      } else if (filterOption === 'mostReplyededs') {
         currentTopics = api.get('mostReplyeds');
-      } else if (filters === 'mostRecents') {
+      } else if (filterOption === 'mostRecents') {
         currentTopics = api.get('mostRecents');
       }
       commit('SET_TOPICS_LIST', { currentTopics });
