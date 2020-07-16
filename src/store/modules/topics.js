@@ -232,7 +232,7 @@ export default {
     currentTopic: null,
     currentTopicReplies: null,
     currentFilter: null,
-    amount: 12, // number of topics required in request
+    streamAmount: 12, // number of topics required in request
   },
 
   getters: {
@@ -261,11 +261,12 @@ export default {
     },
 
     // TO IMPLEMENT REQUEST - ADD TOKEN
-    loadInitialTopics({ state, commit }) {
+    loadInitialTopics({ commit }, { type, streamCount }) {
       Promise((resolve, reject) => {
         api.get('/getInitialTopics', {
           params: {
-            amount: state.amount,
+            type,
+            streamCount,
           },
         })
           .then((response) => {
@@ -280,19 +281,27 @@ export default {
       });
     },
 
-    // TO BE IMPLEMENTED
-    loadMoreTopics({ commit }, { filterOption, streamCount }) {
+    // TO IMPLEMENT REQUEST - ADD TOKEN
+    loadMoreTopics({ commit }, { type, streamCount }) {
       // this action is performed every time the user reaches the last topic on the topics page.
-      // api get 12 topics elements as object array, in ascending order by date, based on current filter. *** this appears like unsplash loading.
-      let currentTopics = [];
-      if (filterOption === 'moreActives') {
-        currentTopics = api.get('moreActive');
-      } else if (filterOption === 'mostReplyededs') {
-        currentTopics = api.get('mostReplyeds');
-      } else if (filterOption === 'mostRecents') {
-        currentTopics = api.get('mostRecents');
-      }
-      commit('SET_TOPICS_LIST', { currentTopics });
+      // const nextStreamStart = (streamCount * state.streamAmount) + 1;
+      Promise((resolve, reject) => {
+        api.get('/getMoreTopics', {
+          params: {
+            type,
+            streamCount,
+          },
+        })
+          .then((response) => {
+            console.log('topics/loadMoreTopics');
+            commit('SET_TOPICS_LIST', response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            reject(error);
+          });
+      });
     },
 
     // TO BE REWIWED
@@ -536,7 +545,7 @@ export default {
   mutations: {
     // OK
     SET_TOPICS_LIST(state, { data }) {
-      state.list = data;
+      state.list.push(data);
     },
 
     // OK

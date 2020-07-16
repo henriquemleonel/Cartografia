@@ -44,8 +44,10 @@ export default {
   data() {
     return {
       loading: false,
-      filterOption: [{ type: 'mostRecents', streamCount: 0 }], // void array => mostRecents
       topicsLoaded: [], // array to be iterated
+      filterOption: [], // void array => mostRecents
+      currentFilter: 'mostRecents',
+      lastFilter: 'mostRecents',
       streamCount: 0, // most actives
     };
   },
@@ -65,7 +67,7 @@ export default {
     // }),
   },
   beforeMount() {
-    this.getInitialTopics();
+    this.getInitialTopics('mostRecents');
   },
   mounted() {
     this.$nextTick(function scrollListener() {
@@ -77,10 +79,24 @@ export default {
     window.removeEventListener('scroll', this.onScroll);
   },
   methods: {
-    getInitialTopics() {
-      this.$store.dispatch('topics/loadInitialTopics')
+    changeFilter(type) {
+      // click in filter options  trigger this action
+      if (type !== this.lastFilter) {
+        this.currentFilter = type; // used to set logic getMoreTopics.
+        this.lastFilter = type; // used to call getInitialTopics whenever filter changes
+        this.streamCount = 0;
+        this.getInitialTopics(type);
+      } else {
+        console.log('filter dont changed');
+      }
+    },
+    getInitialTopics(type) {
+      this.$store.dispatch('topics/loadInitialTopics', {
+        type,
+        streamCount: 0,
+      })
         .then((response) => {
-          this.filterOption[0] = { type: 'mostRecents', streamCount: 1 }; // records the value of the new streamCount
+          this.streamCount = 1; // records the value of the new streamCount
           this.topicsLoaded.push(response.data);
         })
         .catch((error) => {
@@ -88,36 +104,18 @@ export default {
         });
     },
     getMoreTopics() {
-      if (!this.hasAnyFilter) {
-        let currentOption;
-        let currentStreamCount;
-        if (this.filterOption[0] === 'mostReplyededs') {
-          this.currentOption = 'mostRecents';
-        } else if (this.filterOption[0] === 'mostActives') {
-          this.currentOption = 'mostRecents';
-        }
-        this.$store.dispatch('topics/loadMoreTopics', {
-          filterOption: currentOption,
-          streamCount: currentStreamCount,
+      // stream continue get 'currentFilter' and increment streamCount
+      this.$store.dispatch('topics/loadMoreTopics', {
+        type: this.currentFilter, // {}
+        streamCount: this.streamCount,
+      })
+        .then((response) => {
+          this.streamCount += 1; // increment
+          this.topicsLoaded.push(response.data);
         })
-          .then((response) => {
-            this.topicsLoaded.push(response.data);
-          })
-          .catch((error) => {
-            console.log('topicsList/getMoreTopics - ERROR', error.message);
-          });
-      } else {
-        // stream get 'mostRecents'
-        this.$store.dispatch('topics/loadMoreTopics', {
-          // this.filterOption[0] {}
-        })
-          .then((response) => {
-            this.topicsLoaded.push(response.data);
-          })
-          .catch((error) => {
-            console.log('topicsList/getMoreTopics - ERROR', error.message);
-          });
-      }
+        .catch((error) => {
+          console.log('topicsList/getMoreTopics - ERROR', error.message);
+        });
     },
     onScroll() {
       window.onscroll = () => {
