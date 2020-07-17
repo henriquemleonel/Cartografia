@@ -81,9 +81,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "faq" */ '../views/Faq.vue'),
   },
   {
-    path: '/teste',
-    name: 'Teste',
-    component: () => import(/* webpackChunkName: "teste" */ '../views/CompTeste.vue'),
+    path: '/test',
+    name: 'ViewTest',
+    component: () => import(/* webpackChunkName: "teste" */ '../views/ViewTest.vue'),
   },
   {
     path: '/buffer',

@@ -4,9 +4,10 @@
       v-if="topicsLoaded.length === 0"
       class="message"
     >
-      Ainda não possuimos debates abertos.
+      <span class="body-2 bolder">Ainda não possuimos diálogos abertos.</span>
     </div>
 
+    <!-- IMPLEMENTAR O SCROOL AREA E O TRIGGER GET_MORE_TOPICS, JUNTO AO TRIGGER GHANGE_FILTER -->
     <div
       v-else
       class="content"

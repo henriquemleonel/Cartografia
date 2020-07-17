@@ -1,25 +1,45 @@
 <template>
   <div class="container">
-
     <div class="fixed-center">
-
-      <my-menu/>
-
+      <progress-bar
+        :step="currentStep"
+        :steps-content="['passo 1', 'passo 2', 'passo 3']"
+      />
+      <div class="row">
+        <base-button
+          class=""
+          theme="flat"
+          @click="currentStep -= 1"
+        >
+          <!-- <i class="fas fa-plus reply-icon"></i> -->
+          <span class="body-2 bolder text-black"> prev </span>
+        </base-button>
+        <base-button
+          class=""
+          theme="flat"
+          @click="currentStep += 1"
+        >
+          <!-- <i class="fas fa-plus reply-icon"></i> -->
+          <span class="body-2 bolder text-black"> next </span>
+        </base-button>
+      </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import MyMenu from '../components/Menu.vue';
+import ProgressBar from '../components/BaseStepProgressBar.vue';
+import BaseButton from '../components/BaseButton.vue';
 
 export default {
-  name: 'comp-Teste',
+  name: 'ViewTest',
   components: {
-    MyMenu,
+    ProgressBar,
+    BaseButton,
   },
   data() {
     return {
+      currentStep: 1,
     };
   },
   computed: {
@@ -61,6 +81,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   border: 1px solid pink;
+  width: 500px;
   min-width: 200px;
   // height: 100%;
 }
