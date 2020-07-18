@@ -1,41 +1,19 @@
 <template>
   <div class="container">
     <div class="fixed-center">
-      <progress-bar
-        :step="currentStep"
-        :steps-content="['passo 1', 'passo 2', 'passo 3']"
-      />
-      <div class="row">
-        <base-button
-          class=""
-          theme="flat"
-          @click="currentStep -= 1"
-        >
-          <!-- <i class="fas fa-plus reply-icon"></i> -->
-          <span class="body-2 bolder text-black"> prev </span>
-        </base-button>
-        <base-button
-          class=""
-          theme="flat"
-          @click="currentStep += 1"
-        >
-          <!-- <i class="fas fa-plus reply-icon"></i> -->
-          <span class="body-2 bolder text-black"> next </span>
-        </base-button>
-      </div>
+      <topic-creator />
     </div>
   </div>
 </template>
 
 <script>
-import ProgressBar from '../components/BaseStepProgressBar.vue';
-import BaseButton from '../components/BaseButton.vue';
+// import Stepper from '../components/BaseStepper.vue';
+import TopicCreator from '../components/TopicCreator.vue';
 
 export default {
   name: 'ViewTest',
   components: {
-    ProgressBar,
-    BaseButton,
+    TopicCreator,
   },
   data() {
     return {
@@ -72,18 +50,19 @@ export default {
   width: 100%;
   height: 100vh;
   padding: 32px;
-  background-color: #f5f5f5;
+  // background-color: #f5f5f5;
 }
 
 .fixed-center {
   position: absolute;
-  top: 16px;
+  margin-top: 0px;
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
-  border: 1px solid pink;
-  width: 500px;
-  min-width: 200px;
-  // height: 100%;
+  // border: 1px solid green;
+  width: 800px;
+  min-width: 300px;
+  // height: 90%;
 }
 
 </style>

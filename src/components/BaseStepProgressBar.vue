@@ -1,14 +1,17 @@
 <template>
-  <div class="app-component">
+  <div class="app-component progressbar-component">
     <ul class="progressbar">
       <li
-        v-for="(item, index) in stepsContent"
+        v-for="(item, index) in stepsTitle"
         :id="index + 1"
         :key="index"
-        :class="{ 'active': currentStep === index + 1}"
+        :class="{ 'active': currentStep >= index + 1}"
       >
         <!-- <span> {{ index }} </span> -->
-        <span> {{ item }} </span>
+        <span
+          :class="{ 'active': currentStep >= index + 1}"
+          class="caption bolder"
+        > {{ item }} </span>
       </li>
     </ul>
   </div>
@@ -18,70 +21,42 @@
 export default {
   name: 'StepProgressBar',
   props: {
-    step: {
+    currentStep: {
       type: Number,
       default: 1,
     },
-    stepsContent: {
+    stepsTitle: {
       type: Array,
-      default: () => [],
+      default: () => ['passo 1', 'passo 2', 'passo 3'],
     },
   },
   data() {
     return {
-      currentStep: 1,
-      lastStep: 0,
-      count: 0,
     };
   },
-  watch: {
-    step() {
-      console.log('prop', this.step);
-      if (this.step <= this.stepsContent.length && this.step > 0) {
-        // console.log('prop', this.step);
-        if (this.step > this.lastStep && this.count < (this.stepsContent.length - 1)) {
-          this.nextStep();
-          this.count += 1;
-          this.lastStep = this.step - 1;
-        }
-        if (this.step < this.lastStep && this.count > 0) {
-          this.prevStep();
-          this.count -= 1;
-          this.lastStep = this.step + 1;
-        }
-        console.log('step local', this.currentStep);
-        console.log('last step', this.lastStep);
-      } else {
-        console.log('estouro');
-        this.lastStep = this.step + 1; // PENSA AI MANO
-        
-      }
-    },
-  },
-  methods: {
-    nextStep() {
-      this.currentStep += 1;
-    },
-    prevStep() {
-      this.currentStep -= 1;
-    },
-  },
+  methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
 
 $height: 32px;
 $width: 32px;
 $line-height: 32px;
-$color: #ddd;
+$primaryColor: black;
+$secondaryColor: #ddd;
 
 .progressbar {
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-around;
   counter-reset: step;
+  // border: 1px solid red;
+  margin: 0;
 }
 
 .progressbar li {
@@ -90,6 +65,7 @@ $color: #ddd;
   position: relative;
   text-align: center;
   width: 33.33%;
+  color: $secondaryColor;
 }
 
 .progressbar li:before {
@@ -97,8 +73,9 @@ $color: #ddd;
   counter-increment: step;
   height: $height;
   width: $width;
+  font-weight: bold;
   line-height: $line-height;
-  border: 1px solid $color;
+  border: 1px solid $secondaryColor;
   display: block;
   text-align: center;
   margin: 0 auto 8px auto;
@@ -106,12 +83,21 @@ $color: #ddd;
   background-color: white;
 }
 
+span {
+  color: #ddd;
+}
+
+span.active {
+  color: $primaryColor;
+  transition: 1s ease-in-out;
+}
+
 .progressbar li:after {
   content: '';
   position: absolute;
   width: 100%;
   height: 1px;
-  background-color: $color;
+  background-color: $secondaryColor;
   top: 16px;
   left: -50%;
   z-index: -1;
@@ -122,10 +108,18 @@ $color: #ddd;
 }
 
 .progressbar li.active {
-  color: green;
+  color: $primaryColor;
+  transition: 0.8s ease-in-out;
 }
 
 .progressbar li.active:before {
-  border-color: green;
+  border-color: $primaryColor;
+  transition: 0.6s ease-in-out;
 }
+
+.progressbar li.active:after {
+  background-color: $primaryColor;
+  transition: 0.8s ease-in-out;
+}
+
 </style>

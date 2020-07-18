@@ -1,29 +1,41 @@
 <template>
   <div class="filter">
-
     <!-- start options -->
     <div class="filter-list">
       <q-list>
-
-        <q-item class="item" :id="`item-${item.value}`" v-for="item in options" :key="item.value" clickable @click="emit(item)">
-
-          <q-item-section class="icon-content" avatar>
-
+        <q-item
+          v-for="item in options"
+          :id="`item-${item.value}`"
+          :key="item.value"
+          class="item"
+          clickable
+          @click="emit(item)"
+        >
+          <q-item-section
+            class="icon-content"
+            avata
+          >
             <!-- iconId -1 : index of array of icons (0 a 17) -->
-            <icon-base :id="`icon-${item.value}`" :iconId="item.value -1" width="12" :setWhite="false" />
-
+            <icon-base
+              :id="`icon-${item.value}`"
+              :icon-id="item.value -1"
+              width="12"
+              :set-white="false"
+            />
           </q-item-section>
 
-          <q-item-section class="label-content overline bolder" :id="`category-label-${item.value}`"> {{ item.label }} </q-item-section>
-
+          <q-item-section
+            :id="`category-label-${item.value}`"
+            class="label-content overline bolder"
+          >
+            {{ item.label }}
+          </q-item-section>
         </q-item>
-
       </q-list>
 
       <!-- <span style="color: red"> {{ this.selected }}</span> -->
     </div>
     <!-- end options -->
-
   </div>
 </template>
 
@@ -32,7 +44,7 @@ import { mapGetters } from 'vuex';
 import iconBase from './iconBase.vue';
 
 export default {
-  name: 'my-filter',
+  name: 'MyFilter',
   components: {
     iconBase,
   },
