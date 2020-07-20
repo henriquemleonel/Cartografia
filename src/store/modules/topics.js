@@ -14,7 +14,7 @@ export default {
           name: 'jão', // implement user name
           id: 12,
         },
-        createdAt: '2020/04/28', // implements full date, with time too
+        createdAt: '2020/04/28', // implements full date, with time too mm dd yyyy HH:MM:SS timezone
         content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
         positiveSupports: 170,
         negativeSupports: 65,
@@ -342,6 +342,11 @@ export default {
       });
     },
 
+    sayHello() {
+      const message = 'alo';
+      return message;
+    },
+
     // OK
     createNewTopic({
       state,
@@ -356,19 +361,19 @@ export default {
       const userRef = rootGetters['users/getUserReference'];
       // get current date and time
       const today = new Date();
-      const date = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
+      const date = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}-${today.getTime}`;
       // mount reply object
       const newTopic = {
         id: topicId, // TO BE DELETED
         title: data.title,
-        categoryId: data.categoryId,
+        categoriesTagged: data.categoriesTagged,
         user: userRef,
-        createdAt: date,
+        createdAt: date, // TO BE DELETED
         content: data.content,
-        positiveSupports: 0,
-        negativeSupports: 0,
-        numberOfReplies: 0,
-        views: 0,
+        positiveSupports: 0, // TO BE DELETED, RECEIVE AND STORE FROM API
+        negativeSupports: 0, // TO BE DELETED
+        numberOfReplies: 0, // TO BE DELETED
+        views: 0, // TO BE DELETED
       };
       console.log('topics/createNewTopic', newTopic);
       commit('ADD_NEW_TOPIC', { newTopic }); // TO BE DELETED

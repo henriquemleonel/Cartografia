@@ -60,7 +60,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   // border: 1px solid green;
-  width: 800px;
+  width: 700px;
   min-width: 300px;
   // height: 90%;
 }

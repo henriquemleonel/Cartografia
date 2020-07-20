@@ -21,8 +21,8 @@
         id="section1"
         class="stepper-section"
       >
-        <span class="title-1 bolder mg-top16">Sobre os Diálogos</span>
-        <span class="headline-2 bolder mg-top16">Diálogos abertos</span>
+        <span class="title-3 bolder mg-top16">Sobre os Diálogos</span>
+        <span class="headline-3 bolder mg-top16">Diálogos abertos</span>
         <p class="body-2 mg-top8 justify-text">
           Você poderá iniciar um debate, que aqui chamamos de diálogo, para compartilhar pontos de vista com outras pessoas sobre os assuntos
           que te preocupam em relação à cultura em Campo Grande.
@@ -32,10 +32,10 @@
           identifica a necessidade de encontros presenciais específicos (assembleias, reuniões) como também contribui para a compreensão das necessidades da
           comunidade artística de Campo Grande.
         </p>
-        <span class="headline-2 bolder mg-top16"> Recomendações para participar de um diálogo aberto</span>
+        <span class="headline-3 bolder mg-top16"> Recomendações para participar de um diálogo aberto</span>
         <p class="body-2 mg-top8 justify-text">
           1. Para iniciar um debate é necessário que você faça um cadastro na
-          <router-link class="link" to="/signUp"><strong>Plataforma Cartografia da Cultura</strong></router-link>.
+          <router-link class="link body-2" to="/signUp"><strong>Plataforma Cartografia da Cultura</strong></router-link>.
           Os usuários cadastrados também podem participar das discussões já iniciadas através dos comentários e/ ou indicar se concorda ou não concorda
           clicando nos botões “👍” ou “👎” encontrados em cada debate proposto.
         </p>
@@ -58,9 +58,9 @@
         id="section2"
         class="stepper-section"
       >
-        <span class="title-1 bolder mg-top16">Regras para iniciar um diálogo</span>
+        <span class="title-1 bolder">Regras para iniciar um diálogo</span>
         <!-- 1 -->
-        <span class="body-2 bolder mg-top32">1. Uma vez feito o login, você poderá:</span>
+        <span class="body-2 bolder mg-top16">1. Uma vez feito o login, você poderá:</span>
         <ol>
           <li class="body-2 justify-text">
             Iniciar um debate.
@@ -117,15 +117,25 @@
           </li>
         </ol>
         <!-- ACCEPT TERMS -->
-        <div class="accept-rules row al-items-center">
+        <div class="stepper-rules row al-items-center">
           <q-checkbox
-            v-model="acceptRules"
+            v-model="rulesAccepted"
             size="32px"
             color="black"
             true-value="item.category"
           />
-          <span class="body-2 mg-left8">Eu li e concordo com as regras da plataforma.</span>
-          <span class="caption mg-left8">( você deve marcar essa opção para continuar )</span>
+          <span
+            class="body-2 mg-left8"
+          >
+            Eu li e concordo com as
+            <strong
+              style="cursor: pointer"
+              @click="scrollToTop()"
+            >
+              Regras da Plataforma
+            </strong>.
+          </span>
+          <span class="caption mg-left8">(Esta opção deve ser marcada*)</span>
         </div>
       </section>
       <!-- SECTION 3 -->
@@ -133,11 +143,12 @@
         v-if="currentStep === 3"
         class="stepper-section"
       >
-        <span class="title-2 bolder mg-top16">Crie seu diálogo</span>
-        <span class="headline-2 bolder mg-top16">Título do seu diálogo</span>
+        <span class="title-3 bolder">Crie seu diálogo.</span>
+        <span class="headline-3 bolder mg-top16">Título do seu diálogo</span>
+        <span class="caption mg-top4">Insira um título que represente o assunto principal da discussão.</span>
         <!-- TITLE -->
         <q-input
-          v-model="title"
+          v-model.trim="title"
           class="input"
           dense
           square
@@ -148,14 +159,15 @@
           @blur="$v.title.$touch"
         />
 
-        <span class="headline-2 bolder">Texto do Diálogo</span>
+        <span class="headline-3 bolder">Texto do Diálogo</span>
+        <span class="caption mg-top4">Insira um texto revisado por você. Veja se está claro e objetivo.</span>
         <!-- CONTENT -->
         <q-input
           v-model="content"
           class="input"
+          type="textarea"
           counter
           dense
-          autogrow
           square
           filled
           bottom-slots
@@ -165,35 +177,86 @@
           @blur="$v.content.$touch"
         />
         <!-- CATEGORY -->
-        <div class="category column mg-top16">
-          <span class="headline-2 bolder">Identifique sua categoria</span>
-          <span class="body-3">Marque as opções que se relacionam ao seu diálogo</span>
-          <div class="list mg-top8">
-            <q-list id="item" v-for="item in options" :key="item.value">
-              <q-item clickable @click="selectCategory(item)">
-                <q-item-section avatar>
-                  <!-- iconId -1 : index of array of icons (0 a 17) -->
-                  <icon-base :iconId="item.value -1" width="16" :setWhite="active" />
-                </q-item-section>
-                <q-item-section :id="item.value" class="body-3 bolder" :class="{ 'white' : active }"> {{ item.label }} </q-item-section>
-              </q-item>
-            </q-list>
+        <span class="headline-3 bolder mg-top16">Categoria do diálogo</span>
+        <span class="caption">Marque as opções que se relacionam ao seu diálogo</span>
+        <div class="category-field row no-wrap  mg-top8">
+          <q-list class="category-list">
+            <q-item
+              v-for="item in options"
+              :id="`item-${item.value}`"
+              :key="item.value"
+              class="category-list-item"
+              clickable
+              @click="tagCategory(item)"
+            >
+              <q-item-section
+                class="category-list-item-section"
+                avata
+              >
+                <!-- iconId -1 : index of array of icons (0 a 17) -->
+                <icon-base
+                  :id="`icon-${item.value}`"
+                  class="category-list-icon"
+                  :icon-id="item.value -1"
+                  width="16"
+                  :set-white="false"
+                />
+              </q-item-section>
+
+              <q-item-section
+                :id="`category-label-${item.value}`"
+                class="category-list-item-section"
+              >
+                <span class="caption bolder">{{ item.label }}</span>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <!-- show tags -->
+          <div class="categorys-tagged">
+            <div
+              v-for="item in categoriesTagged"
+              :key="item.value"
+              class="category-tagged-badge"
+              :style="{ 'border-color': item.color }"
+            >
+              <span
+                class="caption bolder"
+                :style="{ 'color': item.color }"
+              > {{ item.label }} </span>
+            </div>
           </div>
+        </div>
+        <!-- TERMS -->
+        <div class="stepper-terms row no-wrap al-items-center">
+          <q-checkbox
+            v-model="termsAccepted"
+            size="32px"
+            color="black"
+          />
+          <span class="body-3 mg-left8">Eu li e concordo com os
+            <router-link
+              class="link"
+              :to="{ path: '/terms', hash: '#terms'}"
+            >
+              <span
+                class="body-3 bolder"
+              >Termos de Uso</span>
+            </router-link>
+            e
+            <router-link
+              class="link"
+              :to="{ path: '/terms', hash: '#privacity'}"
+            >
+              <span
+                class="body-3 bolder"
+              >Privacidade.</span>
+            </router-link>
+          </span>
         </div>
       </section>
     </div>
     <!-- FOOTER -->
     <div class="stepper-footer">
-      <!-- CANCEL -->
-      <base-button
-        v-if="currentStep === 1"
-        class="stepper-btn"
-        theme="flat"
-        @click="cancel()"
-      >
-        <i class="fas fa-times btn-icon"></i>
-        <span class="body-3 bolder stepper-btn-span mg-left16"> cancelar </span>
-      </base-button>
       <!-- BACK -->
       <base-button
         v-if="currentStep != 1"
@@ -201,8 +264,18 @@
         theme="flat"
         @click="prevStep()"
       >
-        <i class="fas fa-arrow-left btn-icon"></i>
+        <i class="fas fa-arrow-left btn-icon" />
         <span class="body-3 bolder stepper-btn-span mg-left16"> voltar </span>
+      </base-button>
+      <!-- CANCEL -->
+      <base-button
+        v-if="currentStep !== 2"
+        class="stepper-btn"
+        theme="flat"
+        @click="cancel()"
+      >
+        <i class="fas fa-times btn-icon" />
+        <span class="body-3 bolder stepper-btn-span text-uppercase mg-left16"> cancelar </span>
       </base-button>
       <base-button
         v-if="currentStep != numberOfSteps"
@@ -211,13 +284,13 @@
         @click="nextStep()"
       >
         <span class="body-3 bolder stepper-btn-span text-uppercase"> Continuar </span>
-        <i class="fas fa-arrow-right btn-icon mg-left16"></i>
+        <i class="fas fa-arrow-right btn-icon mg-left16" />
       </base-button>
       <base-button
         v-if="currentStep === numberOfSteps"
         class="stepper-btn"
-        theme="secondary"
-        @click="finish()"
+        :theme="formIsValid ? 'secondary' : 'disabled'"
+        @click="submit()"
       >
         <!-- <i class="fas fa-plus reply-icon"></i> -->
         <span class="body-3 bolder text-uppercase"> Iniciar diálogo </span>
@@ -227,7 +300,12 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators';
+import {
+  required,
+  minLength,
+  maxLength,
+  // alphaNum,
+} from 'vuelidate/lib/validators';
 import { mapGetters } from 'vuex';
 
 import Identity from './Logo.vue';
@@ -247,21 +325,24 @@ export default {
   },
   data() {
     return {
-      currentStep: 3,
+      currentStep: 1,
       count: 0,
       numberOfSteps: 3,
       stepsTitle: ['O que são os Diálogos', 'Regras', 'Crie seu Diálogo'],
-      acceptRules: false,
+      rulesAccepted: false,
+      termsAccepted: false,
       title: '',
       content: '',
-      categoryId: null,
+      categoriesTagged: [],
     };
   },
   validations: {
     title: {
       required,
-      minLength: minLength(3),
-      validChars: (value) => (/^[a-zA-Z0-9_]+$/ig).test(value),
+      minLength: minLength(5),
+      // alphaNum: (value) => (alphaNum(value)),
+      validChars: (value) => (/^[a-zA-Z0-9\s]+$/ig).test(value),
+
     },
     content: {
       required,
@@ -273,7 +354,7 @@ export default {
       options: 'categories/loadCategories',
     }),
     formIsValid() {
-      if (this.$v.$anyError || this.selected === null || this.terms === false) {
+      if (this.$v.$anyError || this.rulesAccepted === false || this.termsAccepted === false || this.categoriesTagged.length === 0) {
         return false;
       }
       return true;
@@ -283,10 +364,10 @@ export default {
         return 'Esse campo é requerido';
       }
       if (!this.$v.title.validChars) {
-        return 'Este campo deve conter apenas letras, números e underline';
+        return 'Este campo deve conter apenas letras e números';
       }
       if (!this.$v.title.minLength) {
-        return 'Mínimo de três dígitos';
+        return 'Mínimo de cinco dígitos';
       }
       return '';
     },
@@ -301,21 +382,75 @@ export default {
     },
   },
   methods: {
-    selectCategory(el) {
-      console.log('category', el);
-      this.categoryId = el.value;
+    showDate() {
+      console.log('data', new Date());
+    },
+    submit() {
+      if (!this.$v.$anyError && this.formIsValid) {
+        this.$store.dispatch('topics/createNewTopic', {
+          data: {
+            title: this.title,
+            content: this.content,
+            categoriesTagged: this.categoriesTagged,
+          },
+        }).then((response) => {
+          console.log('topicCreator/submit');
+          this.$router.push({ name: 'TopicPage', params: { topicId: response.id } }); // push nextPage here or store
+        }).catch((error) => {
+          if (error.message === 'Request failed with status code 400') {
+            this.errorMessage = 'Escrever errors';
+          }
+          if (error.message === 'Request failed with status code 401') {
+            this.errorMessage = 'Escrever errors';
+          }
+          if (error.message === 'timeout of 5000ms exceeded') {
+            this.errorMessage = 'Escrever errors';
+          }
+          console.log('topicCreator/submit', error.message);
+        });
+      }
+    },
+    cancel() {
+      this.$router.push({ name: 'Topics' });
+    },
+    tagCategory(sel) {
+      if (this.categoriesTagged.some((tag) => tag === sel)) {
+        console.log('hasBeenTagged', sel);
+        const index = this.categoriesTagged.findIndex((el) => el.value === sel.value);
+        const element = this.categoriesTagged[index];
+        document.getElementById(`icon-${sel.value}`).getElementById('g').setAttribute('fill', `${element.color}`); // restaura a cor do svg icon
+        document.getElementById(`category-label-${sel.value}`).style.color = '#000'; // restaura a cor do label
+        // document.getElementById(`item-${sel.value}`).style.borderRight = 'none';
+        this.categoriesTagged.splice(index, 1); // remove elemento do array backup
+        console.log('tag in array', this.categoriesTagged);
+      } else {
+        console.log('tagged', sel);
+        this.categoriesTagged.push(sel);
+        // document.getElementById(`icon-${sel.value}`).getElementById('g').setAttribute('fill', `${sel.color}`); // seta a nova cor para o svg icon
+        document.getElementById(`category-label-${sel.value}`).style.color = `${sel.color}`; // seta a nova cor para label
+        // document.getElementById(`item-${sel.value}`).style.borderRight = `2px solid ${sel.color}`;
+      }
     },
     nextStep() {
       if (this.count <= (this.numberOfSteps)) {
         this.currentStep += 1;
         this.count += 1;
       }
+      this.scrollToTop();
     },
     prevStep() {
       if (this.count >= 0) {
         this.currentStep -= 1;
         this.count -= 1;
       }
+      this.scrollToTop();
+    },
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
     },
   },
 };
@@ -389,7 +524,7 @@ li {
   margin-left: 32px;
 }
 
-.accept-rules {
+.stepper-rules, .stepper-terms {
   margin-top: 32px;
 }
 
@@ -400,6 +535,50 @@ li {
 
 .justify-text {
   text-align: justify;
+}
+
+.category-list {
+  margin-top: 16px;
+}
+
+.category-list-item {
+  // max-height: 40px;
+  width: 250px;
+  padding: 4px 0 4px 0;
+  margin-bottom: 4px;
+}
+
+.category-list-item-section {
+  // display: block;
+  align-items: center;
+}
+
+.category-list-icon {
+  margin-right: 16px;
+  // padding: 2px !important;
+}
+
+.categorys-tagged {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  margin-left: 32px;
+  margin-top: 16px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  max-height: 200px;
+  width: 100%;
+}
+
+.category-tagged-badge {
+  display: block;
+  border: 1px solid;
+  border-radius: 2px;
+  height: min-content;
+  padding: 2px 8px;
+  margin: 0 4px 4px 0;
 }
 
 @keyframes fadeInOpacity {

@@ -1,30 +1,34 @@
 <template>
   <div class="app-page topics-page">
-
-    <!-- aside -->
-    <div class="aside">
-
-      <logo-card class="identity" :blackMode="true"/>
+    <!-- ASIDE -->
+    <div class="topics-page-aside">
+      <logo-card
+        :black-mode="true"
+        class="identity"
+      />
 
       <div
-        class="aside-actions"
         v-if="handleResize"
+        class="aside-actions"
       >
         <div class="aside-filter-options">
-          <div class="filter-options-item" @click="filterThis(item.value)" v-for="(item, index) in options" :key="index">
-
+          <div
+            v-for="(item, index) in options"
+            :key="index"
+            class="filter-options-item"
+            @click="filterThis(item.value)"
+          >
             <span
               id="filter-item"
-              class="body-3" :class="{ 'selected-effect' : filterTypeSelected === item.value }"
+              class="body-3"
+              :class="{ 'selected-effect' : filterTypeSelected === item.value }"
             >
               {{ item.label }}
             </span>
-
           </div>
         </div>
 
         <div class="aside-filter-search">
-
           <q-input
             v-model="search"
             label="Procurar"
@@ -32,51 +36,53 @@
             dense
             color="black"
           >
-            <template v-slot:prepend>
-              <q-icon class="bolder text-black" name="search" size="xs" />
+            <template #prepend>
+              <q-icon
+                class="bolder text-black"
+                name="search"
+                size="xs"
+              />
             </template>
           </q-input>
-
         </div>
 
         <div class="aside-filter-create-topic">
-
-          <base-button class="row no-wrap al-items-center" theme="primary" @click="createNewTopic()">
+          <base-button
+            class="row no-wrap al-items-center"
+            theme="primary"
+            @click="createNewTopic()"
+          >
             <!-- <q-icon class="fas fa-plus text-white" size="xs"></q-icon> -->
             <span class="body-2 bolder text-white"> + </span>
             <span class="caption bolder text-white"> insira um novo diálogo </span>
           </base-button>
-
         </div>
-
       </div>
-
     </div>
     <!-- end aside -->
 
     <!-- filter to mobile -->
-    <div class="filter-mobile" v-if="handleResize">
+    <div
+      v-if="handleResize"
+      class="filter-mobile"
+    >
       <span class="body-2 bolder"> + </span>
     </div>
 
     <!-- content -->
     <div class="content">
-
       <!-- scroll area -->
       <q-scroll-area
+        v-if="handleResize"
         class="scrollArea"
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
-        v-if="handleResize"
       >
-        <topics-list/>
-
+        <topics-list />
       </q-scroll-area>
       <!-- end scroll-area -->
-
     </div>
     <!-- end content -->
-
   </div>
 </template>
 
@@ -85,7 +91,7 @@ import TopicsList from '../components/TopicsList.vue';
 import BaseButton from '../components/BaseButton.vue';
 
 export default {
-  name: 'schedulePage',
+  name: 'SchedulePage',
   components: {
     TopicsList,
     BaseButton,
@@ -119,6 +125,12 @@ export default {
       },
     };
   },
+  computed: {
+    allTopics() {
+      const eventsToShow = this.$store.getters.eventsFiltered;
+      return eventsToShow;
+    },
+  },
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
@@ -126,15 +138,9 @@ export default {
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
-  computed: {
-    allTopics() {
-      const eventsToShow = this.$store.getters.eventsFiltered;
-      return eventsToShow;
-    },
-  },
   methods: {
     createNewTopic() {
-      console.log('create new');
+      this.$router.push({ name: 'CreateTopic' });
     },
     filterThis(filterType) {
       this.filterTypeSelected = filterType;
@@ -172,7 +178,7 @@ export default {
   }
 }
 
-.aside {
+.topics-page-aside {
   background-color: white;
   height: 100%;
   min-width: 250px;

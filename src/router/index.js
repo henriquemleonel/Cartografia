@@ -66,6 +66,14 @@ const routes = [
     // },
   },
   {
+    path: '/topics/createTopic', // todos os tópicos (debates)
+    name: 'CreateTopic',
+    component: () => import(/* webpackChunkName: "Topics" */ '../views/CreateTopic.vue'),
+    // meta: {
+    //   requiresAuth: true,
+    // },
+  },
+  {
     path: '/topics/:topicId', // página de um tópico
     name: 'TopicPage',
     component: () => import(/* webpackChunkName: "topic" */ '../views/TopicPage.vue'),

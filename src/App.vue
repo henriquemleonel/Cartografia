@@ -33,6 +33,11 @@
 }
 
 // --------------- quasar reset class -----------------------
+
+.q-item__section--main {
+  flex: none !important;
+}
+
 .q-item {
   min-height: 32px !important;
   padding: 4px;
