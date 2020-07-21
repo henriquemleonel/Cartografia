@@ -6,10 +6,12 @@ export default {
 
   state: {
     list: [
+      // OBJECT REFERENCE ----  TO BE DELETED
       {
         id: 1,
         title: 'Dance Fest',
-        categoryId: 1,
+        topicCategory: 1,
+        categoriesTagged: 1,
         user: {
           name: 'jão', // implement user name
           id: 12,
@@ -19,126 +21,6 @@ export default {
         positiveSupports: 170,
         negativeSupports: 65,
         numberOfReplies: 2,
-        views: 0,
-      },
-      {
-        id: 2,
-        title: 'Festival Forró',
-        categoryId: 5,
-        user: {
-          name: 'maria',
-          id: 19,
-        },
-        createdAt: '2020/05/04',
-        content: 'pula fogueira',
-        positiveSupports: 170,
-        negativeSupports: 64,
-        numberOfReplies: 12,
-        views: 0,
-      },
-      {
-        id: 3,
-        title: 'Como não viver em isolamento',
-        categoryId: 1,
-        user: {
-          name: 'anna',
-          id: 28,
-        },
-        createdAt: '2020/05/07',
-        content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográplesmente uma simulação de texto da indústria tipográfica ede impressos,',
-        positiveSupports: 170,
-        negativeSupports: 64,
-        numberOfReplies: 12,
-        views: 0,
-      },
-      {
-        id: 4,
-        title: 'Fashion Trends CG',
-        categoryId: 15,
-        user: {
-          name: 'benta',
-          id: 32,
-        },
-        createdAt: '2020/05/13',
-        content: 'indústria tipográfica ede impressos,',
-        positiveSupports: 170,
-        negativeSupports: 64,
-        numberOfReplies: 12,
-        views: 0,
-      },
-      {
-        id: 5,
-        title: 'Mis Hitchcok',
-        categoryId: 10,
-        user: {
-          name: 'martiello',
-          id: 67,
-        },
-        createdAt: '2020/05/22',
-        content: 'pula fogueira Lorem Ipsum é simplesmente uma simulação de texto',
-        positiveSupports: 170,
-        negativeSupports: 64,
-        numberOfReplies: 12,
-        views: 0,
-      },
-      {
-        id: 6,
-        title: 'Festa Junina',
-        categoryId: 5,
-        user: {
-          name: 'claudio',
-          id: 189,
-        },
-        createdAt: '20202/05/28',
-        content: 'pula fogueira ',
-        positiveSupports: 170,
-        negativeSupports: 64,
-        numberOfReplies: 12,
-        views: 0,
-      },
-      {
-        id: 7,
-        title: 'Photo Export',
-        categoryId: 8,
-        user: {
-          name: 'mellisa',
-          id: 78,
-        },
-        createdAt: '2020/06/01',
-        content: 'photo graph u',
-        positiveSupports: 170,
-        negativeSupports: 64,
-        numberOfReplies: 12,
-        views: 0,
-      },
-      {
-        id: 8,
-        title: 'Praça Imigrantes',
-        categoryId: 7,
-        user: {
-          name: 'enzo',
-          id: 45,
-        },
-        createdAt: '2020/06/05',
-        content: 'photo graph u',
-        positiveSupports: 170,
-        negativeSupports: 64,
-        numberOfReplies: 12,
-        views: 0,
-      },
-      {
-        id: 9,
-        title: 'Morada Baís',
-        categoryId: 6,
-        user: {
-          name: 'marcio',
-          id: 7,
-        },
-        createdAt: '2020/07/05',
-        content: 'photo graph u',
-        positiveSupports: 170,
-        negativeSupports: 64,
-        numberOfReplies: 12,
         views: 0,
       },
     ],
@@ -243,30 +125,13 @@ export default {
 
   actions: {
 
-    // TO BE DELETED
-    // this action is applied only in the local implementation.
-    localLoadCurrentTopic({ state, commit }, { topicId }) {
-      let data = {};
-      data = state.list.find((el) => el.id === topicId);
-      commit('SET_CURRENT_TOPIC', data); // update local storage
-    },
-
-    // TO BE DELETED
-    localLoadCurrentTopicReplyes({ state, commit }, { topicId }) {
-      console.log('topics/localLoadCurrentReplies', topicId);
-      const data = state.replies.filter(
-        (reply) => reply.topicId === topicId,
-      );
-      commit('SET_CURRENT_TOPIC_REPLYES', data);
-    },
-
-    // TO IMPLEMENT REQUEST - ADD TOKEN
-    loadInitialTopics({ commit }, { type, streamCount }) {
+    // WAITING API IMPLEMENT
+    loadInitialTopics({ commit }, { type, pagination }) {
       Promise((resolve, reject) => {
         api.get('/getInitialTopics', {
           params: {
             type,
-            streamCount,
+            pagination,
           },
         })
           .then((response) => {
@@ -281,15 +146,15 @@ export default {
       });
     },
 
-    // TO IMPLEMENT REQUEST - ADD TOKEN
-    loadMoreTopics({ commit }, { type, streamCount }) {
+    // WAITING API IMPLEMENT
+    loadMoreTopics({ commit }, { type, pagination }) {
       // this action is performed every time the user reaches the last topic on the topics page.
-      // const nextStreamStart = (streamCount * state.streamAmount) + 1;
+      // const nextStreamStart = (pagination * state.streamAmount) + 1;
       Promise((resolve, reject) => {
         api.get('/getMoreTopics', {
           params: {
             type,
-            streamCount,
+            pagination,
           },
         })
           .then((response) => {
@@ -347,51 +212,55 @@ export default {
       return message;
     },
 
-    // OK
+    // OK - REVISED
     createNewTopic({
-      state,
       commit,
-      dispatch,
       rootGetters,
     }, { data }) {
-      // generate new key to being used as id, on this new topic.
-      dispatch('setKey'); // TO BE DELETED
-      const topicId = state.key; // TO BE DELETED
-      // get data from current user, to reference this topic. contains { id, name, categoryId, avatarUrl}
-      const userRef = rootGetters['users/getUserReference'];
-      // get current date and time
-      const today = new Date();
-      const date = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}-${today.getTime}`;
-      // mount reply object
-      const newTopic = {
-        id: topicId, // TO BE DELETED
-        title: data.title,
-        categoriesTagged: data.categoriesTagged,
-        user: userRef,
-        createdAt: date, // TO BE DELETED
-        content: data.content,
-        positiveSupports: 0, // TO BE DELETED, RECEIVE AND STORE FROM API
-        negativeSupports: 0, // TO BE DELETED
-        numberOfReplies: 0, // TO BE DELETED
-        views: 0, // TO BE DELETED
-      };
-      console.log('topics/createNewTopic', newTopic);
-      commit('ADD_NEW_TOPIC', { newTopic }); // TO BE DELETED
-      // post to api topic object, to be added on serve and storage response.
-      // Promise((resolve, reject) => {
-      //   api.post('/createNewTopic', {
-      //     newTopic,
-      //   })
-      //     .then((response) => {
-      //       console.log('topics/createNewTopic - response', response.data);
-      //       commit('ADD_NEW_TOPIC', response.data);
-      //       resolve(response);
-      //     })
-      //     .catch((error) => {
-      //       console.log(error.message);
-      //       reject(error);
-      //     });
-      // });
+      // getters { userId }
+      const userId = rootGetters['users/getUserId']; // IMPLEMENTAR ISSO NO MÓDULO USERS
+      const token = localStorage.getItem('access_token');
+      // response
+      // const newTopic = {
+      //   topicId: Number, // id do diálogo
+      //   title: String, // titulo do diálogo
+      //   topicCategory: Number, // id da categoria principal do diálogo
+      //   categoriesTagged: Array, // id das categorias relacionadas ao diálogo
+      //   userRef: {
+      //     name: Number, // nome do usuário proprietário deste diálogo
+      //     id: Number, // id do usuário
+      //     categoryId: Number, // categoria do usuário
+      //     avatarUrl: String, // url do avatar do usuário
+      //   },
+      //   createdAt: String, // data de criação do diálogo --- JS DATE OBJECT
+      //   content: String, // texto do diálogo
+      //   positiveSupports: Number, // votos a favor
+      //   negativeSupports: Number, // votos contra
+      //   numberOfReplies: Number, // número de respostas/comentários
+      //   views: Number, // números de visualizações
+      // };
+      Promise((resolve, reject) => {
+        api.post('/createNewTopic', {
+          body: {
+            userId,
+            title: data.title,
+            content: data.content,
+            categoriesTagged: data.categoriesTagged,
+          },
+          headers: {
+            Autrhorization: `token ${token}`,
+          },
+        })
+          .then((response) => {
+            console.log('topics/createNewTopic - response', response.data);
+            commit('ADD_NEW_TOPIC', response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            reject(error);
+          });
+      });
     },
 
     // TO BE IMPLEMENTED
