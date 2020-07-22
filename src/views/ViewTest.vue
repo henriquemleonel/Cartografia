@@ -1,23 +1,22 @@
 <template>
   <div class="container">
     <div class="fixed-center">
-      <topic-creator />
+      <recover-stepper />
     </div>
   </div>
 </template>
 
 <script>
 // import Stepper from '../components/BaseStepper.vue';
-import TopicCreator from '../components/TopicCreator.vue';
+import RecoverStepper from '../components/RecoverStepper.vue';
 
 export default {
   name: 'ViewTest',
   components: {
-    TopicCreator,
+    RecoverStepper,
   },
   data() {
     return {
-      currentStep: 1,
     };
   },
   computed: {
