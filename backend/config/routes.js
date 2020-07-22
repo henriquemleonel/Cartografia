@@ -57,6 +57,12 @@ module.exports = app => {
         .post(app.api.maps.save)
         .delete(app.api.maps.remove)
 
+    app.route('/topic/')
+        .all(app.config.passport.authenticate())
+        .get(app.api.maps.get)
+        .post(app.api.topics.save)
+        .delete(app.api.maps.remove)
+
     app.route('/stats')
         .get(app.api.stats.get)
 
