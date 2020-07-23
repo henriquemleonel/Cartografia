@@ -57,10 +57,10 @@ module.exports = app => {
         .post(app.api.maps.save)
         .delete(app.api.maps.remove)
 
+  // Está faltando a altênticação, cuidado, tem que colocar de pois 
     app.route('/topic/')
-        .all(app.config.passport.authenticate())
-        .get(app.api.maps.get)
         .post(app.api.topics.save)
+        .get(app.api.maps.get)
         .delete(app.api.maps.remove)
 
     app.route('/stats')
