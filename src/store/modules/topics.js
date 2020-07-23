@@ -146,7 +146,7 @@ export default {
       });
     },
 
-    // WAITING API IMPLEMENT
+    // AWAIT API IMPLEMENT
     loadMoreTopics({ commit }, { type, pagination }) {
       // this action is performed every time the user reaches the last topic on the topics page.
       // const nextStreamStart = (pagination * state.streamAmount) + 1;
@@ -169,50 +169,7 @@ export default {
       });
     },
 
-    // TO BE REWIWED
-    loadCurrentTopic({ commit }, { topicId }) {
-      // api get, this topic to be set as currentTopic. and get replies array of this topic.
-      Promise((resolve, reject) => {
-        api.get('/getCurrentTopic', {
-          topicId,
-        })
-          .then((response) => {
-            console.log('topics/loadCurrentTopic - response', response.data);
-            commit('SET_CURRENT_TOPIC', response.data);
-            resolve(response);
-          })
-          .catch((error) => {
-            console.log(error.message);
-            reject(error);
-          });
-      });
-      console.log('topics/loadCurrentTopic LOG');
-    },
-
-    // TO BE REWIWED
-    loadCurrentTopicReplyes({ commit }, { topicId }) {
-      Promise((resolve, reject) => {
-        api.get('/getCurrentTopicReplyes', {
-          topicId,
-        })
-          .then((response) => {
-            console.log('topics/loadCurrentTopicReplyes - response', response.data);
-            commit('SET_CURRENT_TOPIC_REPLYES', response.data);
-            resolve(response);
-          })
-          .catch((error) => {
-            console.log(error.message);
-            reject(error);
-          });
-      });
-    },
-
-    sayHello() {
-      const message = 'alo';
-      return message;
-    },
-
-    // OK - REVISED
+    // OK - AWAIT API IMPLEMENT
     createNewTopic({
       commit,
       rootGetters,
@@ -245,6 +202,7 @@ export default {
             userId,
             title: data.title,
             content: data.content,
+            topicCategory: data.topicCategory,
             categoriesTagged: data.categoriesTagged,
           },
           headers: {
@@ -254,6 +212,43 @@ export default {
           .then((response) => {
             console.log('topics/createNewTopic - response', response.data);
             commit('ADD_NEW_TOPIC', response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            reject(error);
+          });
+      });
+    },
+
+    // TO BE REWIWED
+    loadCurrentTopic({ commit }, { topicId }) {
+      Promise((resolve, reject) => {
+        api.get('/getCurrentTopic', {
+          topicId,
+        })
+          .then((response) => {
+            console.log('topics/loadCurrentTopic - response', response.data);
+            commit('SET_CURRENT_TOPIC', response.data);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            reject(error);
+          });
+      });
+      console.log('topics/loadCurrentTopic LOG');
+    },
+
+    // TO BE REWIWED
+    loadCurrentTopicReplyes({ commit }, { topicId }) {
+      Promise((resolve, reject) => {
+        api.get('/getCurrentTopicReplyes', {
+          topicId,
+        })
+          .then((response) => {
+            console.log('topics/loadCurrentTopicReplyes - response', response.data);
+            commit('SET_CURRENT_TOPIC_REPLYES', response.data);
             resolve(response);
           })
           .catch((error) => {

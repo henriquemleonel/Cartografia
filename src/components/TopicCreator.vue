@@ -122,7 +122,6 @@
             v-model="rulesAccepted"
             size="32px"
             color="black"
-            true-value="item.category"
           />
           <span
             class="body-2 mg-left8"
@@ -135,7 +134,7 @@
               Regras da Plataforma
             </strong>.
           </span>
-          <span class="caption mg-left8">(Esta opção deve ser marcada*)</span>
+          <span class="caption mg-left8" :class="{ 'rules-accept-error' : rulesError }">(Esta opção deve ser marcada*)</span>
         </div>
       </section>
       <!-- SECTION 3 -->
@@ -178,7 +177,8 @@
         />
         <!-- CATEGORY -->
         <span class="headline-3 bolder mg-top16">Categoria do diálogo</span>
-        <span class="caption">Marque as opções que se relacionam ao seu diálogo</span>
+        <span class="caption mg-top8">1. Marque a opção que representa o tema principal do seu diálogo</span>
+        <span class="caption">2. Marque as opções que se relacionam ao seu diálogo</span>
         <div class="category-field row no-wrap  mg-top8">
           <q-list class="category-list">
             <q-item
@@ -187,7 +187,7 @@
               :key="item.value"
               class="category-list-item"
               clickable
-              @click="tagCategory(item)"
+              @click="tagEvent(item)"
             >
               <q-item-section
                 class="category-list-item-section"
@@ -212,17 +212,33 @@
             </q-item>
           </q-list>
           <!-- show tags -->
-          <div class="categorys-tagged">
-            <div
-              v-for="item in categoriesTagged"
-              :key="item.value"
-              class="category-tagged-badge"
-              :style="{ 'border-color': item.color }"
-            >
-              <span
-                class="caption bolder"
-                :style="{ 'color': item.color }"
-              > {{ item.label }} </span>
+          <div class="tag-field">
+            <div class="main-tag">
+              <span id="label" class="caption">categoria principal</span>
+              <div
+                v-if="topicCategory !== null"
+                class="main-tag-badge caption bolder"
+                :style="{ 'color': topicCategory.color }"
+              >
+                <span class="caption bolder">{{ topicCategory.label }}</span>
+                <i id="untag" class="far fa-times-circle mg-left16" @click="untagMain()" />
+              </div>
+            </div>
+            <div class="related-tags">
+              <span class="caption">categorias relacionadas</span>
+              <div class="related-tags-grid">
+                <div
+                  v-for="item in categoriesTagged"
+                  :key="item.value"
+                  class="categorys-tags-badge"
+                  :style="{ 'border-color': item.color }"
+                >
+                  <span
+                    class="caption bolder"
+                    :style="{ 'color': item.color }"
+                  > {{ item.label }} </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -325,14 +341,17 @@ export default {
   },
   data() {
     return {
-      currentStep: 1,
+      currentStep: 3,
       count: 0,
       numberOfSteps: 3,
       stepsTitle: ['O que são os Diálogos', 'Regras', 'Crie seu Diálogo'],
       rulesAccepted: false,
+      rulesError: false,
       termsAccepted: false,
       title: '',
       content: '',
+      topicCategory: null,
+      hasSelected: false,
       categoriesTagged: [],
     };
   },
@@ -391,6 +410,7 @@ export default {
           data: {
             title: this.title,
             content: this.content,
+            topicCategory: this.topicCategory,
             categoriesTagged: this.categoriesTagged,
           },
         }).then((response) => {
@@ -413,30 +433,46 @@ export default {
     cancel() {
       this.$router.push({ name: 'Topics' });
     },
-    tagCategory(sel) {
-      if (this.categoriesTagged.some((tag) => tag === sel)) {
+    tagEvent(sel) {
+      if (this.topicCategory === null && this.categoriesTagged.length === 0) {
+        this.tagMain(sel);
+      } else if (this.categoriesTagged.some((tag) => tag === sel)) {
         console.log('hasBeenTagged', sel);
         const index = this.categoriesTagged.findIndex((el) => el.value === sel.value);
         const element = this.categoriesTagged[index];
-        document.getElementById(`icon-${sel.value}`).getElementById('g').setAttribute('fill', `${element.color}`); // restaura a cor do svg icon
-        document.getElementById(`category-label-${sel.value}`).style.color = '#000'; // restaura a cor do label
-        // document.getElementById(`item-${sel.value}`).style.borderRight = 'none';
-        this.categoriesTagged.splice(index, 1); // remove elemento do array backup
+        document.getElementById(`icon-${sel.value}`).getElementById('g').setAttribute('fill', `${element.color}`);
+        document.getElementById(`category-label-${sel.value}`).style.color = '#000';
+        document.getElementById(`item-${sel.value}`).style.borderRight = 'none';
+        this.categoriesTagged.splice(index, 1);
         console.log('tag in array', this.categoriesTagged);
       } else {
         console.log('tagged', sel);
         this.categoriesTagged.push(sel);
-        // document.getElementById(`icon-${sel.value}`).getElementById('g').setAttribute('fill', `${sel.color}`); // seta a nova cor para o svg icon
-        document.getElementById(`category-label-${sel.value}`).style.color = `${sel.color}`; // seta a nova cor para label
-        // document.getElementById(`item-${sel.value}`).style.borderRight = `2px solid ${sel.color}`;
+        document.getElementById(`category-label-${sel.value}`).style.color = `${sel.color}`;
+        document.getElementById(`item-${sel.value}`).style.borderRight = `2px solid ${sel.color}`;
       }
     },
+    tagMain(sel) {
+      console.log('sel', sel);
+      this.topicCategory = sel;
+      document.getElementById(`category-label-${sel.value}`).style.color = `${sel.color}`;
+      this.hasSelected = true;
+      const index = this.options.findIndex((el) => el.value === sel.value);
+      this.options.splice(index, 1);
+    },
+    untagMain() {
+      this.options.push(this.topicCategory);
+      this.topicCategory = null;
+    },
     nextStep() {
-      if (this.count <= (this.numberOfSteps)) {
+      if (this.currentStep === 2 && this.rulesAccepted === false) {
+        this.rulesError = true;
+      } else if (this.count <= (this.numberOfSteps)) {
         this.currentStep += 1;
         this.count += 1;
+        this.scrollToTop();
+        this.rulesError = false;
       }
-      this.scrollToTop();
     },
     prevStep() {
       if (this.count >= 0) {
@@ -528,6 +564,19 @@ li {
   margin-top: 32px;
 }
 
+.rules-accept-error {
+  animation: shake 0.2s;
+  color: red;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0px); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(0px); }
+  75% { transform: translateX(5px); }
+  100% { transform: translateX(0px); }
+}
+
 .link {
   text-decoration: none;
   color: black;
@@ -539,6 +588,9 @@ li {
 
 .category-list {
   margin-top: 16px;
+  border: 1px solid #ddd;
+  padding: 0 8px;
+  border-radius: 2px;
 }
 
 .category-list-item {
@@ -558,27 +610,72 @@ li {
   // padding: 2px !important;
 }
 
-.categorys-tagged {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
+.tag-field {
+  width: 100%;
+  max-width: 450px;
   margin-left: 32px;
   margin-top: 16px;
+  // border: 1px solid red;
+}
+
+.main-tag {
+  display: flex;
+  flex-flow: column nowrap;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 2px;
+  min-height: 56px;
+  max-width: 250px;
+
+  #label {
+    margin-top: -4px;
+    color: $gray3;
+  }
+
+}
+
+.main-tag-badge {
+  width: fit-content;
+  border: 1px solid;
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+#untag {
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.related-tags {
+  margin-top: 32px;
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 2px;
-  max-height: 200px;
-  width: 100%;
+  min-height: 100px;
+  max-width: 350px;
+
+  span {
+    margin-top: -8px;
+    color: $gray3;
+  }
 }
 
-.category-tagged-badge {
+.related-tags-grid {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+}
+
+.categorys-tags-badge {
   display: block;
   border: 1px solid;
   border-radius: 2px;
   height: min-content;
   padding: 2px 8px;
-  margin: 0 4px 4px 0;
+  margin: 4px 4px 4px 0;
 }
 
 @keyframes fadeInOpacity {
