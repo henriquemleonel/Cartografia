@@ -5,25 +5,12 @@ module.exports = app => {
   const { existsOrError, notExistsOrError } = app.api.validation
 
   const save = async(req, res) => {
-    const topic = {...req.body }
+    let topic = {...req.body }
     if (req.params.id) topic.id = req.params.id
     existsOrError(topic.title, "Título não informado")
     existsOrError(topic.content, "Conteudo não informado")
     existsOrError(topic.userId, "Usuário não informado")
     existsOrError(topic.topicCategory, "Categoria principal não informada")
-    //existsOrError(topic.categoriesTagged, "Categorias secundárias não informadas") Deletar, mas lembrar que há esse array
-
-    //const topicFromDB = await app.db('topics')
-    //.where({ id: topic.id }).first()
-
-
-    //Avalia se tem ou não no cadastro
-    //if (!topic.id) {
-    //notExistsOrError(topicFromDB, "Topico já cadastrado")
-    //}
-    // catch (msg) {
-    //return res.status(400).send(msg)
-    //}
 
     console.log(topic)
     console.log(!topic.categoriesTagged)
@@ -73,62 +60,60 @@ module.exports = app => {
 
     } else {
 
-      let teste = ( category, topicId ) => {
-        return app.db('topicsCategories')
-          .insert({"topicId":topicId, "categoriesId":category})
-          .then(res=>{ 
-            console.log("category: ", category)
-            console.log("topicId: ", topicId)
-            console.log("respostas implementação das tags: ",res) 
-          })
-          .catch(err => console.log(err))
-      }
-
-      let teste2 = topicId =>{
-        return app.db('topics')
-          .select()
-          .where({id:topicId})
-          .first()
-          .then(async topicNoTag => {
-            await app.db('topicsCategories').select().where({ "topicId":topicNoTag.id }).then(
-              tags => {
-                console.log('tags:', tags)
-                topicNoTag.categoriesTagged = []
-                Array.from(tags).forEach(category =>{
-                  topicNoTag.categoriesTagged.append(category)
-                })
-
-                console.log(topicNoTag)
-                res.json(topicNoTag)
-              }
-            ).catch(err => {
-              res.status(400).send(err)
-            })
-
-          })
-          .catch(err => {
-            res.status(501).send(err)
-          })
-      }
-
+      console.log(topic)
+      console.log( topic.categoriesTagged )
       let categoriesTagged = topic.categoriesTagged
-      console.log(categoriesTagged)
       delete topic.categoriesTagged
-      await app.db('topics')
-        .insert(topic)
-        .then(
-           topicId => {
-            console.log(topicId)
-            categoriesTagged.forEach( category=>{
-              console.log('ForEach: ', category)
-              sp(teste)(category, topicId[0])
-            })
-            sp(teste2)(topicId)
+
+      const promiseInsertTopic = () => {
+        return  app.db('topics').insert(topic).then(id => {
+          topic.id = id[0]
+          console.log("topic id = ", topic.id)
+          console.log("id[0] =", id[0])
+          promiseInsertTopicCategory()
+
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+
+      const promiseInsertTopicCategory = () =>{
+
+        let preQuerie = "INSERT INTO topicsCategories(topicId, categoriesId) VALUES "
+        categoriesTagged.forEach(category => {
+        preQuerie = preQuerie.concat(`( ${topic.id} , ${category}  ),`)
+      })
+
+        preQuerie = preQuerie.substring(0, preQuerie.length-1).concat(";")
+        console.log(preQuerie)
+
+        return app.db.raw(preQuerie).then(
+          _ => promiseSearchTopic()
+        )
+      }
+
+
+      const promiseSearchTopic = () => {
+        return app.db("topics").select().where({"id":topic.id}).then(
+          topicDB => {
+            topic = topicDB[0]
+            console.log(topic)
+            promiseSearchTopicCategory()
           }
         )
-        .catch(err => res.status(500).send(err))
-    }
+      }
 
+      const promiseSearchTopicCategory = () => {
+        return app.db("topicsCategories").select().where({"topicId":topic.id})
+          .then(topicCategoryDB => {
+            topic.categoriesTagged = topicCategoryDB
+            res.json(topic)
+          })
+      }
+
+      promiseInsertTopic()
+
+    }
   }
 
   const get = (req, res) => {
