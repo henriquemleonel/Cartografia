@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt-nodejs')
 const sp  = require("synchronized-promise")
 
+
+
 module.exports = app => {
   const { existsOrError, notExistsOrError } = app.api.validation
 
@@ -18,45 +20,69 @@ module.exports = app => {
 
     // CONSERTAR O MALDITO PROMISE HELL!
     // Caso não exista Tags associadas 
-    if(!topic.categoriesTagged){
-      if (topic.id) {
-        // Caso tenha se passado um ID como parâmetro, faça o update
-        await app.db('topics')
-          .update(topic)
-          .where({ id: topic.id })
-          .then(resp => {
-            res.json(resp)
-          })
-          .catch(err => res.status(500).send(err))
-      } else {
-        await app.db('topics')
-          .insert(topic)
-          .then(
-            async resp => {
-              await app.db('topics')
-                .select()
-                .where({id:resp[0]})
-                .first()
-                .then(newresp =>{ 
-                  console.log("Eu:", newresp)
-                  res.json(newresp)
-                })
-                .catch(err => {
-                  res.status(500).send(err)
-                })
-            }
-          )
-          .catch(err => res.status(500).send(err))
-      }
+    
+    const promiseSearchTopic = () => {
+      return app.db("topics").select().where({"id":topic.id}).then(
+        topicDB => {
+          topic = topicDB[0]
+          console.log(topic)
+          promiseSearchTopicCategory()
+        }
+      )
     }
 
-    // Casos existam tags
-    if (topic.id) {
-      app.db('topics')
-        .update(topic)
-        .where({ id: topic.id })
-        .then(res.status(204).send())
-        .catch(err => res.status(500).send(err))
+
+    const promiseSearchTopicCategory = () => {
+      return app.db("topicsCategories").select().where({"topicId":topic.id})
+        .then(topicCategoryDB => {
+          topic.categoriesTagged = topicCategoryDB
+          res.json(topic)
+        }).catch( err => res.status(400).send(err) )
+    }
+
+    if(!topic.categoriesTagged){
+      topic.categoriesTagged = [topic.topicCategory]
+    }
+
+    // Casos existam tags if (topic.id) {
+      //Flowchart Guarde as tags -> delete todas do banco -> atualize o topic -> readicione as tags -> trate o json -> Envie o Json
+      let categoriesTagged = topic.categoriesTagged
+      delete topic.categoriesTagged
+
+      const promiseDeleteTopicCategories = () => {
+        return app.db("topicsCategories").where('topicId',topic.id).del()
+          .then(
+            resp => {
+              promiseUpdateTopic()
+            }
+          )
+      }
+
+      const promiseUpdateTopic = () => {
+        return app.db("topics").where("id", topic.id).update(topic)
+          .then(resp => {
+            console.log(resp)
+            promiseInsertTopicCategory()
+          })
+      }
+
+      const promiseInsertTopicCategory = () =>{
+
+        let preQuerie = "INSERT INTO topicsCategories(topicId, categoriesId) VALUES "
+        categoriesTagged.forEach(category => {
+          preQuerie = preQuerie.concat(`( ${topic.id} , ${category}  ),`)
+        })
+
+        preQuerie = preQuerie.substring(0, preQuerie.length-1).concat(";")
+        console.log(preQuerie)
+
+        return app.db.raw(preQuerie).then(
+          _ => promiseSearchTopic()
+        )
+      }
+
+
+      promiseDeleteTopicCategories()
 
     } else {
 
@@ -92,137 +118,52 @@ module.exports = app => {
         )
       }
 
-
-      const promiseSearchTopic = () => {
-        return app.db("topics").select().where({"id":topic.id}).then(
-          topicDB => {
-            topic = topicDB[0]
-            console.log(topic)
-            promiseSearchTopicCategory()
-          }
-        )
-      }
-
-      const promiseSearchTopicCategory = () => {
-        return app.db("topicsCategories").select().where({"topicId":topic.id})
-          .then(topicCategoryDB => {
-            topic.categoriesTagged = topicCategoryDB
-            res.json(topic)
-          })
-      }
-
       promiseInsertTopic()
 
     }
   }
 
-  const get = (req, res) => {
-    app.db('topics')
-      .select('id', 'firstName', 'lastName', 'email', 'isValid')
-      .whereNull('deletedAt')
-      .then(topics => res.json(topics))
-      .catch(err => res.status(500).send(err))
-  }
 
   const getById = (req, res) => {
-    app.db('topics')
-      .select('firstName', 'lastName', 'email', 'isValid')
-      .where({ id: req.params.id })
-      .whereNull('deletedAt')
-      .then(topic => res.json(topic))
-      .catch(err => res.status(500).send(err))
-  }
+    let topic = {}
+    topic.id = req.params.id
 
-  const remove = async(req, res) => {
-    try {
-      const address = await app.db('addresses')
-        .where({ topicId: req.params.id })
-      notExistsOrError(address, "Esse usuário possui endereço")
-
-      const rowsUpdated = await app.db('topics')
-        .update({ deletedAt: new Date() })
-        .where({ id: req.params.id })
-      existsOrError(rowsUpdated, "Usuário não encontrado")
-      res.status(204).send()
-    } catch (msg) {
-      res.status(400).send(msg)
+    const searchTopicsCategories = () =>{
+     return app.db('topicsCategories').select().where('topicId', topic.id)
+        .then(resp => {
+          topic.categoriesTagged = resp
+          res.json(topic)
+        }).catch(res.status(500).send(err))
     }
-  }
 
-  const savePhoto = async(req, res) => {
-    // var storage = multer.diskStorage({
-    //     destination: function(req, file, cb) {
-    //         cb(null, './img/topics/')
-    //     },
-    //     filename: function(req, file, cb) {
-    //         cb(null, Date.now().toString() + '-' + topic.id)
-    //     }
-    // // })
-    // router.post('./save-image2', multer.single('image'), async(req, res, next) => {
-    //     const topic = {...req.body }
-    //     const fileplace = {...req.file }
-    //     console.log(topic)
-    //     console.log(fileplace)
-    //     try {
-    //         existsOrError(topic.id, 'Id do usuário não informado')
-    //             // existsOrError(topic.image, 'Imagem está vazia')
-    //     } catch (msg) {
-    //         res.status(400).send(msg)
-    //     }
-    //     console.log('Passei por aqui')
-    //     try {
-    //         let rowsupdate = await app.db('topics')
-    //             .where({ id: topic.id })
-    //             .update({ imgUrl: fileplace.path })
-    //         res.status(204).send()
-    //     } catch (msg) {
-    //         res.status(400).send(msg)
-    //     }
-    // })
+    const searchTopics = () => {
+      return app.db('topics').select().where({ id: topic.id })
+        .then(resp => {
+          console.log(resp[0])
+          topic=resp[0]
+          searchTopicsCategories()
+        }).catch(res.status(500))
+    }
 
-    const topic = {...req.body }
-    const fileplace = {...req.file }
-    // console.log(topic)
-    // console.log(fileplace)
-    try {
-      existsOrError(topic.id, 'Id do usuário não informado')
-    } catch (msg) {
-      res.status(400).send(msg)
-    }
-    console.log('Passei por aqui')
-    try {
-      let rowsUpdated = await app.db('topics')
-        .where({ id: topic.id })
-        .update({ imgUrl: fileplace.path })
-      console.log("resposta: " + rowsUpdated)
-      res.send(fileplace.path)
-    } catch (msg) {
-      res.status(400).send('Tipo de arquivo Inválido')
-    }
+    searchTopics()
 
   }
 
-  //const testPhoto = async(req, res) => {
-  //res.send(`
-  //<html>
-  //<head> 
-  //<title> Teste de Imagem </title>
-  //</head>
-  //</body>
-  //<!-- O enctype é de extrema importância! Não funciona sem! -->
-  //<form action="/save-image/topic/"  method="POST" enctype="multipart/form-data">
-  //<p> Cuidado com o NAME!!! Tem que estar o mesmo que está escrito dessa forma para dar certo </p>
-  //<p>  <xmp style='font-size:20px;background-color:green;width:30vw;display:block;text-align:center;color:white;'>"<input type="file" name="image">" </xmp></p>
-  //<h3> id do dono da imagem </h3></br>
-  //<input type='number' name='id'>
-  //<h3> Upload da imagem </h3></br>
-  //<input type="file" name="image"></br>
-  //<button type="submit"> Enviar </button>
-  //</form>
-  //</body>
-  //</html>
-  //`)
+  //const remove = async(req, res) => {
+    //try {
+      //const address = await app.db('addresses')
+        //.where({ topicId: req.params.id })
+      //notExistsOrError(address, "Esse usuário possui endereço")
+
+      //const rowsUpdated = await app.db('topics')
+        //.update({ deletedAt: new Date() })
+        //.where({ id: req.params.id })
+      //existsOrError(rowsUpdated, "Usuário não encontrado")
+      //res.status(204).send()
+    //} catch (msg) {
+      //res.status(400).send(msg)
+    //}
   //}
 
-  return { save, get, getById, remove, savePhoto }
+  return { save, getById }
 }

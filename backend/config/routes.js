@@ -60,8 +60,11 @@ module.exports = app => {
   // Está faltando a altênticação, cuidado, tem que colocar de pois 
     app.route('/topic/')
         .post(app.api.topics.save)
-        .get(app.api.maps.get)
-        .delete(app.api.maps.remove)
+
+  // Está faltando a altênticação, cuidado, tem que colocar de pois 
+    app.route('/topic/:id')
+        .post(app.api.topics.save)
+        .get(app.api.topics.getById)
 
     app.route('/stats')
         .get(app.api.stats.get)
