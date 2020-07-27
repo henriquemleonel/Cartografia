@@ -2,9 +2,11 @@
   <div class="topics-list">
     <div
       v-if="topicsLoaded.length === 0"
-      class="message"
+      class="null-state column"
     >
-      <span class="body-2 bolder">Ainda não possuimos diálogos abertos.</span>
+      <img src="../assets/statics/pixeltrue-idea.png">
+      <span class="body-2 bolder"><strong>Ops!</strong> ainda não possuimos diálogos abertos.</span>
+      <span class="body-2 bolder">você pode ser o primeiro</span>
     </div>
 
     <!-- IMPLEMENTAR O SCROOL AREA E O TRIGGER GET_MORE_TOPICS, JUNTO AO TRIGGER GHANGE_FILTER -->
@@ -157,12 +159,23 @@ export default {
   font-weight: 400;
 }
 
-.message {
-  text-align: center;
-  font-size: 20px;
-  color: #888;
-  font-weight: 500;
-  line-height: 1.5;
-  margin-top: 50px;
+.null-state {
+  margin-top: 60px;
+
+  img {
+    height: 120px;
+    // width: 90px;
+    align-self: center;
+  }
+
+  span {
+    text-transform: lowercase;
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    font-weight: 500;
+    line-height: 1.5;
+    align-self: center;
+  }
 }
 </style>

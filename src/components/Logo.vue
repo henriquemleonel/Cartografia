@@ -8,7 +8,7 @@
     </div>
 
     <div class="bottom column">
-      <span id="forum-info" class="body-2 bolder"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
+      <span id="forum-info" class="body-3 bolder"> Fórum municipal <br/> de Cultura <br/> de Campo Grande </span>
       <div class="line"></div>
       <span id="sub-info" class="overline bolder"> cultura em movimento </span>
     </div>

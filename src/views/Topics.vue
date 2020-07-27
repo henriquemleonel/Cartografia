@@ -91,7 +91,7 @@ import TopicsList from '../components/TopicsList.vue';
 import BaseButton from '../components/BaseButton.vue';
 
 export default {
-  name: 'SchedulePage',
+  name: 'TopicsPage',
   components: {
     TopicsList,
     BaseButton,
