@@ -61,11 +61,18 @@ module.exports = app => {
     app.route('/topic/')
         .post(app.api.topics.save)
 
-  // Está faltando a altênticação, cuidado, tem que colocar de pois 
     app.route('/topic/:id')
         .post(app.api.topics.save)
         .get(app.api.topics.getById)
 
+    app.route('/topicsMostRecent/')
+        .get(app.api.topics.getMostRecent)
+
+    app.route('/topicsMostReplyededs/')
+        .get(app.api.topics.getMostReplyededs)
+
+// Fim topics
+  //
     app.route('/stats')
         .get(app.api.stats.get)
 

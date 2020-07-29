@@ -46,6 +46,7 @@ module.exports = app => {
 
     // Casos existam tags if (topic.id) {
       //Flowchart Guarde as tags -> delete todas do banco -> atualize o topic -> readicione as tags -> trate o json -> Envie o Json
+   if(topic.id) {
       let categoriesTagged = topic.categoriesTagged
       delete topic.categoriesTagged
 
@@ -149,21 +150,48 @@ module.exports = app => {
 
   }
 
-  //const remove = async(req, res) => {
-    //try {
-      //const address = await app.db('addresses')
-        //.where({ topicId: req.params.id })
-      //notExistsOrError(address, "Esse usuário possui endereço")
+  let limit = 12
+  const getMostRecent = (req, res) => {
+    let page = parseInt( req.query.page ) || 1 
+    const offset = (page) => {
+      return page*limit
+    }
+    let settedOffset = offset(page) 
+    console.log("set offset: ", settedOffset)
+    preQuerie = `SELECT * FROM topics ORDER BY createAt DESC LIMIT ${settedOffset} , ${limit};`
 
-      //const rowsUpdated = await app.db('topics')
-        //.update({ deletedAt: new Date() })
-        //.where({ id: req.params.id })
-      //existsOrError(rowsUpdated, "Usuário não encontrado")
-      //res.status(204).send()
-    //} catch (msg) {
-      //res.status(400).send(msg)
-    //}
-  //}
+    app.db.raw(preQuerie)
+      .then(resp => {
+        let data = {}
+        data.page = page
+        data.data = resp[0]
+        console.log(data)
+        res.json(data)
+      }).catch(err => {
+        res.status(500).send(err)
+      })
 
-  return { save, getById }
+  }
+
+  const getMostReplyededs = (req, res) => {
+    let page = parseInt( req.query.page ) || 1 
+    const offset = (page) => {
+      return page*limit
+    }
+    let settedOffset = offset(page) 
+    console.log("set offset: ", settedOffset)
+    preQuerie = `SELECT * FROM topics ORDER BY numerOfReplies LIMIT ${limit} OFFSET ${settedOffset};`
+    app.db.raw(preQuerie)
+      .then(resp => {
+        let data = {}
+        data.page = page
+        data.data = resp[0]
+        console.log(data)
+        res.json(data)
+      }).catch(err => {
+        res.status(500).send(err)
+      })
+  }
+
+  return { save, getById, getMostRecent, getMostReplyededs}
 }
