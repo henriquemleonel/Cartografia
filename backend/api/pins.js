@@ -87,5 +87,49 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
-    return { getById, get, remove, save }
+    const savePhoto = async(req, res) => {
+        const pins = {...req.body }
+        const fileplace = {...req.file }
+        try {
+            existsOrError(pins.id, 'pins id não informado')
+        } catch (msg) {
+            res.status(400).send(msg)
+        }
+
+        console.log('Passei por aqui')
+
+        try {
+            let rowsUpdated = await app.db('pins')
+                .where({ id: pins.id })
+                .update({ imgUrl: fileplace.path })
+            console.log("resposta: " + rowsUpdated)
+            res.send(fileplace.path)
+        } catch (msg) {
+            res.status(400).send('Tipo de arquivo Inválido')
+        }
+
+    }
+
+    const testPhoto = async(req, res) => {
+        res.send(`
+        <html>
+                <head> 
+                    <title> Teste de Imagem Pins</title>
+                </head>
+                </body>
+                    <!-- O enctype é de extrema importância! Não funciona sem! -->
+                    <form action="/save-image/pins/"  method="POST" enctype="multipart/form-data">
+                        <p> Cuidado com o NAME!!! Tem que estar o mesmo que está escrito dessa forma para dar certo </p>
+                        <h3> id do pin da imagem </h3></br>
+                        <input type='number' name='id'>
+                        <h3> Upload da imagem </h3></br>
+                        <input type="file" name="image"></br>
+                        <button type="submit"> Enviar </button>
+                    </form>
+                </body>
+            </html>
+        `)
+    }
+
+    return { getById, get, remove, save ,testPhoto, savePhoto}
 }

@@ -87,40 +87,8 @@ module.exports = app => {
     }
 
     const savePhoto = async(req, res) => {
-        // var storage = multer.diskStorage({
-        //     destination: function(req, file, cb) {
-        //         cb(null, './img/users/')
-        //     },
-        //     filename: function(req, file, cb) {
-        //         cb(null, Date.now().toString() + '-' + user.id)
-        //     }
-        // // })
-        // router.post('./save-image2', multer.single('image'), async(req, res, next) => {
-        //     const user = {...req.body }
-        //     const fileplace = {...req.file }
-        //     console.log(user)
-        //     console.log(fileplace)
-        //     try {
-        //         existsOrError(user.id, 'Id do usuário não informado')
-        //             // existsOrError(user.image, 'Imagem está vazia')
-        //     } catch (msg) {
-        //         res.status(400).send(msg)
-        //     }
-        //     console.log('Passei por aqui')
-        //     try {
-        //         let rowsupdate = await app.db('users')
-        //             .where({ id: user.id })
-        //             .update({ imgUrl: fileplace.path })
-        //         res.status(204).send()
-        //     } catch (msg) {
-        //         res.status(400).send(msg)
-        //     }
-        // })
-
         const user = {...req.body }
         const fileplace = {...req.file }
-            // console.log(user)
-            // console.log(fileplace)
         try {
             existsOrError(user.id, 'Id do usuário não informado')
         } catch (msg) {

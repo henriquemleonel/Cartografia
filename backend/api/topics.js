@@ -18,9 +18,7 @@ module.exports = app => {
     console.log(!topic.categoriesTagged)
     topic.createAt = new Date()
 
-    // CONSERTAR O MALDITO PROMISE HELL!
     // Caso não exista Tags associadas 
-    
     const promiseSearchTopic = () => {
       return app.db("topics").select().where({"id":topic.id}).then(
         topicDB => {
@@ -193,5 +191,5 @@ module.exports = app => {
       })
   }
 
-  return { save, getById, getMostRecent, getMostReplyededs}
+  return { save, getById, getMostRecent, getMostReplyededs }
 }
