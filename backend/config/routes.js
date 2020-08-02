@@ -62,24 +62,40 @@ module.exports = app => {
         .post(app.api.topics.save)
 
     app.route('/topic/:id')
-        .post(app.api.topics.save)
         .get(app.api.topics.getById)
 
-    app.route('/topicsMostRecent/')
+    app.route('/topicsmostrecent/')
         .get(app.api.topics.getMostRecent)
 
-    app.route('/topicsMostReplyededs/')
+    app.route('/topicsmostreplyededs/')
         .get(app.api.topics.getMostReplyededs)
 
-// Fim topics
-  //
-    app.route('/stats')
-        .get(app.api.stats.get)
+  // Fim topics
+  // Rota Reply
+  
+    app.route('/reply/')
+        .post(app.api.reply.save)
 
-    app.route('/save-image/user/')
-        .post(uploaderUsers.single('image'), app.api.user.savePhoto)
+    app.route('/reply/:id')
+        .get(app.api.reply.getById)
 
-    app.route('/teste-imagem/')
-        .get(app.api.user.testPhoto)
+  // fim Rota Reply
+  // Rota Reply
+  
+    app.route('/answer/')
+        .post(app.api.answer.save)
+
+    app.route('/answer/:id')
+        .get(app.api.answer.getById)
+        .post(app.api.answer.save)
+
+    //app.route('/stats')
+        //.get(app.api.stats.get)
+
+    //app.route('/save-image/user/')
+        //.post(uploaderUsers.single('image'), app.api.user.savePhoto)
+
+    //app.route('/teste-imagem/')
+        //.get(app.api.user.testPhoto)
 
 }

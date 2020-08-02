@@ -152,7 +152,7 @@ module.exports = app => {
 
   let limit = 12
   const getMostRecent = (req, res) => {
-    let page = parseInt( req.query.page ) || 1 
+    let page = parseInt( req.query.page ) || 0 
     const offset = (page) => {
       return page*limit
     }
@@ -174,13 +174,13 @@ module.exports = app => {
   }
 
   const getMostReplyededs = (req, res) => {
-    let page = parseInt( req.query.page ) || 1 
+    let page = parseInt( req.query.page ) || 0 
     const offset = (page) => {
       return page*limit
     }
     let settedOffset = offset(page) 
     console.log("set offset: ", settedOffset)
-    preQuerie = `SELECT * FROM topics ORDER BY numerOfReplies LIMIT ${limit} OFFSET ${settedOffset};`
+    preQuerie = `SELECT * FROM topics ORDER BY numerOfReplies DESC LIMIT ${settedOffset}, ${limit};`
     app.db.raw(preQuerie)
       .then(resp => {
         let data = {}
