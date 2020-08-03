@@ -1,7 +1,7 @@
 const admin = require("./admin.js")
 const multer = require('../config/multerconfig.js')
 const uploaderUsers = multer('users')
-const uploaderEvents = multer('public/events')
+const uploaderEvents = multer('events')
 const uploaderPins = multer('pins')
 
 module.exports = app => {
@@ -110,8 +110,17 @@ module.exports = app => {
   // Rota answer
   
     app.route('/event/')
+        .post(app.api.event.save)
 
     app.route('/event/:id')
+        .post(app.api.event.save)
+        .get(app.api.event.getById)
+
+    app.route('/save-image/events/')
+        .post(uploaderEvents.single('image'), app.api.event.savePhoto)
+
+    app.route('/teste-imagem/events/')
+        .get(app.api.event.testPhoto)
 
   // Fim Answer
     //app.route('/stats')
