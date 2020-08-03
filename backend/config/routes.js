@@ -81,10 +81,10 @@ module.exports = app => {
     app.route('/topic/:id')
         .get(app.api.topics.getById)
 
-    app.route('/topicsmostrecent/')
+    app.route('/topicsMostRecent/')
         .get(app.api.topics.getMostRecent)
 
-    app.route('/topicsmostreplyededs/')
+    app.route('/topicsMostReplyededs/')
         .get(app.api.topics.getMostReplyededs)
 
   // Fim topics
@@ -96,6 +96,8 @@ module.exports = app => {
     app.route('/reply/:id')
         .get(app.api.reply.getById)
 
+    app.route('/getCurrentTopicReplies/:id')
+        .get(app.api.reply.getCurrentTopicReplies)
   // fim Rota Reply
   // Rota answer
   

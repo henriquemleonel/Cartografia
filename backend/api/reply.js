@@ -97,6 +97,18 @@ module.exports = app => {
       })
       .catch( err => res.status(400).send(err))
   }
+  
+  const getCurrentTopicReplies = async(req, res) =>{
+    topicId = req.params.id
+    app.db('replies').select()
+      .where('topicId', topicId)
+      .orderBy('createAt','desc')
+      .then(resp =>{
+        res.json(resp)
+      }).catch(err => {
+        res.status(500).send(err)
+      })
+  }
 
   const remove = async(req, res) => {
     try {
@@ -115,5 +127,5 @@ module.exports = app => {
   }
 
 
-  return {save, getById}
+  return {save, getById, getCurrentTopicReplies}
 }
